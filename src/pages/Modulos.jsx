@@ -4,7 +4,7 @@ import { base44 } from "@/api/base44Client";
 import { createPageUrl } from "@/utils";
 import { motion } from "framer-motion";
 import { ArrowLeft, Lock, CheckCircle } from "lucide-react";
-import BottomNav from "../components/shared/BottomNav";
+import BottomNav from "@/components/shared/BottomNav";
 
 const MODULOS = [
   { id: "mod1", titulo: "Primeiros Passos no Celular", emoji: "📱", desc: "Aprenda a usar seu celular", cor: "#5C2E7F", aulas: 5 },

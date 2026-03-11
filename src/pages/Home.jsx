@@ -3,11 +3,11 @@ import { useNavigate } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import { createPageUrl } from "@/utils";
 import { motion } from "framer-motion";
-import HeaderHome from "../components/home/HeaderHome";
-import BannerDestaque from "../components/home/BannerDestaque";
-import ActionCards from "../components/home/ActionCards";
-import ModuloAtivo from "../components/home/ModuloAtivo";
-import BottomNav from "../components/shared/BottomNav";
+import HeaderHome from "@/components/home/HeaderHome";
+import BannerDestaque from "@/components/home/BannerDestaque";
+import ActionCards from "@/components/home/ActionCards";
+import ModuloAtivo from "@/components/home/ModuloAtivo";
+import BottomNav from "@/components/shared/BottomNav";
 
 export default function Home() {
   const navigate = useNavigate();

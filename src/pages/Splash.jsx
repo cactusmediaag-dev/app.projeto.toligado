@@ -14,7 +14,7 @@ export default function Splash() {
       if (userId) {
         navigate(createPageUrl("Home"));
       } else {
-        navigate(createPageUrl("Login"));
+        navigate(createPageUrl("Entrar"));
       }
     }, 2500);
     return () => clearTimeout(timer);

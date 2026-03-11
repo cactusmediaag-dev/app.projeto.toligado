@@ -4,7 +4,7 @@ import { base44 } from "@/api/base44Client";
 import { createPageUrl } from "@/utils";
 import { motion } from "framer-motion";
 import { ArrowLeft } from "lucide-react";
-import BottomNav from "../components/shared/BottomNav";
+import BottomNav from "@/components/shared/BottomNav";
 
 const CONQUISTAS = [
   { id: "c1", titulo: "Primeiro Login", desc: "Entrou no app pela primeira vez", emoji: "🌟", req: "always" },

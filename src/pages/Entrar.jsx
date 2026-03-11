@@ -3,8 +3,8 @@ import { useNavigate, Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { base44 } from "@/api/base44Client";
 import { createPageUrl } from "@/utils";
-import PinInput from "../components/auth/PinInput";
-import ActionButton from "../components/shared/ActionButton";
+import PinInput from "@/components/auth/PinInput";
+import ActionButton from "@/components/shared/ActionButton";
 
 export default function Entrar() {
   const navigate = useNavigate();

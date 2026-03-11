@@ -4,7 +4,7 @@ import { base44 } from "@/api/base44Client";
 import { createPageUrl } from "@/utils";
 import { motion } from "framer-motion";
 import { ArrowLeft, LogOut, Star, Coins, BookOpen, Calendar } from "lucide-react";
-import BottomNav from "../components/shared/BottomNav";
+import BottomNav from "@/components/shared/BottomNav";
 
 export default function Perfil() {
   const navigate = useNavigate();

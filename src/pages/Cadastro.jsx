@@ -4,10 +4,10 @@ import { motion, AnimatePresence } from "framer-motion";
 import { ArrowLeft } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 import { createPageUrl } from "@/utils";
-import ProgressBar from "../components/auth/ProgressBar";
-import PinInput from "../components/auth/PinInput";
-import ActionButton from "../components/shared/ActionButton";
-import Confetti from "../components/shared/Confetti";
+import ProgressBar from "@/components/auth/ProgressBar";
+import PinInput from "@/components/auth/PinInput";
+import ActionButton from "@/components/shared/ActionButton";
+import Confetti from "@/components/shared/Confetti";
 
 const MONTHS = [
   "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho",

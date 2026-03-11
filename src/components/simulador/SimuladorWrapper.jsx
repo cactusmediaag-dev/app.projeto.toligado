@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { ArrowLeft, Volume2 } from "lucide-react";
+import PhoneFrame from "./PhoneFrame";
+import InstructionBalloon from "./InstructionBalloon";
+import AudioSystem from "@/lib/AudioSystem";
 
 export default function SimuladorWrapper({
   children,
@@ -10,26 +13,19 @@ export default function SimuladorWrapper({
   totalPassos,
   onVoltar,
   showMascote = true,
+  statusBarTheme = "light",
 }) {
   const [isPlaying, setIsPlaying] = useState(false);
+  const [screenOpacity, setScreenOpacity] = useState(1);
 
-  const speakText = (text) => {
-    if ('speechSynthesis' in window) {
-      window.speechSynthesis.cancel();
-      const utterance = new SpeechSynthesisUtterance(text);
-      utterance.lang = 'pt-BR';
-      utterance.rate = 0.85;
-      utterance.pitch = 1.1;
-      
-      utterance.onstart = () => setIsPlaying(true);
-      utterance.onend = () => setIsPlaying(false);
-      
-      const voices = window.speechSynthesis.getVoices();
-      const femaleVoice = voices.find(v => v.lang.includes('pt') && v.name.toLowerCase().includes('female'));
-      if (femaleVoice) utterance.voice = femaleVoice;
-      
-      window.speechSynthesis.speak(utterance);
+  const speakText = async (text) => {
+    setIsPlaying(true);
+    try {
+      await AudioSystem.speak(text);
+    } catch (e) {
+      console.error('Audio error:', e);
     }
+    setIsPlaying(false);
   };
 
   useEffect(() => {
@@ -38,9 +34,16 @@ export default function SimuladorWrapper({
     }, 500);
     return () => {
       clearTimeout(timer);
-      window.speechSynthesis?.cancel();
+      AudioSystem.stop();
     };
   }, [audioText]);
+
+  // Transition effect when changing steps
+  useEffect(() => {
+    setScreenOpacity(0);
+    const timer = setTimeout(() => setScreenOpacity(1), 150);
+    return () => clearTimeout(timer);
+  }, [passoAtual]);
 
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-b from-[#F8F0FF] to-[#EDE0FF] pb-6">
@@ -75,46 +78,26 @@ export default function SimuladorWrapper({
         </button>
       </div>
 
-      {/* Celular Simulado */}
+      {/* Phone Simulator */}
       <div className="flex-1 flex items-center justify-center px-4 py-4">
-        <div className="relative">
+        <PhoneFrame statusBarTheme={statusBarTheme}>
           <motion.div
-            initial={{ scale: 0.9, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            className="bg-black rounded-[3rem] p-4 shadow-2xl"
-            style={{ width: "320px", height: "600px" }}
+            style={{ opacity: screenOpacity }}
+            transition={{ duration: 0.2 }}
+            className="w-full h-full"
           >
-            <div className="bg-white rounded-[2.5rem] w-full h-full overflow-hidden relative">
-              {/* Notch */}
-              <div className="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-6 bg-black rounded-b-2xl z-10" />
-              {children}
-            </div>
+            {children}
           </motion.div>
-        </div>
+        </PhoneFrame>
       </div>
 
-      {/* Balão de Instrução */}
-      <AnimatePresence>
-        {instrucao && (
-          <motion.div
-            initial={{ y: 50, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            exit={{ y: 50, opacity: 0 }}
-            className="mx-4 mb-4"
-          >
-            <div className="bg-white rounded-3xl p-5 shadow-xl border-2 border-[#EDE0FF]">
-              <div className="flex gap-3 items-start">
-                {showMascote && (
-                  <div className="text-4xl flex-shrink-0">🧓</div>
-                )}
-                <p className="text-lg text-[#5C2E7F] font-semibold leading-relaxed flex-1">
-                  {instrucao}
-                </p>
-              </div>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      {/* Instruction Balloon */}
+      {instrucao && showMascote && (
+        <InstructionBalloon
+          text={instrucao}
+          onRepeat={() => audioText && speakText(audioText)}
+        />
+      )}
     </div>
   );
 }

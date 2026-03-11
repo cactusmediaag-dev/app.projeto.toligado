@@ -55,6 +55,8 @@ import Modulos from './pages/Modulos';
 import Ranking from './pages/Ranking';
 import Conquistas from './pages/Conquistas';
 import Perfil from './pages/Perfil';
+import Modulo1Licao1 from './pages/Modulo1Licao1';
+import Modulo1Licao2 from './pages/Modulo1Licao2';
 
 
 export const PAGES = {
@@ -66,6 +68,8 @@ export const PAGES = {
     "Ranking": Ranking,
     "Conquistas": Conquistas,
     "Perfil": Perfil,
+    "Modulo1Licao1": Modulo1Licao1,
+    "Modulo1Licao2": Modulo1Licao2,
 }
 
 export const pagesConfig = {

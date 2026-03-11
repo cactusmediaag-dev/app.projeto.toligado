@@ -99,12 +99,15 @@ export default function Modulo1Licao1() {
             <div className="flex gap-2 items-center">
               {passo >= 3 ? (
                 <ElementoClicavel
-                  onClick={() => handleCliqueCerto(999, () => setBateriaVisivel(true))}
+                  onClick={() => {
+                    setBateriaVisivel(true);
+                    setTimeout(() => {}, 100);
+                  }}
                   posicao="bottom"
                 >
-                  <div className="flex items-center gap-1 text-red-500 font-bold">
-                    <span>🔋</span>
-                    <span className="text-xs">15%</span>
+                  <div className="flex items-center gap-1 text-red-500 font-bold cursor-pointer p-2">
+                    <span className="text-lg">🔋</span>
+                    <span className="text-sm">15%</span>
                   </div>
                 </ElementoClicavel>
               ) : (
@@ -173,38 +176,38 @@ export default function Modulo1Licao1() {
       </div>
 
       {/* Botões físicos do celular */}
-      <div className="absolute -right-1 top-32 flex flex-col gap-8">
+      <div className="absolute -right-2 top-32 flex flex-col gap-8">
         {passo === 1 && (
           <ElementoClicavel
             onClick={() => handleCliqueCerto(2, () => setTelaAcesa(true))}
             posicao="right"
           >
-            <div className="w-2 h-16 bg-gray-300 rounded-l-lg" />
+            <div className="w-8 h-16 bg-gray-300 rounded-l-lg cursor-pointer active:bg-gray-400" />
           </ElementoClicavel>
         )}
         {passo >= 2 && (
-          <div className="w-2 h-16 bg-gray-300 rounded-l-lg" />
+          <div className="w-8 h-16 bg-gray-300 rounded-l-lg" />
         )}
       </div>
 
-      <div className="absolute -left-1 top-24 flex flex-col gap-3">
+      <div className="absolute -left-2 top-24 flex flex-col gap-3">
         {passo === 2 ? (
           <>
             <ElementoClicavel
               onClick={() => handleCliqueCerto(3, () => setVolumeVisivel(true))}
               posicao="left"
             >
-              <div className="w-2 h-12 bg-gray-300 rounded-r-lg" />
+              <div className="w-8 h-12 bg-gray-300 rounded-r-lg cursor-pointer active:bg-gray-400" />
             </ElementoClicavel>
             <div
               onClick={() => handleCliqueErrado("Quase lá! Tente o botão de cima, o de AUMENTAR 😊")}
-              className="w-2 h-12 bg-gray-300 rounded-r-lg cursor-pointer"
+              className="w-8 h-12 bg-gray-300 rounded-r-lg cursor-pointer active:bg-gray-400"
             />
           </>
         ) : (
           <>
-            <div className="w-2 h-12 bg-gray-300 rounded-r-lg" />
-            <div className="w-2 h-12 bg-gray-300 rounded-r-lg" />
+            <div className="w-8 h-12 bg-gray-300 rounded-r-lg" />
+            <div className="w-8 h-12 bg-gray-300 rounded-r-lg" />
           </>
         )}
       </div>

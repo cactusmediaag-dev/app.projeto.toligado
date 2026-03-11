@@ -29,12 +29,17 @@ export default function ElementoClicavel({
         ↓
       </motion.div>
 
-      {/* Elemento com Pulse */}
+      {/* Elemento com Pulse - área clicável expandida */}
       <div
         onClick={onClick}
-        className="cursor-pointer animate-pulse-border"
+        className="cursor-pointer animate-pulse-border p-2"
         style={{
           animation: "pulse-border 2s infinite",
+          minWidth: "48px",
+          minHeight: "48px",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
         }}
       >
         {children}
@@ -43,7 +48,7 @@ export default function ElementoClicavel({
       <style jsx>{`
         @keyframes pulse-border {
           0% { box-shadow: 0 0 0 0 rgba(243, 152, 75, 0.7); }
-          70% { box-shadow: 0 0 0 15px rgba(243, 152, 75, 0); }
+          70% { box-shadow: 0 0 0 20px rgba(243, 152, 75, 0); }
           100% { box-shadow: 0 0 0 0 rgba(243, 152, 75, 0); }
         }
         .animate-pulse-border {

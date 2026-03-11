@@ -47,8 +47,16 @@
  *
  * The mainPage value must match a key in the PAGES object exactly.
  */
+import Splash from './pages/Splash';
+import Cadastro from './pages/Cadastro';
 
-export const pagesConfig = {
-	Pages: {}
+
+export const PAGES = {
+    "Splash": Splash,
+    "Cadastro": Cadastro,
 }
 
+export const pagesConfig = {
+    mainPage: "Splash",
+    Pages: PAGES,
+};

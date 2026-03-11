@@ -82,14 +82,19 @@ import Modulo5Licao2 from './pages/Modulo5Licao2';
 import Modulo5Licao3 from './pages/Modulo5Licao3';
 import Modulo5Licao4 from './pages/Modulo5Licao4';
 import Modulo5Licao5 from './pages/Modulo5Licao5';
+import Modulo6Celebracao from './pages/Modulo6Celebracao';
+import Modulo6Licao1 from './pages/Modulo6Licao1';
+import Modulo6Licao2 from './pages/Modulo6Licao2';
+import Modulo6Licao3 from './pages/Modulo6Licao3';
 import Modulos from './pages/Modulos';
 import Perfil from './pages/Perfil';
 import Ranking from './pages/Ranking';
 import Splash from './pages/Splash';
-import Modulo6Licao1 from './pages/Modulo6Licao1';
-import Modulo6Licao2 from './pages/Modulo6Licao2';
-import Modulo6Licao3 from './pages/Modulo6Licao3';
-import Modulo6Celebracao from './pages/Modulo6Celebracao';
+import Modulo7Licao1 from './pages/Modulo7Licao1';
+import Modulo7Licao2 from './pages/Modulo7Licao2';
+import Modulo7Licao3 from './pages/Modulo7Licao3';
+import Modulo7Licao4 from './pages/Modulo7Licao4';
+import Modulo7Celebracao from './pages/Modulo7Celebracao';
 
 
 export const PAGES = {
@@ -128,14 +133,19 @@ export const PAGES = {
     "Modulo5Licao3": Modulo5Licao3,
     "Modulo5Licao4": Modulo5Licao4,
     "Modulo5Licao5": Modulo5Licao5,
+    "Modulo6Celebracao": Modulo6Celebracao,
+    "Modulo6Licao1": Modulo6Licao1,
+    "Modulo6Licao2": Modulo6Licao2,
+    "Modulo6Licao3": Modulo6Licao3,
     "Modulos": Modulos,
     "Perfil": Perfil,
     "Ranking": Ranking,
     "Splash": Splash,
-    "Modulo6Licao1": Modulo6Licao1,
-    "Modulo6Licao2": Modulo6Licao2,
-    "Modulo6Licao3": Modulo6Licao3,
-    "Modulo6Celebracao": Modulo6Celebracao,
+    "Modulo7Licao1": Modulo7Licao1,
+    "Modulo7Licao2": Modulo7Licao2,
+    "Modulo7Licao3": Modulo7Licao3,
+    "Modulo7Licao4": Modulo7Licao4,
+    "Modulo7Celebracao": Modulo7Celebracao,
 }
 
 export const pagesConfig = {

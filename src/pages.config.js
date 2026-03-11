@@ -95,6 +95,8 @@ import Modulo7Licao2 from './pages/Modulo7Licao2';
 import Modulo7Licao3 from './pages/Modulo7Licao3';
 import Modulo7Licao4 from './pages/Modulo7Licao4';
 import Modulo7Celebracao from './pages/Modulo7Celebracao';
+import Modulo8Licao1 from './pages/Modulo8Licao1';
+import Modulo8Licao2 from './pages/Modulo8Licao2';
 
 
 export const PAGES = {
@@ -146,6 +148,8 @@ export const PAGES = {
     "Modulo7Licao3": Modulo7Licao3,
     "Modulo7Licao4": Modulo7Licao4,
     "Modulo7Celebracao": Modulo7Celebracao,
+    "Modulo8Licao1": Modulo8Licao1,
+    "Modulo8Licao2": Modulo8Licao2,
 }
 
 export const pagesConfig = {

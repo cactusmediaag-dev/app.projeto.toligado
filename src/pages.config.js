@@ -49,11 +49,23 @@
  */
 import Splash from './pages/Splash';
 import Cadastro from './pages/Cadastro';
+import Entrar from './pages/Entrar';
+import Home from './pages/Home';
+import Modulos from './pages/Modulos';
+import Ranking from './pages/Ranking';
+import Conquistas from './pages/Conquistas';
+import Perfil from './pages/Perfil';
 
 
 export const PAGES = {
     "Splash": Splash,
     "Cadastro": Cadastro,
+    "Entrar": Entrar,
+    "Home": Home,
+    "Modulos": Modulos,
+    "Ranking": Ranking,
+    "Conquistas": Conquistas,
+    "Perfil": Perfil,
 }
 
 export const pagesConfig = {

@@ -7,8 +7,8 @@ import { ArrowLeft, Lock, CheckCircle } from "lucide-react";
 import BottomNav from "@/components/shared/BottomNav";
 
 const MODULOS = [
-  { id: "mod1", titulo: "Primeiros Passos no Celular", emoji: "📱", desc: "Aprenda a usar seu celular", cor: "#5C2E7F", aulas: 5 },
-  { id: "mod2", titulo: "Internet Segura", emoji: "🔒", desc: "Navegue com segurança", cor: "#2ECC71", aulas: 4 },
+  { id: "mod1", titulo: "Ferramentas Google e Introdução ao Celular", emoji: "📱", desc: "Aprenda a usar seu celular", cor: "#5C2E7F", aulas: 5 },
+  { id: "mod2", titulo: "Configurações e Segurança Inicial", emoji: "🔒", desc: "Mantenha seu celular seguro", cor: "#2ECC71", aulas: 8 },
   { id: "mod3", titulo: "Dinheiro Digital", emoji: "💰", desc: "PIX, contas e finanças", cor: "#F3984B", aulas: 6 },
   { id: "mod4", titulo: "Cidadania Online", emoji: "🏛️", desc: "Serviços públicos digitais", cor: "#3498DB", aulas: 4 },
   { id: "mod5", titulo: "Redes Sociais", emoji: "💬", desc: "WhatsApp, Facebook e mais", cor: "#E74C3C", aulas: 5 },
@@ -62,13 +62,17 @@ export default function Modulos() {
             animate={{ x: 0, opacity: 1 }}
             transition={{ delay: i * 0.08 }}
             onClick={() => {
-              if (status === "active" && mod.id === "mod1") {
-                navigate(createPageUrl("Modulo1Licao1"));
+              if (status === "active") {
+                if (mod.id === "mod1") {
+                  navigate(createPageUrl("Modulo1Licao1"));
+                } else if (mod.id === "mod2") {
+                  navigate(createPageUrl("Modulo2Licao1"));
+                }
               }
             }}
             className={`ripple-btn rounded-3xl p-5 flex items-center gap-4 shadow-md transition-all active:scale-[0.97]
               ${status === "locked" ? "opacity-50 bg-gray-100" : "bg-white border-2 border-[#EDE0FF]"}
-              ${status === "active" && mod.id === "mod1" ? "cursor-pointer" : ""}
+              ${status === "active" && (mod.id === "mod1" || mod.id === "mod2") ? "cursor-pointer" : ""}
             `}
             >
               <div

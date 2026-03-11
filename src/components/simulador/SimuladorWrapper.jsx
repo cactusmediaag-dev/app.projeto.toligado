@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import { ArrowLeft, Volume2 } from "lucide-react";
 import PhoneFrame from "./PhoneFrame";
 import InstructionBalloon from "./InstructionBalloon";
-import AudioSystem from "@/lib/AudioSystem";
+import AudioSystem from "@/components/shared/AudioSystem";
 
 export default function SimuladorWrapper({
   children,

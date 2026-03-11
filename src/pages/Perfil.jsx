@@ -121,6 +121,8 @@ export default function Perfil() {
           </div>
         </motion.div>
 
+        <VoiceSettings />
+
         <motion.button
           initial={{ y: 20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
@@ -136,5 +138,65 @@ export default function Perfil() {
 
       <BottomNav />
     </div>
+  );
+}
+
+function VoiceSettings() {
+  const [apiKey, setApiKey] = useState(localStorage.getItem('elevenlabs_key') || '');
+  const [testing, setTesting] = useState(false);
+  const [saved, setSaved] = useState(false);
+
+  const saveKey = () => {
+    window.ELEVENLABS_API_KEY = apiKey;
+    localStorage.setItem('elevenlabs_key', apiKey);
+    setSaved(true);
+    setTimeout(() => setSaved(false), 2000);
+  };
+
+  const testVoice = async () => {
+    setTesting(true);
+    if (window.AudioSystem) {
+      await window.AudioSystem.speak('Olá! Estou aqui para te ajudar a aprender!');
+    }
+    setTesting(false);
+  };
+
+  return (
+    <motion.div
+      initial={{ y: 20, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      transition={{ delay: 0.45 }}
+      className="bg-white rounded-3xl p-5 shadow-md mt-6"
+    >
+      <div className="flex items-center gap-2 mb-3">
+        <span className="text-2xl">🔊</span>
+        <h3 className="text-lg font-black text-[#5C2E7F]">Configurações de Voz</h3>
+      </div>
+      <p className="text-sm text-gray-600 mb-4">
+        Para uma voz mais natural, insira sua chave ElevenLabs (opcional)
+      </p>
+      <input
+        type="password"
+        placeholder="Chave API ElevenLabs (opcional)"
+        value={apiKey}
+        onChange={(e) => setApiKey(e.target.value)}
+        className="w-full p-3 border-2 border-gray-300 rounded-xl text-sm mb-3 focus:border-[#5C2E7F] focus:outline-none"
+      />
+      <div className="flex gap-2">
+        <button
+          onClick={saveKey}
+          className="flex-1 bg-[#5C2E7F] text-white py-3 rounded-xl font-bold text-sm active:scale-95 transition-transform"
+        >
+          {saved ? "✅ Salvo!" : "💾 Salvar"}
+        </button>
+        <button
+          onClick={testVoice}
+          disabled={testing}
+          className="flex-1 bg-[#F3984B] text-white py-3 rounded-xl font-bold text-sm active:scale-95 transition-transform disabled:opacity-50"
+        >
+          {testing ? "🔊 Testando..." : "▶️ Testar"}
+        </button>
+      </div>
+    </motion.div>
   );
 }

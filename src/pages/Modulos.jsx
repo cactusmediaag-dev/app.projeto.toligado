@@ -57,13 +57,19 @@ export default function Modulos() {
           const status = getStatus(mod.id, i);
           return (
             <motion.div
-              key={mod.id}
-              initial={{ x: -20, opacity: 0 }}
-              animate={{ x: 0, opacity: 1 }}
-              transition={{ delay: i * 0.08 }}
-              className={`ripple-btn rounded-3xl p-5 flex items-center gap-4 shadow-md transition-all active:scale-[0.97]
-                ${status === "locked" ? "opacity-50 bg-gray-100" : "bg-white border-2 border-[#EDE0FF]"}
-              `}
+            key={mod.id}
+            initial={{ x: -20, opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            transition={{ delay: i * 0.08 }}
+            onClick={() => {
+              if (status === "active" && mod.id === "mod1") {
+                navigate(createPageUrl("Modulo1Licao1"));
+              }
+            }}
+            className={`ripple-btn rounded-3xl p-5 flex items-center gap-4 shadow-md transition-all active:scale-[0.97]
+              ${status === "locked" ? "opacity-50 bg-gray-100" : "bg-white border-2 border-[#EDE0FF]"}
+              ${status === "active" && mod.id === "mod1" ? "cursor-pointer" : ""}
+            `}
             >
               <div
                 className="w-16 h-16 rounded-2xl flex items-center justify-center text-3xl shadow-sm"

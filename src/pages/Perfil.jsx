@@ -2,14 +2,15 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { base44 } from "@/api/base44Client";
 import { createPageUrl } from "@/utils";
-import { motion } from "framer-motion";
-import { ArrowLeft, LogOut, Star, Coins, BookOpen, Calendar } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { ArrowLeft, LogOut, Star, Coins, BookOpen, Calendar, Trash2 } from "lucide-react";
 import BottomNav from "@/components/shared/BottomNav";
 import AudioSystem from "@/components/shared/AudioSystem";
 
 export default function Perfil() {
   const navigate = useNavigate();
   const [usuario, setUsuario] = useState(null);
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
 
   useEffect(() => {
     const load = async () => {
@@ -25,6 +26,18 @@ export default function Perfil() {
     localStorage.removeItem("toligado_user_id");
     localStorage.removeItem("toligado_user_nome");
     navigate(createPageUrl("Entrar"));
+  };
+
+  const handleDeleteAccount = async () => {
+    if (!usuario) return;
+    try {
+      await base44.entities.Usuario.delete(usuario.id);
+      localStorage.removeItem("toligado_user_id");
+      localStorage.removeItem("toligado_user_nome");
+      navigate(createPageUrl("Entrar"));
+    } catch (e) {
+      console.error('Delete error:', e);
+    }
   };
 
   if (!usuario) {
@@ -48,10 +61,10 @@ export default function Perfil() {
 
   return (
     <div
-      className="min-h-screen pb-24"
+      className="min-h-screen pb-24 bg-background dark:bg-gray-900"
       style={{ background: "linear-gradient(180deg, #5C2E7F 0%, #A67EC8 30%, #F8F0FF 60%, #FFFFFF 100%)" }}
     >
-      <div className="px-5 pt-6 pb-4 flex items-center justify-between">
+      <div className="px-5 pt-6 pb-4 flex items-center justify-between pt-[env(safe-area-inset-top)]">
         <button
           onClick={() => navigate(createPageUrl("Home"))}
           className="p-2 rounded-xl bg-white/20 text-white active:scale-90 transition-all"
@@ -130,12 +143,66 @@ export default function Perfil() {
           transition={{ delay: 0.5 }}
           whileTap={{ scale: 0.95 }}
           onClick={handleLogout}
-          className="ripple-btn w-full mt-6 py-4 rounded-2xl bg-red-50 border-2 border-red-200 text-red-500 font-bold text-lg flex items-center justify-center gap-2 active:bg-red-100 transition-all"
+          className="ripple-btn w-full mt-6 py-4 rounded-2xl bg-red-50 dark:bg-red-900/20 border-2 border-red-200 dark:border-red-800 text-red-500 dark:text-red-400 font-bold text-lg flex items-center justify-center gap-2 active:bg-red-100 transition-all"
         >
           <LogOut className="w-5 h-5" />
           Sair da conta
         </motion.button>
+
+        <motion.button
+          initial={{ y: 20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ delay: 0.55 }}
+          whileTap={{ scale: 0.95 }}
+          onClick={() => setShowDeleteDialog(true)}
+          className="ripple-btn w-full mt-3 py-4 rounded-2xl bg-gray-50 dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-400 font-bold text-lg flex items-center justify-center gap-2 active:bg-gray-100 transition-all"
+        >
+          <Trash2 className="w-5 h-5" />
+          Excluir conta
+        </motion.button>
       </div>
+
+      <AnimatePresence>
+        {showDeleteDialog && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-5"
+            onClick={() => setShowDeleteDialog(false)}
+          >
+            <motion.div
+              initial={{ scale: 0.9 }}
+              animate={{ scale: 1 }}
+              exit={{ scale: 0.9 }}
+              onClick={(e) => e.stopPropagation()}
+              className="bg-white dark:bg-gray-800 rounded-3xl p-6 max-w-sm w-full"
+            >
+              <div className="text-center mb-4">
+                <div className="text-5xl mb-3">⚠️</div>
+                <h3 className="text-xl font-black text-gray-900 dark:text-white mb-2">Excluir conta?</h3>
+                <p className="text-gray-600 dark:text-gray-400 text-sm">
+                  Todos os seus dados e progresso serão permanentemente excluídos. Esta ação não pode ser desfeita.
+                </p>
+              </div>
+              <div className="space-y-2">
+                <button
+                  onClick={handleDeleteAccount}
+                  className="w-full py-3 rounded-xl bg-red-500 text-white font-bold active:scale-95 transition-transform"
+                >
+                  Sim, excluir conta
+                </button>
+                <button
+                  onClick={() => setShowDeleteDialog(false)}
+                  className="w-full py-3 rounded-xl bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white font-bold active:scale-95 transition-transform"
+                >
+                  Cancelar
+                </button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       <BottomNav />
     </div>

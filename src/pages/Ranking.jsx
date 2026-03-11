@@ -5,31 +5,34 @@ import { createPageUrl } from "@/utils";
 import { motion } from "framer-motion";
 import { ArrowLeft, Crown } from "lucide-react";
 import BottomNav from "@/components/shared/BottomNav";
+import PullToRefresh from "@/components/shared/PullToRefresh";
 
 export default function Ranking() {
   const navigate = useNavigate();
   const [usuarios, setUsuarios] = useState([]);
   const [myId, setMyId] = useState(null);
 
+  const load = async () => {
+    const userId = localStorage.getItem("toligado_user_id");
+    if (!userId) { navigate(createPageUrl("Entrar")); return; }
+    setMyId(userId);
+    const all = await base44.entities.Usuario.list("-xp_total", 50);
+    setUsuarios(all);
+  };
+
   useEffect(() => {
-    const load = async () => {
-      const userId = localStorage.getItem("toligado_user_id");
-      if (!userId) { navigate(createPageUrl("Entrar")); return; }
-      setMyId(userId);
-      const all = await base44.entities.Usuario.list("-xp_total", 50);
-      setUsuarios(all);
-    };
     load();
   }, []);
 
   const medals = ["🥇", "🥈", "🥉"];
 
   return (
-    <div
-      className="min-h-screen pb-24"
-      style={{ background: "linear-gradient(180deg, #F8F0FF 0%, #FFFFFF 40%, #F8F0FF 100%)" }}
-    >
-      <div className="px-5 pt-6 pb-4 flex items-center gap-3">
+    <PullToRefresh onRefresh={load}>
+      <div
+        className="min-h-screen pb-24 bg-background dark:bg-gray-900"
+        style={{ background: "linear-gradient(180deg, #F8F0FF 0%, #FFFFFF 40%, #F8F0FF 100%)" }}
+      >
+        <div className="px-5 pt-6 pb-4 flex items-center gap-3 pt-[env(safe-area-inset-top)]">
         <button
           onClick={() => navigate(createPageUrl("Home"))}
           className="p-2 rounded-xl bg-[#EDE0FF] text-[#5C2E7F] active:scale-90 transition-all"
@@ -109,7 +112,8 @@ export default function Ranking() {
         </div>
       )}
 
-      <BottomNav />
-    </div>
+        <BottomNav />
+      </div>
+    </PullToRefresh>
   );
 }

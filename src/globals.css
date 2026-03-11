@@ -134,3 +134,14 @@ body {
 .gentle-shake {
   animation: gentleShake 0.4s ease;
 }
+
+/* Disable text selection on interactive elements */
+button,
+.ripple-btn,
+nav,
+.bottom-nav {
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+}

@@ -42,10 +42,10 @@ export default function Modulos() {
 
   return (
     <div
-      className="min-h-screen pb-24"
+      className="min-h-screen pb-24 bg-background dark:bg-gray-900"
       style={{ background: "linear-gradient(180deg, #F8F0FF 0%, #FFFFFF 40%, #F8F0FF 100%)" }}
     >
-      <div className="px-5 pt-6 pb-4 flex items-center gap-3">
+      <div className="px-5 pt-6 pb-4 flex items-center gap-3 pt-[env(safe-area-inset-top)]">
         <button
           onClick={() => navigate(createPageUrl("Home"))}
           className="p-2 rounded-xl bg-[#EDE0FF] text-[#5C2E7F] active:scale-90 transition-all"

@@ -86,22 +86,22 @@ import Modulo6Celebracao from './pages/Modulo6Celebracao';
 import Modulo6Licao1 from './pages/Modulo6Licao1';
 import Modulo6Licao2 from './pages/Modulo6Licao2';
 import Modulo6Licao3 from './pages/Modulo6Licao3';
-import Modulos from './pages/Modulos';
-import Perfil from './pages/Perfil';
-import Ranking from './pages/Ranking';
-import Splash from './pages/Splash';
+import Modulo7Celebracao from './pages/Modulo7Celebracao';
 import Modulo7Licao1 from './pages/Modulo7Licao1';
 import Modulo7Licao2 from './pages/Modulo7Licao2';
 import Modulo7Licao3 from './pages/Modulo7Licao3';
 import Modulo7Licao4 from './pages/Modulo7Licao4';
-import Modulo7Celebracao from './pages/Modulo7Celebracao';
+import Modulo8Celebracao from './pages/Modulo8Celebracao';
 import Modulo8Licao1 from './pages/Modulo8Licao1';
 import Modulo8Licao2 from './pages/Modulo8Licao2';
 import Modulo8Licao3 from './pages/Modulo8Licao3';
 import Modulo8Licao4 from './pages/Modulo8Licao4';
 import Modulo8Licao5 from './pages/Modulo8Licao5';
 import Modulo8Licao6 from './pages/Modulo8Licao6';
-import Modulo8Celebracao from './pages/Modulo8Celebracao';
+import Modulos from './pages/Modulos';
+import Perfil from './pages/Perfil';
+import Ranking from './pages/Ranking';
+import Splash from './pages/Splash';
 
 
 export const PAGES = {
@@ -144,22 +144,22 @@ export const PAGES = {
     "Modulo6Licao1": Modulo6Licao1,
     "Modulo6Licao2": Modulo6Licao2,
     "Modulo6Licao3": Modulo6Licao3,
-    "Modulos": Modulos,
-    "Perfil": Perfil,
-    "Ranking": Ranking,
-    "Splash": Splash,
+    "Modulo7Celebracao": Modulo7Celebracao,
     "Modulo7Licao1": Modulo7Licao1,
     "Modulo7Licao2": Modulo7Licao2,
     "Modulo7Licao3": Modulo7Licao3,
     "Modulo7Licao4": Modulo7Licao4,
-    "Modulo7Celebracao": Modulo7Celebracao,
+    "Modulo8Celebracao": Modulo8Celebracao,
     "Modulo8Licao1": Modulo8Licao1,
     "Modulo8Licao2": Modulo8Licao2,
     "Modulo8Licao3": Modulo8Licao3,
     "Modulo8Licao4": Modulo8Licao4,
     "Modulo8Licao5": Modulo8Licao5,
     "Modulo8Licao6": Modulo8Licao6,
-    "Modulo8Celebracao": Modulo8Celebracao,
+    "Modulos": Modulos,
+    "Perfil": Perfil,
+    "Ranking": Ranking,
+    "Splash": Splash,
 }
 
 export const pagesConfig = {

@@ -15,7 +15,7 @@ export default function BottomNav() {
   const location = useLocation();
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-lg border-t border-[#EDE0FF] shadow-lg">
+    <nav className="fixed bottom-0 left-0 right-0 z-40 bg-white/95 dark:bg-gray-900/95 backdrop-blur-lg border-t border-[#EDE0FF] dark:border-gray-700 shadow-lg pb-[env(safe-area-inset-bottom)]">
       <div className="max-w-md mx-auto flex items-center justify-around py-2 px-2">
         {navItems.map((item, i) => {
           if (item.type === "center") {

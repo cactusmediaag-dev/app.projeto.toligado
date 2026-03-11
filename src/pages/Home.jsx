@@ -8,29 +8,31 @@ import BannerDestaque from "@/components/home/BannerDestaque";
 import ActionCards from "@/components/home/ActionCards";
 import ModuloAtivo from "@/components/home/ModuloAtivo";
 import BottomNav from "@/components/shared/BottomNav";
+import PullToRefresh from "@/components/shared/PullToRefresh";
 
 export default function Home() {
   const navigate = useNavigate();
   const [usuario, setUsuario] = useState(null);
   const [loading, setLoading] = useState(true);
 
+  const loadUser = async () => {
+    const userId = localStorage.getItem("toligado_user_id");
+    if (!userId) {
+      navigate(createPageUrl("Entrar"));
+      return;
+    }
+    const users = await base44.entities.Usuario.filter({ id: userId });
+    if (users.length === 0) {
+      localStorage.removeItem("toligado_user_id");
+      localStorage.removeItem("toligado_user_nome");
+      navigate(createPageUrl("Entrar"));
+      return;
+    }
+    setUsuario(users[0]);
+    setLoading(false);
+  };
+
   useEffect(() => {
-    const loadUser = async () => {
-      const userId = localStorage.getItem("toligado_user_id");
-      if (!userId) {
-        navigate(createPageUrl("Entrar"));
-        return;
-      }
-      const users = await base44.entities.Usuario.filter({ id: userId });
-      if (users.length === 0) {
-        localStorage.removeItem("toligado_user_id");
-        localStorage.removeItem("toligado_user_nome");
-        navigate(createPageUrl("Entrar"));
-        return;
-      }
-      setUsuario(users[0]);
-      setLoading(false);
-    };
     loadUser();
   }, [navigate]);
 
@@ -52,17 +54,21 @@ export default function Home() {
   }
 
   return (
-    <div
-      className="min-h-screen pb-4"
-      style={{ background: "linear-gradient(180deg, #F8F0FF 0%, #FFFFFF 40%, #F8F0FF 100%)" }}
-    >
-      <HeaderHome usuario={usuario} />
-      <div className="mt-2">
-        <BannerDestaque usuario={usuario} />
+    <PullToRefresh onRefresh={loadUser}>
+      <div
+        className="min-h-screen pb-4 bg-background dark:bg-gray-900"
+        style={{ background: "linear-gradient(180deg, #F8F0FF 0%, #FFFFFF 40%, #F8F0FF 100%)" }}
+      >
+        <div className="pt-[env(safe-area-inset-top)]">
+          <HeaderHome usuario={usuario} />
+        </div>
+        <div className="mt-2">
+          <BannerDestaque usuario={usuario} />
+        </div>
+        <ActionCards />
+        <ModuloAtivo usuario={usuario} />
+        <BottomNav />
       </div>
-      <ActionCards />
-      <ModuloAtivo usuario={usuario} />
-      <BottomNav />
-    </div>
+    </PullToRefresh>
   );
 }

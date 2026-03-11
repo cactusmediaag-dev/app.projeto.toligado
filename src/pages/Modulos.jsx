@@ -12,10 +12,11 @@ const MODULOS = [
   { id: "mod3", titulo: "Acesso e Segurança Avançada", emoji: "🛡️", desc: "Reconhecimento facial e voz", cor: "#2471A3", aulas: 5 },
   { id: "mod4", titulo: "Uso de Redes Sociais", emoji: "📲", desc: "WhatsApp, Facebook e Instagram", cor: "#8E44AD", aulas: 3 },
   { id: "mod5", titulo: "Criação de Conteúdo Digital", emoji: "🎬", desc: "Posts, vídeos e fotos", cor: "#E74C3C", aulas: 5 },
-  { id: "mod6", titulo: "Dinheiro Digital", emoji: "💰", desc: "PIX, contas e finanças", cor: "#F3984B", aulas: 6 },
-  { id: "mod7", titulo: "Cidadania Online", emoji: "🏛️", desc: "Serviços públicos digitais", cor: "#3498DB", aulas: 4 },
-  { id: "mod8", titulo: "Comunicação Digital", emoji: "💬", desc: "E-mail e videochamadas", cor: "#16A085", aulas: 5 },
-  { id: "mod9", titulo: "Saúde Digital", emoji: "❤️", desc: "Bem-estar e tecnologia", cor: "#9B59B6", aulas: 3 },
+  { id: "mod6", titulo: "Aplicativos Públicos e Serviços", emoji: "🏛️", desc: "INSS, contas e cadastros", cor: "#1A5276", aulas: 3 },
+  { id: "mod7", titulo: "Dinheiro Digital", emoji: "💰", desc: "PIX, contas e finanças", cor: "#F3984B", aulas: 6 },
+  { id: "mod8", titulo: "Cidadania Online", emoji: "🗳️", desc: "Serviços públicos digitais", cor: "#3498DB", aulas: 4 },
+  { id: "mod9", titulo: "Comunicação Digital", emoji: "💬", desc: "E-mail e videochamadas", cor: "#16A085", aulas: 5 },
+  { id: "mod10", titulo: "Saúde Digital", emoji: "❤️", desc: "Bem-estar e tecnologia", cor: "#9B59B6", aulas: 3 },
 ];
 
 export default function Modulos() {
@@ -76,12 +77,14 @@ export default function Modulos() {
                   navigate(createPageUrl("Modulo4Licao1"));
                 } else if (mod.id === "mod5") {
                   navigate(createPageUrl("Modulo5Licao1"));
+                } else if (mod.id === "mod6") {
+                  navigate(createPageUrl("Modulo6Licao1"));
                 }
               }
             }}
             className={`ripple-btn rounded-3xl p-5 flex items-center gap-4 shadow-md transition-all active:scale-[0.97]
               ${status === "locked" ? "opacity-50 bg-gray-100" : "bg-white border-2 border-[#EDE0FF]"}
-              ${status === "active" && (mod.id === "mod1" || mod.id === "mod2" || mod.id === "mod3" || mod.id === "mod4" || mod.id === "mod5") ? "cursor-pointer" : ""}
+              ${status === "active" && (mod.id === "mod1" || mod.id === "mod2" || mod.id === "mod3" || mod.id === "mod4" || mod.id === "mod5" || mod.id === "mod6") ? "cursor-pointer" : ""}
             `}
             >
               <div

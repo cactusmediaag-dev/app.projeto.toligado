@@ -47,55 +47,61 @@
  *
  * The mainPage value must match a key in the PAGES object exactly.
  */
-import Splash from './pages/Splash';
 import Cadastro from './pages/Cadastro';
+import Conquistas from './pages/Conquistas';
 import Entrar from './pages/Entrar';
 import Home from './pages/Home';
-import Modulos from './pages/Modulos';
-import Ranking from './pages/Ranking';
-import Conquistas from './pages/Conquistas';
-import Perfil from './pages/Perfil';
+import Modulo1Celebracao from './pages/Modulo1Celebracao';
 import Modulo1Licao1 from './pages/Modulo1Licao1';
 import Modulo1Licao2 from './pages/Modulo1Licao2';
 import Modulo1Licao3 from './pages/Modulo1Licao3';
 import Modulo1Licao4 from './pages/Modulo1Licao4';
 import Modulo1Licao5 from './pages/Modulo1Licao5';
-import Modulo1Celebracao from './pages/Modulo1Celebracao';
 import Modulo2Licao1 from './pages/Modulo2Licao1';
 import Modulo2Licao2 from './pages/Modulo2Licao2';
 import Modulo2Licao3 from './pages/Modulo2Licao3';
 import Modulo2Licao4 from './pages/Modulo2Licao4';
 import Modulo2Licao5 from './pages/Modulo2Licao5';
 import Modulo2Licao6 from './pages/Modulo2Licao6';
+import Modulos from './pages/Modulos';
+import Perfil from './pages/Perfil';
+import Ranking from './pages/Ranking';
+import Splash from './pages/Splash';
 import Modulo2Licao7 from './pages/Modulo2Licao7';
 import Modulo2Licao8 from './pages/Modulo2Licao8';
 import Modulo2Celebracao from './pages/Modulo2Celebracao';
+import Modulo3Licao1 from './pages/Modulo3Licao1';
+import Modulo3Licao2 from './pages/Modulo3Licao2';
+import Modulo3Licao3 from './pages/Modulo3Licao3';
 
 
 export const PAGES = {
-    "Splash": Splash,
     "Cadastro": Cadastro,
+    "Conquistas": Conquistas,
     "Entrar": Entrar,
     "Home": Home,
-    "Modulos": Modulos,
-    "Ranking": Ranking,
-    "Conquistas": Conquistas,
-    "Perfil": Perfil,
+    "Modulo1Celebracao": Modulo1Celebracao,
     "Modulo1Licao1": Modulo1Licao1,
     "Modulo1Licao2": Modulo1Licao2,
     "Modulo1Licao3": Modulo1Licao3,
     "Modulo1Licao4": Modulo1Licao4,
     "Modulo1Licao5": Modulo1Licao5,
-    "Modulo1Celebracao": Modulo1Celebracao,
     "Modulo2Licao1": Modulo2Licao1,
     "Modulo2Licao2": Modulo2Licao2,
     "Modulo2Licao3": Modulo2Licao3,
     "Modulo2Licao4": Modulo2Licao4,
     "Modulo2Licao5": Modulo2Licao5,
     "Modulo2Licao6": Modulo2Licao6,
+    "Modulos": Modulos,
+    "Perfil": Perfil,
+    "Ranking": Ranking,
+    "Splash": Splash,
     "Modulo2Licao7": Modulo2Licao7,
     "Modulo2Licao8": Modulo2Licao8,
     "Modulo2Celebracao": Modulo2Celebracao,
+    "Modulo3Licao1": Modulo3Licao1,
+    "Modulo3Licao2": Modulo3Licao2,
+    "Modulo3Licao3": Modulo3Licao3,
 }
 
 export const pagesConfig = {

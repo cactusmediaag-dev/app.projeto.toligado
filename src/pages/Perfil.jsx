@@ -5,6 +5,7 @@ import { createPageUrl } from "@/utils";
 import { motion } from "framer-motion";
 import { ArrowLeft, LogOut, Star, Coins, BookOpen, Calendar } from "lucide-react";
 import BottomNav from "@/components/shared/BottomNav";
+import AudioSystem from "@/components/shared/AudioSystem";
 
 export default function Perfil() {
   const navigate = useNavigate();
@@ -155,8 +156,10 @@ function VoiceSettings() {
 
   const testVoice = async () => {
     setTesting(true);
-    if (window.AudioSystem) {
-      await window.AudioSystem.speak('Olá! Estou aqui para te ajudar a aprender!');
+    try {
+      await AudioSystem.speak('Olá! Estou aqui para te ajudar a aprender!');
+    } catch (e) {
+      console.error('Test voice error:', e);
     }
     setTesting(false);
   };

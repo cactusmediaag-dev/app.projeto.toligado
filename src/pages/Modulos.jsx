@@ -14,9 +14,8 @@ const MODULOS = [
   { id: "mod5", titulo: "Criação de Conteúdo Digital", emoji: "🎬", desc: "Posts, vídeos e fotos", cor: "#E74C3C", aulas: 5 },
   { id: "mod6", titulo: "Aplicativos Públicos e Serviços", emoji: "🏛️", desc: "INSS, contas e cadastros", cor: "#1A5276", aulas: 3 },
   { id: "mod7", titulo: "Operações Financeiras I", emoji: "💰", desc: "PIX, boletos e QR Code", cor: "#1E8449", aulas: 4 },
-  { id: "mod8", titulo: "Cidadania Online", emoji: "🗳️", desc: "Serviços públicos digitais", cor: "#3498DB", aulas: 4 },
-  { id: "mod9", titulo: "Comunicação Digital", emoji: "💬", desc: "E-mail e videochamadas", cor: "#16A085", aulas: 5 },
-  { id: "mod10", titulo: "Saúde Digital", emoji: "❤️", desc: "Bem-estar e tecnologia", cor: "#9B59B6", aulas: 3 },
+  { id: "mod8", titulo: "Operações Financeiras II e Segurança", emoji: "🔐", desc: "Segurança financeira e IA", cor: "#922B21", aulas: 6 },
+
 ];
 
 export default function Modulos() {
@@ -81,12 +80,14 @@ export default function Modulos() {
                   navigate(createPageUrl("Modulo6Licao1"));
                 } else if (mod.id === "mod7") {
                   navigate(createPageUrl("Modulo7Licao1"));
+                } else if (mod.id === "mod8") {
+                  navigate(createPageUrl("Modulo8Licao1"));
                 }
               }
             }}
             className={`ripple-btn rounded-3xl p-5 flex items-center gap-4 shadow-md transition-all active:scale-[0.97]
               ${status === "locked" ? "opacity-50 bg-gray-100" : "bg-white border-2 border-[#EDE0FF]"}
-              ${status === "active" && (mod.id === "mod1" || mod.id === "mod2" || mod.id === "mod3" || mod.id === "mod4" || mod.id === "mod5" || mod.id === "mod6" || mod.id === "mod7") ? "cursor-pointer" : ""}
+              ${status === "active" && (mod.id === "mod1" || mod.id === "mod2" || mod.id === "mod3" || mod.id === "mod4" || mod.id === "mod5" || mod.id === "mod6" || mod.id === "mod7" || mod.id === "mod8") ? "cursor-pointer" : ""}
             `}
             >
               <div

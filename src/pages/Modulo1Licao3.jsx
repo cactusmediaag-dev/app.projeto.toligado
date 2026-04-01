@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { createPageUrl } from "@/utils";
@@ -7,11 +7,100 @@ import SimuladorWrapper from "@/components/simulador/SimuladorWrapper";
 import ElementoClicavel from "@/components/simulador/ElementoClicavel";
 import ValidacaoQuiz from "@/components/simulador/ValidacaoQuiz";
 
+const LensCamera = ({ onCapture, onSkip }) => {
+  const videoRef = useRef(null);
+  const [streamAtivo, setStreamAtivo] = useState(null);
+  const [captured, setCaptured] = useState(null);
+  const [analyzing, setAnalyzing] = useState(false);
+  const [result, setResult] = useState(null);
+  const [denied, setDenied] = useState(false);
+
+  useEffect(() => {
+    navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } })
+      .then(s => {
+        setStreamAtivo(s);
+        if (videoRef.current) videoRef.current.srcObject = s;
+      })
+      .catch(() => setDenied(true));
+    return () => {
+      setStreamAtivo(prev => {
+        if (prev) prev.getTracks().forEach(t => t.stop());
+        return null;
+      });
+    };
+  }, []);
+
+  const capture = () => {
+    if (!videoRef.current) return;
+    const canvas = document.createElement('canvas');
+    canvas.width = videoRef.current.videoWidth || 640;
+    canvas.height = videoRef.current.videoHeight || 480;
+    canvas.getContext('2d').drawImage(videoRef.current, 0, 0);
+    setCaptured(canvas.toDataURL('image/jpeg', 0.8));
+    setAnalyzing(true);
+    if (streamAtivo) streamAtivo.getTracks().forEach(t => t.stop());
+    setTimeout(() => { setAnalyzing(false); setResult(true); }, 2500);
+  };
+
+  if (denied) return (
+    <div style={{ height:'100%', background:'#111', display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center', color:'#fff', padding:'24px', textAlign:'center', gap:'16px' }}>
+      <span style={{ fontSize:'52px' }}>📷</span>
+      <p style={{ fontSize:'15px', opacity:0.8, lineHeight:1.5 }}>Câmera não disponível neste dispositivo. Tudo bem, pode continuar! 😊</p>
+      <button onClick={onSkip} style={{ background:'#F3984B', color:'#fff', border:'none', borderRadius:'14px', padding:'14px 28px', fontSize:'16px', fontWeight:'700', cursor:'pointer' }}>Continuar a lição ➜</button>
+    </div>
+  );
+
+  if (result) return (
+    <div style={{ height:'100%', background:'#fff', display:'flex', flexDirection:'column' }}>
+      <img src={captured} style={{ width:'100%', height:'52%', objectFit:'cover' }}/>
+      <div style={{ flex:1, padding:'16px', display:'flex', flexDirection:'column', gap:'12px' }}>
+        <div style={{ background:'#e8f4fd', borderRadius:'14px', padding:'14px', display:'flex', alignItems:'center', gap:'12px' }}>
+          <span style={{ fontSize:'28px' }}>🔍</span>
+          <div>
+            <div style={{ fontWeight:'700', fontSize:'15px', color:'#1a73e8' }}>Google Lens identificou!</div>
+            <div style={{ fontSize:'13px', color:'#555', marginTop:'3px' }}>Objeto capturado e analisado ✅</div>
+          </div>
+        </div>
+        <p style={{ fontSize:'14px', color:'#555', lineHeight:1.6, flex:1 }}>Incrível! O Google Lens usa a câmera para identificar qualquer coisa ao seu redor. Plantas, produtos, textos e muito mais! 🌟</p>
+        <button onClick={onCapture} style={{ background:'#4285F4', color:'#fff', border:'none', borderRadius:'14px', padding:'14px', fontSize:'16px', fontWeight:'700', cursor:'pointer' }}>✅ Entendi! Continuar</button>
+      </div>
+    </div>
+  );
+
+  if (analyzing) return (
+    <div style={{ height:'100%', background:'#000', position:'relative', display:'flex', alignItems:'center', justifyContent:'center' }}>
+      {captured && <img src={captured} style={{ position:'absolute', inset:0, width:'100%', height:'100%', objectFit:'cover', opacity:0.5 }}/>}
+      <div style={{ position:'relative', zIndex:1, textAlign:'center', color:'#fff' }}>
+        <div style={{ width:'56px', height:'56px', border:'4px solid #4285F4', borderTopColor:'transparent', borderRadius:'50%', animation:'spin 0.8s linear infinite', margin:'0 auto 16px' }}/>
+        <p style={{ fontSize:'16px' }}>🔍 Analisando com Google Lens...</p>
+      </div>
+    </div>
+  );
+
+  return (
+    <div style={{ height:'100%', background:'#000', position:'relative', overflow:'hidden' }}>
+      <video ref={videoRef} autoPlay playsInline muted style={{ width:'100%', height:'100%', objectFit:'cover' }}/>
+      <div style={{ position:'absolute', inset:0, background:'rgba(0,0,0,0.3)' }}/>
+      <div style={{ position:'absolute', inset:0, display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center', gap:'16px' }}>
+        <div style={{ width:'180px', height:'180px', border:'2px solid rgba(66,133,244,0.8)', borderRadius:'16px', position:'relative', boxShadow:'0 0 0 9999px rgba(0,0,0,0.35)' }}>
+          {[{top:-2,left:-2,borderWidth:'3px 0 0 3px'},{top:-2,right:-2,borderWidth:'3px 3px 0 0'},{bottom:-2,left:-2,borderWidth:'0 0 3px 3px'},{bottom:-2,right:-2,borderWidth:'0 3px 3px 0'}].map((s,i)=>(
+            <div key={i} style={{ position:'absolute', width:'22px', height:'22px', borderColor:'#4285F4', borderStyle:'solid', ...s }}/>
+          ))}
+        </div>
+        <p style={{ color:'#fff', fontSize:'14px', textShadow:'0 1px 4px rgba(0,0,0,0.9)', textAlign:'center' }}>Aponte para qualquer objeto 📷</p>
+      </div>
+      <div style={{ position:'absolute', bottom:'32px', left:0, right:0, display:'flex', flexDirection:'column', alignItems:'center', gap:'12px' }}>
+        <button onClick={capture} style={{ width:'72px', height:'72px', background:'#fff', borderRadius:'50%', border:'5px solid rgba(255,255,255,0.4)', cursor:'pointer', boxShadow:'0 4px 20px rgba(0,0,0,0.5)' }}/>
+        <button onClick={onSkip} style={{ background:'rgba(0,0,0,0.4)', color:'rgba(255,255,255,0.7)', border:'1px solid rgba(255,255,255,0.2)', borderRadius:'20px', padding:'8px 20px', fontSize:'13px', cursor:'pointer' }}>Pular →</button>
+      </div>
+    </div>
+  );
+};
+
 export default function Modulo1Licao3() {
   const navigate = useNavigate();
   const [passo, setPasso] = useState(1);
   const [lensAberto, setLensAberto] = useState(false);
-  const [analisando, setAnalisando] = useState(false);
   const [resultado, setResultado] = useState(null);
   const [imagem, setImagem] = useState("planta");
   const [mostrarValidacao, setMostrarValidacao] = useState(false);
@@ -60,18 +149,24 @@ export default function Modulo1Licao3() {
       audio: "O Google Lens lê o mundo pela câmera! Toque no ícone do Lens para abrir!",
     },
     {
-      instrucao: "A câmera está aberta! Toque no botão de CAPTURAR para identificar a planta 🌿",
-      audio: "A câmera está aberta! Toque no botão de capturar para identificar a planta!",
+      instrucao: "A câmera está aberta! Aponte para algo e toque no botão para capturar 🌿",
+      audio: "A câmera está aberta! Aponte para algo e toque no botão para capturar!",
     },
     {
-      instrucao: "Que incrível! O Lens identificou a planta! Toque em VOLTAR para tentar com outra coisa 😄",
-      audio: "Que incrível! O Lens identificou a planta! Toque em voltar para tentar com outra coisa!",
+      instrucao: "Que incrível! O Lens identificou! Toque em VOLTAR para tentar com outra coisa 😄",
+      audio: "Que incrível! O Lens identificou! Toque em voltar para tentar com outra coisa!",
     },
     {
       instrucao: "Agora aponte para um produto! Toque em CAPTURAR de novo 📦",
       audio: "Agora aponte para um produto! Toque em capturar de novo!",
     },
   ];
+
+  const avancarPasso = () => {
+    setResultado(true);
+    setLensAberto(false);
+    setPasso(p => p + 1);
+  };
 
   return (
     <SimuladorWrapper
@@ -81,7 +176,7 @@ export default function Modulo1Licao3() {
       totalPassos={4}
       onVoltar={() => navigate(createPageUrl("Modulos"))}
     >
-      {!lensAberto && (
+      {!lensAberto && !resultado && (
         <div className="w-full h-full bg-gradient-to-b from-blue-50 to-blue-100 p-6 pt-12">
           <div className="grid grid-cols-4 gap-6 mt-8">
             {passo === 1 && (
@@ -117,56 +212,7 @@ export default function Modulo1Licao3() {
       )}
 
       {lensAberto && !resultado && (
-        <div className="w-full h-full bg-black relative">
-          <div className="absolute inset-0 flex items-center justify-center">
-            {imagem === "planta" && (
-              <div className="text-9xl">🌿</div>
-            )}
-            {imagem === "produto" && (
-              <div className="bg-white rounded-2xl p-6 text-center">
-                <div className="text-6xl mb-2">🍚</div>
-                <p className="text-sm font-bold text-gray-700">Arroz Tipo 1</p>
-                <p className="text-xs text-gray-500">5kg</p>
-              </div>
-            )}
-          </div>
-
-          {analisando && (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              className="absolute inset-0 bg-black/50 flex items-center justify-center"
-            >
-              <motion.div
-                animate={{ rotate: 360 }}
-                transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-                className="w-16 h-16 border-4 border-white border-t-transparent rounded-full"
-              />
-            </motion.div>
-          )}
-
-          {!resultado && (
-            <div className="absolute bottom-6 left-0 right-0 px-6">
-              {(passo === 2 || passo === 4) && (
-                <ElementoClicavel
-                  onClick={() => {
-                    setAnalisando(true);
-                    setTimeout(() => {
-                      setAnalisando(false);
-                      setResultado(true);
-                      setPasso(passo + 1);
-                    }, 1500);
-                  }}
-                  posicao="top"
-                >
-                  <div className="w-20 h-20 bg-white rounded-full mx-auto shadow-xl border-4 border-gray-200 cursor-pointer active:scale-95 transition-all" />
-                </ElementoClicavel>
-              )}
-            </div>
-          )}
-
-          <button className="absolute top-8 left-4 text-white text-2xl">←</button>
-        </div>
+        <LensCamera onCapture={avancarPasso} onSkip={avancarPasso} />
       )}
 
       {resultado && passo === 3 && (
@@ -195,7 +241,7 @@ export default function Modulo1Licao3() {
         </motion.div>
       )}
 
-      {resultado && passo === 5 && (
+      {resultado && passo >= 5 && (
         <motion.div
           initial={{ y: 50, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}

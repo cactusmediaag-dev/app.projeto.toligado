@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { createPageUrl } from "@/utils";
@@ -6,6 +6,71 @@ import { base44 } from "@/api/base44Client";
 import SimuladorWrapper from "@/components/simulador/SimuladorWrapper";
 import ElementoClicavel from "@/components/simulador/ElementoClicavel";
 import ValidacaoQuiz from "@/components/simulador/ValidacaoQuiz";
+
+const AssistenteVoz = ({ onSuccess, onSkip }) => {
+  const [status, setStatus] = useState('idle');
+  const [transcript, setTranscript] = useState('');
+  const recognitionRef = useRef(null);
+
+  const startListening = () => {
+    const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SR) { setStatus('notsupported'); return; }
+    const r = new SR();
+    recognitionRef.current = r;
+    r.lang = 'pt-BR';
+    r.continuous = false;
+    r.interimResults = true;
+    r.onstart = () => setStatus('listening');
+    r.onresult = (e) => {
+      const text = e.results[0][0].transcript;
+      setTranscript(text);
+      if (e.results[0].isFinal) {
+        setStatus('heard');
+        setTimeout(() => onSuccess(text), 1200);
+      }
+    };
+    r.onerror = () => setStatus('error');
+    r.start();
+  };
+
+  useEffect(() => () => recognitionRef.current?.stop(), []);
+
+  if (status === 'notsupported' || status === 'error') return (
+    <div style={{ height:'100%', background:'#1a1a2e', display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center', color:'#fff', padding:'24px', textAlign:'center', gap:'16px' }}>
+      <span style={{ fontSize:'52px' }}>{status === 'error' ? '😅' : '🎤'}</span>
+      <p style={{ fontSize:'16px' }}>{status === 'error' ? 'Não consegui ouvir. Fale mais alto! 🔊' : 'Microfone não disponível. Pode continuar! 😊'}</p>
+      {status === 'error' && (
+        <button onClick={startListening} style={{ background:'#4285F4', color:'#fff', border:'none', borderRadius:'14px', padding:'14px 28px', fontSize:'16px', fontWeight:'700', cursor:'pointer' }}>🎤 Tentar de novo</button>
+      )}
+      <button onClick={onSkip} style={{ background: status === 'error' ? 'transparent' : '#F3984B', color: status === 'error' ? 'rgba(255,255,255,0.5)' : '#fff', border:'none', borderRadius:'14px', padding:'12px 24px', fontSize:'14px', cursor:'pointer' }}>{status === 'error' ? 'Pular →' : 'Continuar a lição ➜'}</button>
+    </div>
+  );
+
+  if (status === 'heard') return (
+    <div style={{ height:'100%', background:'#1a1a2e', display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center', color:'#fff', padding:'24px', textAlign:'center', gap:'20px' }}>
+      <div style={{ display:'flex', gap:'6px' }}>{['#4285F4','#EA4335','#FBBC05','#34A853'].map((c,i)=>(<div key={i} style={{ width:'14px', height:'14px', borderRadius:'50%', background:c }}/>))}</div>
+      <span style={{ fontSize:'52px' }}>✅</span>
+      <div style={{ background:'rgba(255,255,255,0.1)', borderRadius:'16px', padding:'16px 24px' }}>
+        <p style={{ fontSize:'13px', opacity:0.7, marginBottom:'6px' }}>Você disse:</p>
+        <p style={{ fontSize:'18px', fontWeight:'700' }}>&#34;{transcript}&#34;</p>
+      </div>
+      <p style={{ fontSize:'15px', color:'#34A853', fontWeight:'600' }}>O Assistente ouviu você! 🎉</p>
+    </div>
+  );
+
+  return (
+    <div style={{ height:'100%', background:'#1a1a2e', display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center', color:'#fff', padding:'24px', textAlign:'center', gap:'24px' }}>
+      <div style={{ display:'flex', gap:'6px' }}>{['#4285F4','#EA4335','#FBBC05','#34A853'].map((c,i)=>(<div key={i} style={{ width:'14px', height:'14px', borderRadius:'50%', background:c, animation: status === 'listening' ? `bounce 0.6s ease ${i*0.1}s infinite alternate` : 'none' }}/>))}</div>
+      <p style={{ fontSize:'17px', lineHeight:1.5, maxWidth:'260px' }}>{status === 'listening' ? 'Ouvindo... fale agora! 🎤' : 'Toque no microfone e diga: "Ok Google!"'}</p>
+      <button onClick={startListening} style={{ width:'88px', height:'88px', borderRadius:'50%', border:'none', cursor:'pointer', background: status === 'listening' ? 'radial-gradient(circle, #EA4335, #c0392b)' : 'rgba(255,255,255,0.15)', fontSize:'36px', boxShadow: status === 'listening' ? '0 0 0 12px rgba(234,67,53,0.2)' : 'none', transition:'all 0.3s ease' }}>🎤</button>
+      {status === 'listening' && (
+        <div style={{ display:'flex', gap:'4px', alignItems:'center', height:'36px' }}>{[1,2,3,4,5,4,3,2,1].map((h,i)=>(<div key={i} style={{ width:'4px', borderRadius:'2px', background:'#4285F4', height:`${h*6}px`, animation:`audioWave 0.5s ease ${i*0.06}s infinite alternate` }}/>))}</div>
+      )}
+      {transcript && (<div style={{ background:'rgba(255,255,255,0.1)', borderRadius:'12px', padding:'10px 18px', fontSize:'15px', fontStyle:'italic' }}>&#34;{transcript}&#34;</div>)}
+      <button onClick={onSkip} style={{ background:'transparent', color:'rgba(255,255,255,0.4)', border:'none', fontSize:'13px', cursor:'pointer' }}>Pular esta etapa →</button>
+    </div>
+  );
+};
 
 export default function Modulo1Licao2() {
   const navigate = useNavigate();
@@ -142,14 +207,12 @@ export default function Modulo1Licao2() {
             </motion.div>
           )}
           {passo === 2 && (
-            <ElementoClicavel
-              onClick={() => handleCliqueCerto(3, () => { setEscutando(true); setTimeout(() => setResposta(true), 1500); })}
-              posicao="bottom"
-            >
-              <div className="w-20 h-20 bg-blue-500 rounded-full flex items-center justify-center text-4xl shadow-lg cursor-pointer">
-                🎤
-              </div>
-            </ElementoClicavel>
+            <div className="w-full h-full" style={{ margin:'-24px', width:'calc(100% + 48px)', height:'100%' }}>
+              <AssistenteVoz
+                onSuccess={() => { setPasso(3); setEscutando(true); setTimeout(() => setResposta(true), 800); }}
+                onSkip={() => { setPasso(3); setEscutando(true); setTimeout(() => setResposta(true), 800); }}
+              />
+            </div>
           )}
           <p className="text-white text-center mt-6 font-semibold">
             {escutando ? "Ouvindo..." : "Toque no microfone"}

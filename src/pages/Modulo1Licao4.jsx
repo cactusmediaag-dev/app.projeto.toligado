@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { createPageUrl } from "@/utils";
@@ -6,6 +6,88 @@ import { base44 } from "@/api/base44Client";
 import SimuladorWrapper from "@/components/simulador/SimuladorWrapper";
 import ElementoClicavel from "@/components/simulador/ElementoClicavel";
 import ValidacaoQuiz from "@/components/simulador/ValidacaoQuiz";
+
+const PesquisaReal = ({ onClose }) => {
+  const [query, setQuery] = useState('remédio caseiro para dor de cabeça');
+  const [results, setResults] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [searched, setSearched] = useState(false);
+
+  const search = async (q) => {
+    if (!q.trim()) return;
+    setLoading(true);
+    setSearched(true);
+    try {
+      const res = await fetch(
+        `https://api.duckduckgo.com/?q=${encodeURIComponent(q)}&format=json&no_html=1&skip_disambig=1&no_redirect=1`
+      );
+      const data = await res.json();
+      const items = [];
+      if (data.AbstractText) {
+        items.push({
+          title: data.Heading || q,
+          snippet: data.AbstractText.slice(0, 160) + '...',
+          source: data.AbstractSource || 'Wikipedia'
+        });
+      }
+      (data.RelatedTopics || [])
+        .filter(t => t.Text).slice(0, 3)
+        .forEach(t => items.push({
+          title: t.Text.split(' - ')[0].slice(0, 60),
+          snippet: t.Text.slice(0, 120) + '...',
+          source: 'Resultado relacionado'
+        }));
+      if (items.length === 0) items.push(
+        { title: `${q}`, snippet: `Informações sobre "${q}".`, source: 'Google' },
+        { title: `${q} — Dicas`, snippet: `Veja dicas sobre "${q}".`, source: 'Saúde' }
+      );
+      setResults(items);
+    } catch {
+      setResults([{ title: q, snippet: `Resultados para "${q}" encontrados.`, source: 'Google' }]);
+    }
+    setLoading(false);
+  };
+
+  return (
+    <div style={{ height:'100%', background:'#fff', display:'flex', flexDirection:'column', fontSize:'13px' }}>
+      <div style={{ padding:'10px 12px', borderBottom:'1px solid #e0e0e0', display:'flex', alignItems:'center', gap:'8px' }}>
+        <button onClick={onClose} style={{ background:'#5C2E7F', color:'#fff', border:'none', borderRadius:'8px', padding:'6px 12px', fontSize:'12px', fontWeight:'700', cursor:'pointer' }}>← Voltar</button>
+        <div style={{ flex:1, display:'flex', alignItems:'center', gap:'6px', background:'#f1f3f4', borderRadius:'22px', padding:'7px 14px', border:'1px solid #dfe1e5' }}>
+          <span>🔍</span>
+          <input value={query} onChange={e => setQuery(e.target.value)} onKeyDown={e => e.key === 'Enter' && search(query)} style={{ flex:1, border:'none', background:'transparent', fontSize:'13px', outline:'none', color:'#202124' }}/>
+          <button onClick={() => search(query)} style={{ background:'none', border:'none', color:'#4285F4', fontSize:'12px', fontWeight:'700', cursor:'pointer' }}>Buscar</button>
+        </div>
+      </div>
+      {!searched && !loading && (
+        <div style={{ padding:'16px' }}>
+          <button onClick={() => search(query)} style={{ width:'100%', background:'#4285F4', color:'#fff', border:'none', borderRadius:'12px', padding:'14px', fontSize:'15px', fontWeight:'700', cursor:'pointer' }}>🔍 Buscar agora</button>
+        </div>
+      )}
+      {loading && (
+        <div style={{ flex:1, display:'flex', alignItems:'center', justifyContent:'center' }}>
+          <div style={{ width:'32px', height:'32px', border:'3px solid #4285F4', borderTopColor:'transparent', borderRadius:'50%', animation:'spin 0.8s linear infinite' }}/>
+        </div>
+      )}
+      {!loading && searched && (
+        <div style={{ flex:1, overflowY:'auto' }}>
+          <div style={{ padding:'8px 12px', borderBottom:'1px solid #f0f0f0' }}>
+            <p style={{ color:'#70757a', fontSize:'11px' }}>{results.length * 1240} resultados</p>
+          </div>
+          {results.map((r, i) => (
+            <div key={i} style={{ padding:'12px', borderBottom:'1px solid #f8f8f8' }}>
+              <div style={{ color:'#70757a', fontSize:'11px', marginBottom:'3px' }}>🌐 {r.source}</div>
+              <div style={{ color:'#1a0dab', fontSize:'15px', fontWeight:'500', marginBottom:'4px', lineHeight:1.3 }}>{r.title}</div>
+              <div style={{ color:'#4d5156', fontSize:'12px', lineHeight:1.5 }}>{r.snippet}</div>
+            </div>
+          ))}
+          <div style={{ padding:'16px' }}>
+            <button onClick={onClose} style={{ width:'100%', background:'#5C2E7F', color:'#fff', border:'none', borderRadius:'12px', padding:'14px', fontSize:'15px', fontWeight:'700', cursor:'pointer' }}>✅ Entendi! Continuar a lição</button>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
 
 export default function Modulo1Licao4() {
   const navigate = useNavigate();
@@ -53,7 +135,7 @@ export default function Modulo1Licao4() {
         moedas={10}
       />
     );
-  };
+  }
 
   const passos = [
     {
@@ -108,7 +190,7 @@ export default function Modulo1Licao4() {
         </div>
       )}
 
-      {chromeAberto && !resultados && !artigo && (
+      {chromeAberto && !resultados && (
         <div className="w-full h-full bg-white pt-12">
           <div className="px-4 mb-6">
             {passo === 2 && !digitando && (
@@ -165,63 +247,8 @@ export default function Modulo1Licao4() {
         </div>
       )}
 
-      {resultados && !artigo && (
-        <div className="w-full h-full bg-white pt-12 overflow-y-auto">
-          <div className="px-4 mb-4">
-            <div className="bg-gray-100 rounded-full px-4 py-3 flex items-center gap-2">
-              <span>🔍</span>
-              <span className="text-gray-700 font-semibold text-sm">{textoBusca}</span>
-            </div>
-          </div>
-          <div className="px-4 space-y-4">
-            {passo === 3 && (
-              <ElementoClicavel
-                onClick={() => handleCliqueCerto(999, () => setArtigo(true))}
-                posicao="left"
-              >
-                <div className="bg-white border border-gray-200 rounded-2xl p-4 cursor-pointer active:bg-gray-50">
-                  <h3 className="text-blue-600 font-bold text-base mb-1">
-                    Dor de Cabeça: Causas e Tratamentos
-                  </h3>
-                  <p className="text-xs text-gray-600 mb-1">www.saude.com.br</p>
-                  <p className="text-sm text-gray-500 leading-relaxed">
-                    Saiba quais são as principais causas de dor de cabeça e como tratá-las de forma segura...
-                  </p>
-                </div>
-              </ElementoClicavel>
-            )}
-            {[
-              { titulo: "Remédios para Enxaqueca", site: "farmacia.online" },
-              { titulo: "Como Aliviar Dor de Cabeça Naturalmente", site: "vidasaudavel.net" },
-            ].map((item, i) => (
-              <div key={i} className="bg-white border border-gray-200 rounded-2xl p-4">
-                <h3 className="text-blue-600 font-bold text-base mb-1">{item.titulo}</h3>
-                <p className="text-xs text-gray-600 mb-1">{item.site}</p>
-                <p className="text-sm text-gray-500">Descubra métodos eficazes...</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {artigo && (
-        <div className="w-full h-full bg-white pt-12 overflow-y-auto">
-          <div className="px-6 py-4">
-            <button className="text-blue-600 font-bold mb-4">← Voltar</button>
-            <h1 className="text-2xl font-black text-gray-800 mb-4">
-              Dor de Cabeça: Causas e Tratamentos
-            </h1>
-            <p className="text-base text-gray-600 leading-relaxed mb-4">
-              A dor de cabeça é um problema comum que pode ter diversas causas, desde tensão muscular até problemas mais sérios...
-            </p>
-            <button
-              onClick={() => setMostrarValidacao(true)}
-              className="w-full bg-[#F3984B] text-white py-4 rounded-2xl font-bold text-lg active:scale-95 transition-all"
-            >
-              Continuar 🚀
-            </button>
-          </div>
-        </div>
+      {resultados && (
+        <PesquisaReal onClose={() => setMostrarValidacao(true)} />
       )}
     </SimuladorWrapper>
   );

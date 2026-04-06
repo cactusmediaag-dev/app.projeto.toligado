@@ -6,6 +6,7 @@ import { base44 } from "@/api/base44Client";
 import SimuladorWrapper from "@/components/simulador/SimuladorWrapper";
 import ElementoClicavel from "@/components/simulador/ElementoClicavel";
 import ValidacaoQuiz from "@/components/simulador/ValidacaoQuiz";
+import { Sons, MoedasAnimadas, FeedbackAcerto, FeedbackErro } from "@/components/shared/GameFeedback";
 
 const LensCamera = ({ onCapture, onSkip }) => {
   const videoRef = useRef(null);
@@ -126,6 +127,10 @@ export default function Modulo1Licao3() {
   const [lensAberto, setLensAberto] = useState(false);
   const [resultado, setResultado] = useState(false);
   const [mostrarValidacao, setMostrarValidacao] = useState(false);
+  const [feedbackAcerto, setFeedbackAcerto] = useState(false);
+  const [feedbackErro, setFeedbackErro] = useState(false);
+  const [mostrarMoedas, setMostrarMoedas] = useState(false);
+  const [mensagemFeedback, setMensagemFeedback] = useState('');
 
   const handleCliqueCerto = (proximoPasso, acao) => {
     const audio = new Audio(
@@ -293,6 +298,10 @@ export default function Modulo1Licao3() {
           </button>
         </motion.div>
       )}
+
+      {mostrarMoedas && <MoedasAnimadas quantidade={10} onFim={() => setMostrarMoedas(false)} />}
+      {feedbackAcerto && <FeedbackAcerto mensagem={mensagemFeedback} onContinuar={() => { setFeedbackAcerto(false); setMostrarMoedas(true); Sons.avancar(); }} />}
+      {feedbackErro && <FeedbackErro dica={mensagemFeedback} onTentar={() => setFeedbackErro(false)} />}
     </SimuladorWrapper>
   );
 }

@@ -187,6 +187,9 @@ export default function Perfil() {
 
         {/* Botões de conta */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+          <button onClick={() => navigate('/PoliticaPrivacidade')} style={{ width: '100%', padding: '14px', borderRadius: '16px', border: '1px solid #eee', background: '#fafafa', color: '#5C2E7F', fontSize: '14px', fontWeight: '600', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
+            ⚖️ Política de Privacidade
+          </button>
           <button onClick={sair} style={{ width: '100%', padding: '16px', borderRadius: '16px', border: '2px solid rgba(231,76,60,0.3)', background: 'rgba(231,76,60,0.08)', color: '#e74c3c', fontSize: '16px', fontWeight: '700', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
             🚪 Sair da conta
           </button>

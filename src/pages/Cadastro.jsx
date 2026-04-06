@@ -303,6 +303,14 @@ export default function Cadastro() {
         >
           {loading ? 'Criando sua conta...' : step === 3 ? 'Criar minha conta! 🚀' : 'Próximo →'}
         </button>
+        {step === 3 && (
+          <p style={{ color: 'rgba(255,255,255,0.6)', fontSize: '12px', textAlign: 'center', margin: '4px 0 0' }}>
+            Ao criar sua conta você concorda com nossa{' '}
+            <span onClick={() => navigate('/PoliticaPrivacidade')} style={{ color: 'rgba(255,255,255,0.9)', textDecoration: 'underline', cursor: 'pointer', fontWeight: '700' }}>
+              Política de Privacidade
+            </span>
+          </p>
+        )}
       </div>
 
     </div>

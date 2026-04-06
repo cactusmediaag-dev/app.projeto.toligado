@@ -3,10 +3,13 @@ import { useNavigate } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import BottomNav from '@/components/shared/BottomNav';
 import { base44 } from '@/api/base44Client';
+import { Sons } from '@/components/shared/GameFeedback';
 
 export default function Modulos() {
   const navigate = useNavigate();
   const [modulosCompletos, setModulosCompletos] = useState([]);
+  const [moduloSelecionado, setModuloSelecionado] = useState(null);
+  const [mostrarModalRevisao, setMostrarModalRevisao] = useState(false);
 
   useEffect(() => {
     const userId = localStorage.getItem('toligado_user_id');
@@ -43,6 +46,12 @@ export default function Modulos() {
       setTimeout(() => toast.remove(), 2500);
       return;
     }
+    if (status === 'completo') {
+      setModuloSelecionado(modulo);
+      setMostrarModalRevisao(true);
+      return;
+    }
+    Sons.desbloquear();
     navigate(createPageUrl(modulo.primeiraLicao));
   };
 
@@ -124,6 +133,42 @@ export default function Modulos() {
       </div>
 
       <BottomNav />
+
+      {mostrarModalRevisao && moduloSelecionado && (
+        <div
+          style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.6)', zIndex: 1000, display: 'flex', alignItems: 'flex-end', justifyContent: 'center' }}
+          onClick={() => setMostrarModalRevisao(false)}
+        >
+          <div
+            onClick={e => e.stopPropagation()}
+            style={{ background: '#fff', borderRadius: '24px 24px 0 0', padding: 'calc(env(safe-area-inset-bottom,20px) + 24px) 24px 24px', width: '100%', maxWidth: '480px', animation: 'slideUpFeedback 0.3s ease' }}
+          >
+            <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '20px' }}>
+              <div style={{ width: '56px', height: '56px', borderRadius: '16px', background: moduloSelecionado.gradiente, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '28px', flexShrink: 0 }}>
+                {moduloSelecionado.icone}
+              </div>
+              <div style={{ flex: 1 }}>
+                <span style={{ background: '#e8f8f0', color: '#27AE60', fontSize: '12px', fontWeight: '800', padding: '3px 10px', borderRadius: '10px', display: 'inline-block', marginBottom: '6px' }}>✅ Concluído</span>
+                <h3 style={{ fontSize: '16px', fontWeight: '800', color: '#333', margin: 0, lineHeight: 1.2 }}>{moduloSelecionado.titulo.replace('\n', ' ')}</h3>
+              </div>
+            </div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+              <button
+                onClick={() => { setMostrarModalRevisao(false); Sons.avancar(); navigate(createPageUrl(moduloSelecionado.primeiraLicao)); }}
+                style={{ width: '100%', padding: '16px', borderRadius: '16px', border: 'none', background: 'linear-gradient(135deg, #5C2E7F, #9B59B6)', color: '#fff', fontSize: '16px', fontWeight: '800', cursor: 'pointer' }}
+              >
+                📖 Revisar este módulo
+              </button>
+              <button
+                onClick={() => setMostrarModalRevisao(false)}
+                style={{ width: '100%', padding: '14px', borderRadius: '16px', border: '1.5px solid #eee', background: '#fafafa', color: '#999', fontSize: '15px', fontWeight: '700', cursor: 'pointer' }}
+              >
+                Voltar
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

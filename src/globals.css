@@ -220,3 +220,30 @@ body {
   padding: 16px;
   box-shadow: 0 2px 12px rgba(92,46,127,0.08);
 }
+
+@keyframes buttonPulse {
+  0%   { box-shadow: 4px 0 8px rgba(243,152,75,0.4); }
+  100% { box-shadow: 4px 0 20px rgba(243,152,75,1); }
+}
+
+@keyframes arrowPulse {
+  from { transform: translateX(0); }
+  to   { transform: translateX(6px); }
+}
+
+@keyframes fadeInOut {
+  0%   { opacity: 0; transform: translate(-50%,-50%) scale(0.8); }
+  20%  { opacity: 1; transform: translate(-50%,-50%) scale(1); }
+  80%  { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+@keyframes mascoteFala {
+  from { transform: scale(1); }
+  to   { transform: scale(1.08); }
+}
+
+@keyframes speakerPulse {
+  from { transform: scale(1); }
+  to   { transform: scale(1.12); }
+}

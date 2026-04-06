@@ -3,11 +3,7 @@ import { motion } from "framer-motion";
 
 const StatusBar = ({ theme = "light" }) => {
   const now = new Date();
-  const time = now.toLocaleTimeString('pt-BR', {
-    hour: '2-digit',
-    minute: '2-digit'
-  });
-  
+  const time = now.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
   const color = theme === "dark" ? "#fff" : "#000";
 
   return (
@@ -37,8 +33,8 @@ const StatusBar = ({ theme = "light" }) => {
 const AndroidNavBar = () => (
   <div className="absolute bottom-0 left-0 right-0 flex items-center justify-around px-8" style={{ height: '32px', background: 'rgba(245,245,245,0.95)', borderTop: '0.5px solid #e0e0e0' }}>
     <button className="text-xl text-gray-700 bg-transparent border-none cursor-pointer">‹</button>
-    <div className="w-4.5 h-4.5 border-2 border-gray-600 rounded"></div>
-    <div className="w-3.5 h-3.5 border-2 border-gray-600 rounded" style={{ boxShadow: '2px 2px 0 #555' }}></div>
+    <div className="w-4 h-4 border-2 border-gray-600 rounded"></div>
+    <div className="w-3 h-3 border-2 border-gray-600 rounded" style={{ boxShadow: '2px 2px 0 #555' }}></div>
   </div>
 );
 
@@ -57,14 +53,12 @@ export default function PhoneFrame({ children, statusBarTheme = "light" }) {
         boxShadow: '0 0 0 2px #333, 0 0 0 4px #555, 0 25px 60px rgba(0,0,0,0.5), inset 0 0 20px rgba(0,0,0,0.3)'
       }}
     >
-      {/* Notch/Dynamic Island */}
+      {/* Notch */}
       <div className="absolute flex items-center justify-center gap-1.5" style={{
-        width: '120px',
-        height: '28px',
+        width: '120px', height: '28px',
         background: '#1a1a1a',
         borderRadius: '0 0 18px 18px',
-        top: '12px',
-        left: '50%',
+        top: '12px', left: '50%',
         transform: 'translateX(-50%)',
         zIndex: 10
       }}>
@@ -72,9 +66,9 @@ export default function PhoneFrame({ children, statusBarTheme = "light" }) {
       </div>
 
       {/* Phone Screen */}
-      <div className="w-full h-full bg-white rounded-[36px] overflow-hidden relative" style={{ fontSize: '13px' }}>
+      <div className="w-full h-full bg-white rounded-[36px] relative" style={{ fontSize: '13px' }}>
         <StatusBar theme={statusBarTheme} />
-        <div className="absolute left-0 right-0" style={{ top: '56px', bottom: '32px', overflow: 'auto' }}>
+        <div className="absolute left-0 right-0" style={{ top: '56px', bottom: '32px', overflow: 'visible' }}>
           {children}
         </div>
         <AndroidNavBar />

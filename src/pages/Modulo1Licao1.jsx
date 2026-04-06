@@ -15,6 +15,7 @@ export default function Modulo1Licao1() {
   const [bateriaVisivel, setBateriaVisivel] = useState(false);
   const [mostrarValidacao, setMostrarValidacao] = useState(false);
   const [dica, setDica] = useState("");
+  const [mostrarDica, setMostrarDica] = useState(false);
 
   const handleCliqueCerto = (proximoPasso, acao) => {
     // Som de acerto
@@ -32,6 +33,13 @@ export default function Modulo1Licao1() {
     setDica(mensagem);
     setTimeout(() => setDica(""), 3000);
   };
+
+  useEffect(() => {
+    if (passo === 1 && !telaAcesa) {
+      const timer = setTimeout(() => setMostrarDica(true), 5000);
+      return () => clearTimeout(timer);
+    }
+  }, [passo, telaAcesa]);
 
   const handleConcluirValidacao = async () => {
     const userId = localStorage.getItem("toligado_user_id");
@@ -176,14 +184,29 @@ export default function Modulo1Licao1() {
       </div>
 
       {/* Botões físicos do celular */}
-      <div className="absolute -right-2 top-32 flex flex-col gap-8">
+      <div className="absolute -right-2 top-32 flex flex-col gap-8" style={{ position: 'absolute' }}>
         {passo === 1 && (
-          <ElementoClicavel
-            onClick={() => handleCliqueCerto(2, () => setTelaAcesa(true))}
-            posicao="right"
-          >
-            <div className="w-8 h-16 bg-gray-300 rounded-l-lg cursor-pointer active:bg-gray-400" />
-          </ElementoClicavel>
+          <>
+            <div
+              onClick={() => { setMostrarDica(false); handleCliqueCerto(2, () => setTelaAcesa(true)); }}
+              style={{
+                width: '8px', height: '52px',
+                background: mostrarDica ? '#F3984B' : '#9ca3af',
+                borderRadius: '0 4px 4px 0',
+                cursor: 'pointer',
+                animation: mostrarDica ? 'buttonPulse 1s ease infinite' : 'none',
+                boxShadow: mostrarDica ? '4px 0 12px rgba(243,152,75,0.8)' : 'none',
+                transition: 'all 0.3s ease'
+              }}
+            />
+            {mostrarDica && !telaAcesa && (
+              <div style={{
+                position: 'absolute', right: '-42px', top: '10px',
+                animation: 'arrowPulse 0.8s ease infinite alternate',
+                fontSize: '20px', zIndex: 21, pointerEvents: 'none'
+              }}>👉</div>
+            )}
+          </>
         )}
         {passo >= 2 && (
           <div className="w-8 h-16 bg-gray-300 rounded-l-lg" />

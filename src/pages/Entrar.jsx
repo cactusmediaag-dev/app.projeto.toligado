@@ -88,9 +88,7 @@ export default function Entrar() {
         ) : (
           <div style={{ fontSize: '60px', marginBottom: '8px' }}>⚡</div>
         )}
-        <h1 style={{ color: '#fff', fontSize: '26px', fontWeight: '800', margin: '0 0 4px', letterSpacing: '-0.5px' }}>
-          Tô Ligado
-        </h1>
+
         <p style={{ color: 'rgba(255,255,255,0.8)', fontSize: '15px', margin: 0, fontWeight: '600' }}>
           Bem-vindo de volta! 👋
         </p>

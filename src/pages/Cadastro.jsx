@@ -48,13 +48,9 @@ export default function Cadastro() {
         return true;
       case 2: {
         const d = parseInt(dia), m = parseInt(mes), a = parseInt(ano);
-        if (!d || !m || !a || d < 1 || d > 31 || m < 1 || m > 12 || a < 1900 || a > 2000) {
+        if (!d || !m || !a || d < 1 || d > 31 || m < 1 || m > 12 || a < 1900 || a > new Date().getFullYear()) {
           setError("Data de nascimento inválida 📅"); return false;
         }
-        const birthDate = new Date(a, m - 1, d);
-        const today = new Date();
-        const age = today.getFullYear() - birthDate.getFullYear();
-        if (age < 45) { setError("Você precisa ter pelo menos 45 anos 🎂"); return false; }
         return true;
       }
       case 3:

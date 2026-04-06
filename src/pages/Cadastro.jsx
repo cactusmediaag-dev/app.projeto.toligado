@@ -116,24 +116,31 @@ export default function Cadastro() {
     exit: { x: -100, opacity: 0 },
   };
 
+  const podeAvancar = (() => {
+    if (step === 0) return !!sexo;
+    if (step === 1) return nome.trim().length >= 3;
+    if (step === 2) return !!(dia && mes && ano);
+    if (step === 3) return senha.length === 6 && confirmarSenha.length === 6;
+    return true;
+  })();
+
   if (showSuccess) {
     return (
       <div
-        className="min-h-screen flex flex-col items-center justify-center px-6"
-        style={{ background: "linear-gradient(135deg, #5C2E7F 0%, #A67EC8 100%)" }}
+        style={{ height: '100dvh', background: 'linear-gradient(135deg, #5C2E7F 0%, #A67EC8 100%)', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '24px', boxSizing: 'border-box' }}
       >
         <Confetti active={showConfetti} />
         <motion.div
           initial={{ scale: 0.5, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
-          transition={{ type: "spring", stiffness: 200 }}
-          className="text-center"
+          transition={{ type: 'spring', stiffness: 200 }}
+          style={{ textAlign: 'center' }}
         >
-          <div className="text-7xl mb-6">🎉</div>
-          <h2 className="text-3xl font-black text-white mb-3">
-            Parabéns, {nome.split(" ")[0]}!
+          <div style={{ fontSize: '72px', marginBottom: '24px' }}>🎉</div>
+          <h2 style={{ fontSize: '28px', fontWeight: '800', color: '#fff', marginBottom: '12px' }}>
+            Parabéns, {nome.split(' ')[0]}!
           </h2>
-          <p className="text-xl text-white/90 font-semibold">
+          <p style={{ fontSize: '20px', color: 'rgba(255,255,255,0.9)', fontWeight: '600' }}>
             Bem-vindo ao Tô Ligado! ⚡
           </p>
         </motion.div>
@@ -142,25 +149,32 @@ export default function Cadastro() {
   }
 
   return (
-    <div
-      className="min-h-screen flex flex-col"
-      style={{ background: "linear-gradient(135deg, #5C2E7F 0%, #A67EC8 100%)" }}
-    >
-      <div className="pt-4">
-        <div className="flex items-center px-4 mb-2">
+    <div style={{
+      height: '100dvh',
+      background: 'linear-gradient(160deg, #5C2E7F 0%, #A67EC8 100%)',
+      display: 'flex',
+      flexDirection: 'column',
+      overflow: 'hidden',
+      boxSizing: 'border-box'
+    }}>
+
+      {/* TOPO — Progress + voltar */}
+      <div style={{ flex: '0 0 auto', padding: '52px 24px 12px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', marginBottom: '12px' }}>
           {step > 0 && (
             <button
               onClick={handleBack}
-              className="p-2 rounded-xl text-white/80 hover:text-white active:scale-90 transition-all"
+              style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '4px', color: 'rgba(255,255,255,0.8)' }}
             >
-              <ArrowLeft className="w-6 h-6" />
+              <ArrowLeft style={{ width: '24px', height: '24px' }} />
             </button>
           )}
         </div>
         <ProgressBar currentStep={step} totalSteps={4} />
       </div>
 
-      <div className="flex-1 px-6 py-6">
+      {/* MEIO — Conteúdo do step */}
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: '0 24px', gap: '16px', overflow: 'hidden' }}>
         <AnimatePresence mode="wait">
           <motion.div
             key={step}
@@ -168,142 +182,129 @@ export default function Cadastro() {
             initial="enter"
             animate="center"
             exit="exit"
-            transition={{ duration: 0.3 }}
-            className="flex flex-col h-full"
+            transition={{ duration: 0.25 }}
+            style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}
           >
             {step === 0 && (
-              <div className="flex-1 flex flex-col">
-                <h2 className="text-3xl font-black text-white mb-8">
-                  Como você se identifica? 😊
-                </h2>
-                <div className="flex flex-col gap-4">
-                  {[
-                    { value: "Homem", emoji: "👨", label: "Homem" },
-                    { value: "Mulher", emoji: "👩", label: "Mulher" },
-                  ].map((opt) => (
-                    <motion.button
+              <>
+                <h2 style={{ fontSize: '26px', fontWeight: '800', color: '#fff', margin: 0 }}>Você é? 😊</h2>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                  {[{ value: 'Homem', emoji: '🧔', label: 'Homem' }, { value: 'Mulher', emoji: '👩', label: 'Mulher' }].map((opt) => (
+                    <div
                       key={opt.value}
-                      whileTap={{ scale: 0.95 }}
-                      onClick={() => { setSexo(opt.value); setError(""); }}
-                      className={`ripple-btn p-6 rounded-3xl text-left flex items-center gap-4 transition-all duration-300 border-3
-                        ${sexo === opt.value
-                          ? "bg-[#F3984B] border-[#FFD080] text-white shadow-lg shadow-orange-300/40"
-                          : "bg-white/15 border-white/20 text-white hover:bg-white/25"
-                        }
-                      `}
+                      onClick={() => { setSexo(opt.value); setError(''); }}
+                      style={{
+                        display: 'flex', alignItems: 'center', gap: '16px',
+                        padding: '16px 20px', borderRadius: '16px',
+                        background: sexo === opt.value ? 'rgba(243,152,75,0.3)' : 'rgba(255,255,255,0.15)',
+                        border: sexo === opt.value ? '2px solid #F3984B' : '2px solid rgba(255,255,255,0.2)',
+                        cursor: 'pointer', transition: 'all 0.2s ease'
+                      }}
                     >
-                      <span className="text-5xl">{opt.emoji}</span>
-                      <span className="text-2xl font-bold">{opt.label}</span>
-                    </motion.button>
+                      <span style={{ fontSize: '36px' }}>{opt.emoji}</span>
+                      <span style={{ fontSize: '20px', fontWeight: '700', color: '#fff' }}>{opt.label}</span>
+                    </div>
                   ))}
                 </div>
-              </div>
+              </>
             )}
 
             {step === 1 && (
-              <div className="flex-1 flex flex-col">
-                <h2 className="text-3xl font-black text-white mb-8">
-                  Qual é o seu nome? 🌟
-                </h2>
+              <>
+                <h2 style={{ fontSize: '26px', fontWeight: '800', color: '#fff', margin: 0 }}>Qual é o seu nome? 🌟</h2>
                 <input
                   type="text"
                   value={nome}
-                  onChange={(e) => { setNome(e.target.value); setError(""); }}
+                  onChange={(e) => { setNome(e.target.value); setError(''); }}
                   placeholder="Digite seu nome completo"
-                  className="w-full p-5 rounded-2xl text-xl font-semibold bg-white/95 text-[#5C2E7F] placeholder-gray-400 border-2 border-transparent focus:border-[#F3984B] focus:outline-none transition-all"
+                  style={{
+                    width: '100%', padding: '18px', borderRadius: '16px',
+                    fontSize: '18px', fontWeight: '600',
+                    background: 'rgba(255,255,255,0.95)', color: '#5C2E7F',
+                    border: '2px solid transparent', outline: 'none', boxSizing: 'border-box'
+                  }}
                 />
-              </div>
+              </>
             )}
 
             {step === 2 && (
-              <div className="flex-1 flex flex-col">
-                <h2 className="text-3xl font-black text-white mb-8">
-                  Quando você nasceu? 🎂
-                </h2>
-                <div className="flex gap-3">
-                  <div className="flex-1">
-                    <label className="text-white/80 text-sm font-semibold mb-2 block">Dia</label>
+              <>
+                <h2 style={{ fontSize: '26px', fontWeight: '800', color: '#fff', margin: 0 }}>Quando você nasceu? 🎂</h2>
+                <div style={{ display: 'flex', gap: '12px' }}>
+                  <div style={{ flex: 1 }}>
+                    <label style={{ color: 'rgba(255,255,255,0.8)', fontSize: '13px', fontWeight: '600', display: 'block', marginBottom: '6px' }}>Dia</label>
                     <input
-                      type="tel"
-                      inputMode="numeric"
-                      value={dia}
-                      onChange={(e) => { setDia(e.target.value.replace(/\D/g, "").slice(0, 2)); setError(""); }}
-                      placeholder="DD"
-                      maxLength={2}
-                      className="w-full p-4 rounded-2xl text-xl font-bold text-center bg-white/95 text-[#5C2E7F] border-2 border-transparent focus:border-[#F3984B] focus:outline-none"
+                      type="tel" inputMode="numeric" value={dia} maxLength={2} placeholder="DD"
+                      onChange={(e) => { setDia(e.target.value.replace(/\D/g, '').slice(0, 2)); setError(''); }}
+                      style={{ width: '100%', padding: '16px 8px', borderRadius: '14px', fontSize: '20px', fontWeight: '700', textAlign: 'center', background: 'rgba(255,255,255,0.95)', color: '#5C2E7F', border: '2px solid transparent', outline: 'none', boxSizing: 'border-box' }}
                     />
                   </div>
-                  <div className="flex-1">
-                    <label className="text-white/80 text-sm font-semibold mb-2 block">Mês</label>
+                  <div style={{ flex: 1 }}>
+                    <label style={{ color: 'rgba(255,255,255,0.8)', fontSize: '13px', fontWeight: '600', display: 'block', marginBottom: '6px' }}>Mês</label>
                     <input
-                      type="tel"
-                      inputMode="numeric"
-                      value={mes}
-                      onChange={(e) => { setMes(e.target.value.replace(/\D/g, "").slice(0, 2)); setError(""); }}
-                      placeholder="MM"
-                      maxLength={2}
-                      className="w-full p-4 rounded-2xl text-xl font-bold text-center bg-white/95 text-[#5C2E7F] border-2 border-transparent focus:border-[#F3984B] focus:outline-none"
+                      type="tel" inputMode="numeric" value={mes} maxLength={2} placeholder="MM"
+                      onChange={(e) => { setMes(e.target.value.replace(/\D/g, '').slice(0, 2)); setError(''); }}
+                      style={{ width: '100%', padding: '16px 8px', borderRadius: '14px', fontSize: '20px', fontWeight: '700', textAlign: 'center', background: 'rgba(255,255,255,0.95)', color: '#5C2E7F', border: '2px solid transparent', outline: 'none', boxSizing: 'border-box' }}
                     />
                   </div>
-                  <div className="flex-[1.5]">
-                    <label className="text-white/80 text-sm font-semibold mb-2 block">Ano</label>
+                  <div style={{ flex: 1.5 }}>
+                    <label style={{ color: 'rgba(255,255,255,0.8)', fontSize: '13px', fontWeight: '600', display: 'block', marginBottom: '6px' }}>Ano</label>
                     <input
-                      type="tel"
-                      inputMode="numeric"
-                      value={ano}
-                      onChange={(e) => { setAno(e.target.value.replace(/\D/g, "").slice(0, 4)); setError(""); }}
-                      placeholder="AAAA"
-                      maxLength={4}
-                      className="w-full p-4 rounded-2xl text-xl font-bold text-center bg-white/95 text-[#5C2E7F] border-2 border-transparent focus:border-[#F3984B] focus:outline-none"
+                      type="tel" inputMode="numeric" value={ano} maxLength={4} placeholder="AAAA"
+                      onChange={(e) => { setAno(e.target.value.replace(/\D/g, '').slice(0, 4)); setError(''); }}
+                      style={{ width: '100%', padding: '16px 8px', borderRadius: '14px', fontSize: '20px', fontWeight: '700', textAlign: 'center', background: 'rgba(255,255,255,0.95)', color: '#5C2E7F', border: '2px solid transparent', outline: 'none', boxSizing: 'border-box' }}
                     />
                   </div>
                 </div>
-              </div>
+              </>
             )}
 
             {step === 3 && (
-              <div className="flex-1 flex flex-col">
-                <h2 className="text-3xl font-black text-white mb-3">
-                  Crie sua senha secreta 🔐
-                </h2>
-                <p className="text-lg text-white/80 font-semibold mb-8">
-                  Use 6 números que você vai lembrar
-                </p>
-                <div className="mb-6">
-                  <label className="text-white/80 text-sm font-semibold mb-3 block">Senha:</label>
-                  <PinInput value={senha} onChange={(v) => { setSenha(v); setError(""); }} />
+              <>
+                <h2 style={{ fontSize: '24px', fontWeight: '800', color: '#fff', margin: 0 }}>Crie sua senha 🔐</h2>
+                <p style={{ fontSize: '15px', color: 'rgba(255,255,255,0.8)', fontWeight: '600', margin: 0 }}>Use 6 números que você vai lembrar</p>
+                <div>
+                  <label style={{ color: 'rgba(255,255,255,0.8)', fontSize: '14px', fontWeight: '600', display: 'block', marginBottom: '8px' }}>Senha:</label>
+                  <PinInput value={senha} onChange={(v) => { setSenha(v); setError(''); }} />
                 </div>
                 <div>
-                  <label className="text-white/80 text-sm font-semibold mb-3 block">Confirmar senha:</label>
-                  <PinInput value={confirmarSenha} onChange={(v) => { setConfirmarSenha(v); setError(""); }} />
+                  <label style={{ color: 'rgba(255,255,255,0.8)', fontSize: '14px', fontWeight: '600', display: 'block', marginBottom: '8px' }}>Confirmar:</label>
+                  <PinInput value={confirmarSenha} onChange={(v) => { setConfirmarSenha(v); setError(''); }} />
                 </div>
-              </div>
+              </>
             )}
           </motion.div>
         </AnimatePresence>
+
+        {error && (
+          <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}>
+            <div style={{ background: 'rgba(239,68,68,0.2)', border: '1px solid rgba(239,68,68,0.3)', borderRadius: '14px', padding: '12px 16px', textAlign: 'center' }}>
+              <p style={{ color: '#fff', fontWeight: '600', fontSize: '14px', margin: 0 }}>{error}</p>
+            </div>
+          </motion.div>
+        )}
       </div>
 
-      {error && (
-        <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="px-6 mb-2"
-        >
-          <div className="bg-red-500/20 border border-red-300/30 rounded-2xl px-4 py-3 text-center">
-            <p className="text-white font-semibold text-base">{error}</p>
-          </div>
-        </motion.div>
-      )}
-
-      <div className="px-6 pb-8 pt-2">
-        <ActionButton
+      {/* RODAPÉ — Botão sempre visível */}
+      <div style={{ flex: '0 0 auto', padding: '16px 24px 40px' }}>
+        <button
           onClick={handleNext}
           disabled={loading}
-          variant={step === 3 ? "primary" : "primary"}
+          style={{
+            width: '100%', padding: '18px', borderRadius: '16px', border: 'none',
+            background: podeAvancar && !loading
+              ? 'linear-gradient(135deg, #F3984B, #e67e22)'
+              : 'rgba(255,255,255,0.2)',
+            color: '#fff', fontSize: '18px', fontWeight: '800',
+            cursor: podeAvancar && !loading ? 'pointer' : 'not-allowed',
+            transition: 'all 0.3s ease',
+            boxShadow: podeAvancar && !loading ? '0 4px 20px rgba(243,152,75,0.4)' : 'none'
+          }}
         >
-          {loading ? "Criando sua conta..." : step === 3 ? "Criar minha conta! 🚀" : "Próximo →"}
-        </ActionButton>
+          {loading ? 'Criando sua conta...' : step === 3 ? 'Criar minha conta! 🚀' : 'Próximo →'}
+        </button>
       </div>
+
     </div>
   );
 }

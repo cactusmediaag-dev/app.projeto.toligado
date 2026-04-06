@@ -1,121 +1,124 @@
-import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { base44 } from "@/api/base44Client";
-import { createPageUrl } from "@/utils";
-import { motion } from "framer-motion";
-import { ArrowLeft, Lock, CheckCircle } from "lucide-react";
-import BottomNav from "@/components/shared/BottomNav";
-
-const MODULOS = [
-  { id: "mod1", titulo: "Ferramentas Google e Introdução ao Celular", emoji: "📱", desc: "Aprenda a usar seu celular", cor: "#5C2E7F", aulas: 5 },
-  { id: "mod2", titulo: "Configurações e Segurança Inicial", emoji: "🔒", desc: "Mantenha seu celular seguro", cor: "#2ECC71", aulas: 8 },
-  { id: "mod3", titulo: "Acesso e Segurança Avançada", emoji: "🛡️", desc: "Reconhecimento facial e voz", cor: "#2471A3", aulas: 5 },
-  { id: "mod4", titulo: "Uso de Redes Sociais", emoji: "📲", desc: "WhatsApp, Facebook e Instagram", cor: "#8E44AD", aulas: 3 },
-  { id: "mod5", titulo: "Criação de Conteúdo Digital", emoji: "🎬", desc: "Posts, vídeos e fotos", cor: "#E74C3C", aulas: 5 },
-  { id: "mod6", titulo: "Aplicativos Públicos e Serviços", emoji: "🏛️", desc: "INSS, contas e cadastros", cor: "#1A5276", aulas: 3 },
-  { id: "mod7", titulo: "Operações Financeiras I", emoji: "💰", desc: "PIX, boletos e QR Code", cor: "#1E8449", aulas: 4 },
-  { id: "mod8", titulo: "Operações Financeiras II e Segurança", emoji: "🔐", desc: "Segurança financeira e IA", cor: "#922B21", aulas: 6 },
-
-];
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { createPageUrl } from '@/utils';
+import BottomNav from '@/components/shared/BottomNav';
+import { base44 } from '@/api/base44Client';
 
 export default function Modulos() {
   const navigate = useNavigate();
-  const [usuario, setUsuario] = useState(null);
+  const [modulosCompletos, setModulosCompletos] = useState([]);
 
   useEffect(() => {
-    const loadUser = async () => {
-      const userId = localStorage.getItem("toligado_user_id");
-      if (!userId) { navigate(createPageUrl("Entrar")); return; }
-      const users = await base44.entities.Usuario.filter({ id: userId });
-      if (users.length > 0) setUsuario(users[0]);
-    };
-    loadUser();
+    const userId = localStorage.getItem('toligado_user_id');
+    if (!userId) { navigate(createPageUrl('Entrar')); return; }
+    base44.entities.Usuario.filter({ id: userId }).then(users => {
+      if (users.length > 0) setModulosCompletos(users[0].modulos_completos || []);
+    });
   }, []);
 
-  const completados = usuario?.modulos_completos || [];
+  const modulos = [
+    { id: 'mod1', numero: 1, titulo: 'Ferramentas Google\ne Introdução ao Celular', descricao: 'Aprenda a usar seu celular', aulas: 5, icone: '📱', gradiente: 'linear-gradient(135deg, #5C2E7F, #9B59B6)', primeiraLicao: 'Modulo1Licao1' },
+    { id: 'mod2', numero: 2, titulo: 'Configurações e\nSegurança Inicial', descricao: 'Mantenha seu celular seguro', aulas: 8, icone: '🔒', gradiente: 'linear-gradient(135deg, #1A8A5A, #2ECC71)', primeiraLicao: 'Modulo2Licao1' },
+    { id: 'mod3', numero: 3, titulo: 'Acesso e\nSegurança Avançada', descricao: 'Reconhecimento facial e voz', aulas: 5, icone: '🛡️', gradiente: 'linear-gradient(135deg, #2471A3, #5DADE2)', primeiraLicao: 'Modulo3Licao1' },
+    { id: 'mod4', numero: 4, titulo: 'Uso de\nRedes Sociais', descricao: 'WhatsApp, Facebook e Instagram', aulas: 3, icone: '📲', gradiente: 'linear-gradient(135deg, #8E44AD, #D7BDE2)', primeiraLicao: 'Modulo4Licao1' },
+    { id: 'mod5', numero: 5, titulo: 'Criação de\nConteúdo Digital', descricao: 'Posts, vídeos e fotos', aulas: 5, icone: '🎬', gradiente: 'linear-gradient(135deg, #E74C3C, #F1948A)', primeiraLicao: 'Modulo5Licao1' },
+    { id: 'mod6', numero: 6, titulo: 'Aplicativos Públicos\ne Serviços', descricao: 'Gov.br, INSS e contas', aulas: 3, icone: '🏛️', gradiente: 'linear-gradient(135deg, #2E86C1, #85C1E9)', primeiraLicao: 'Modulo6Licao1' },
+    { id: 'mod7', numero: 7, titulo: 'Operações\nFinanceiras I', descricao: 'PIX, boletos e QR Code', aulas: 4, icone: '💰', gradiente: 'linear-gradient(135deg, #27AE60, #82E0AA)', primeiraLicao: 'Modulo7Licao1' },
+    { id: 'mod8', numero: 8, titulo: 'Operações Financeiras\nII e Segurança', descricao: 'Transferências e proteção', aulas: 6, icone: '🔐', gradiente: 'linear-gradient(135deg, #922B21, #E59866)', primeiraLicao: 'Modulo8Licao1' },
+  ];
 
-  const getStatus = (modId, index) => {
-    if (completados.includes(modId)) return "done";
-    const prevDone = index === 0 || completados.includes(MODULOS[index - 1].id);
-    return prevDone ? "active" : "locked";
+  const getStatus = (modulo, index) => {
+    if (modulosCompletos.includes(modulo.id)) return 'completo';
+    if (index === 0) return 'disponivel';
+    if (modulosCompletos.includes(modulos[index - 1].id)) return 'disponivel';
+    return 'bloqueado';
+  };
+
+  const handleModulo = (modulo, status) => {
+    if (status === 'bloqueado') {
+      const toast = document.createElement('div');
+      toast.textContent = 'Complete o módulo anterior primeiro! 💪';
+      toast.style.cssText = 'position:fixed;bottom:100px;left:50%;transform:translateX(-50%);background:#333;color:#fff;padding:12px 20px;border-radius:20px;font-size:14px;font-weight:600;z-index:9999;white-space:nowrap;box-shadow:0 4px 16px rgba(0,0,0,0.3);';
+      document.body.appendChild(toast);
+      setTimeout(() => toast.remove(), 2500);
+      return;
+    }
+    navigate(createPageUrl(modulo.primeiraLicao));
   };
 
   return (
-    <div
-      className="min-h-screen pb-24 bg-background dark:bg-gray-900"
-      style={{ background: "linear-gradient(180deg, #F8F0FF 0%, #FFFFFF 40%, #F8F0FF 100%)" }}
-    >
-      <div className="px-5 pt-6 pb-4 flex items-center gap-3 pt-[env(safe-area-inset-top)]">
-        <button
-          onClick={() => navigate(createPageUrl("Home"))}
-          className="p-2 rounded-xl bg-[#EDE0FF] text-[#5C2E7F] active:scale-90 transition-all"
-        >
-          <ArrowLeft className="w-5 h-5" />
-        </button>
-        <h1 className="text-2xl font-black text-[#5C2E7F]">📚 Módulos</h1>
+    <div style={{ minHeight: '100dvh', background: '#f5f0ff', display: 'flex', flexDirection: 'column' }}>
+
+      {/* HEADER com safe area */}
+      <div style={{
+        background: '#fff',
+        padding: 'calc(env(safe-area-inset-top, 44px) + 12px) 20px 16px',
+        borderBottom: '1px solid #f0e8ff',
+        position: 'sticky', top: 0, zIndex: 10,
+        boxShadow: '0 2px 12px rgba(92,46,127,0.08)'
+      }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+          <button onClick={() => navigate(createPageUrl('Home'))} style={{ background: '#f0e8ff', border: 'none', borderRadius: '10px', width: '36px', height: '36px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', fontSize: '18px', color: '#5C2E7F', flexShrink: 0 }}>
+            ←
+          </button>
+          <span style={{ fontSize: '24px' }}>📚</span>
+          <h1 style={{ fontSize: '22px', fontWeight: '800', color: '#5C2E7F', margin: 0, letterSpacing: '-0.3px' }}>Módulos</h1>
+        </div>
       </div>
 
-      <div className="px-5 space-y-4">
-        {MODULOS.map((mod, i) => {
-          const status = getStatus(mod.id, i);
+      {/* LISTA */}
+      <div style={{ flex: 1, padding: '16px', display: 'flex', flexDirection: 'column', gap: '12px', paddingBottom: '100px' }}>
+        {modulos.map((modulo, index) => {
+          const status = getStatus(modulo, index);
+          const bloqueado = status === 'bloqueado';
+          const completo = status === 'completo';
+
           return (
-            <motion.div
-            key={mod.id}
-            initial={{ x: -20, opacity: 0 }}
-            animate={{ x: 0, opacity: 1 }}
-            transition={{ delay: i * 0.08 }}
-            onClick={() => {
-              if (status === "active") {
-                if (mod.id === "mod1") {
-                  navigate(createPageUrl("Modulo1Licao1"));
-                } else if (mod.id === "mod2") {
-                  navigate(createPageUrl("Modulo2Licao1"));
-                } else if (mod.id === "mod3") {
-                  navigate(createPageUrl("Modulo3Licao1"));
-                } else if (mod.id === "mod4") {
-                  navigate(createPageUrl("Modulo4Licao1"));
-                } else if (mod.id === "mod5") {
-                  navigate(createPageUrl("Modulo5Licao1"));
-                } else if (mod.id === "mod6") {
-                  navigate(createPageUrl("Modulo6Licao1"));
-                } else if (mod.id === "mod7") {
-                  navigate(createPageUrl("Modulo7Licao1"));
-                } else if (mod.id === "mod8") {
-                  navigate(createPageUrl("Modulo8Licao1"));
-                }
-              }
-            }}
-            className={`ripple-btn rounded-3xl p-5 flex items-center gap-4 shadow-md transition-all active:scale-[0.97]
-              ${status === "locked" ? "opacity-50 bg-gray-100" : "bg-white border-2 border-[#EDE0FF]"}
-              ${status === "active" && (mod.id === "mod1" || mod.id === "mod2" || mod.id === "mod3" || mod.id === "mod4" || mod.id === "mod5" || mod.id === "mod6" || mod.id === "mod7" || mod.id === "mod8") ? "cursor-pointer" : ""}
-            `}
+            <div
+              key={modulo.id}
+              onClick={() => handleModulo(modulo, status)}
+              style={{
+                background: '#fff', borderRadius: '20px', padding: '16px',
+                display: 'flex', alignItems: 'center', gap: '16px',
+                cursor: bloqueado ? 'not-allowed' : 'pointer',
+                opacity: bloqueado ? 0.6 : 1,
+                border: completo ? '2px solid #2ECC71' : bloqueado ? '2px solid transparent' : '2px solid rgba(92,46,127,0.15)',
+                boxShadow: bloqueado ? 'none' : '0 2px 12px rgba(92,46,127,0.1)',
+                transition: 'all 0.2s ease',
+              }}
             >
-              <div
-                className="w-16 h-16 rounded-2xl flex items-center justify-center text-3xl shadow-sm"
-                style={{
-                  background: status === "locked"
-                    ? "#E5E7EB"
-                    : `linear-gradient(135deg, ${mod.cor}20, ${mod.cor}40)`,
-                }}
-              >
-                {status === "locked" ? <Lock className="w-6 h-6 text-gray-400" /> : mod.emoji}
+              <div style={{
+                width: '56px', height: '56px', borderRadius: '16px', flexShrink: 0,
+                background: bloqueado ? '#f0f0f0' : modulo.gradiente,
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                fontSize: '28px',
+                boxShadow: bloqueado ? 'none' : '0 4px 12px rgba(0,0,0,0.15)'
+              }}>
+                {bloqueado ? '🔒' : modulo.icone}
               </div>
-              <div className="flex-1">
-                <h4 className={`text-lg font-bold ${status === "locked" ? "text-gray-400" : "text-[#5C2E7F]"}`}>
-                  {mod.titulo}
-                </h4>
-                <p className="text-sm text-gray-400 font-medium">{mod.desc}</p>
-                <p className="text-xs text-gray-400 mt-1 font-semibold">{mod.aulas} aulas</p>
-              </div>
-              {status === "done" && (
-                <CheckCircle className="w-7 h-7 text-[#2ECC71]" />
-              )}
-              {status === "active" && (
-                <div className="px-3 py-1.5 rounded-xl bg-[#F3984B] text-white text-xs font-bold">
-                  Iniciar
+
+              <div style={{ flex: 1, minWidth: 0 }}>
+                <div style={{ fontSize: '15px', fontWeight: '800', color: bloqueado ? '#aaa' : '#333', lineHeight: 1.3, marginBottom: '4px', whiteSpace: 'pre-line' }}>
+                  {modulo.titulo}
                 </div>
-              )}
-            </motion.div>
+                <div style={{ fontSize: '12px', color: bloqueado ? '#bbb' : '#999', marginBottom: '4px' }}>
+                  {modulo.descricao}
+                </div>
+                <div style={{ fontSize: '11px', fontWeight: '700', color: bloqueado ? '#ccc' : '#5C2E7F' }}>
+                  {modulo.aulas} aulas
+                </div>
+              </div>
+
+              <div style={{ flexShrink: 0 }}>
+                {completo ? (
+                  <div style={{ background: '#2ECC71', borderRadius: '20px', padding: '6px 12px', color: '#fff', fontSize: '12px', fontWeight: '700' }}>✅ Feito</div>
+                ) : bloqueado ? (
+                  <div style={{ background: '#f0f0f0', borderRadius: '20px', padding: '6px 12px', color: '#bbb', fontSize: '12px', fontWeight: '700' }}>🔒</div>
+                ) : (
+                  <div style={{ background: 'linear-gradient(135deg, #F3984B, #e67e22)', borderRadius: '20px', padding: '6px 14px', color: '#fff', fontSize: '13px', fontWeight: '800', boxShadow: '0 2px 8px rgba(243,152,75,0.4)' }}>Iniciar</div>
+                )}
+              </div>
+            </div>
           );
         })}
       </div>

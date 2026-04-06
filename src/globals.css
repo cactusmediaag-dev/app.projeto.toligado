@@ -187,3 +187,36 @@ body {
 @keyframes spin {
   to { transform: rotate(360deg); }
 }
+
+/* ===== SAFE AREA — respeitar status bar ===== */
+:root {
+  --safe-top: env(safe-area-inset-top, 44px);
+  --safe-bottom: env(safe-area-inset-bottom, 20px);
+  --page-padding-top: calc(var(--safe-top) + 16px);
+}
+
+.page-header {
+  padding-top: var(--page-padding-top) !important;
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-bottom: 16px;
+}
+
+.page-with-nav {
+  padding-bottom: calc(var(--safe-bottom) + 70px);
+}
+
+.page-title {
+  font-size: 26px !important;
+  font-weight: 800 !important;
+  letter-spacing: -0.5px;
+  margin: 0 !important;
+  color: #5C2E7F;
+}
+
+.card {
+  background: #fff;
+  border-radius: 20px;
+  padding: 16px;
+  box-shadow: 0 2px 12px rgba(92,46,127,0.08);
+}

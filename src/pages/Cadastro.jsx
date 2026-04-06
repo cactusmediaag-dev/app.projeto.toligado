@@ -174,7 +174,7 @@ export default function Cadastro() {
       </div>
 
       {/* MEIO — Conteúdo do step */}
-      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: '0 24px', gap: '16px', overflow: 'hidden' }}>
+      <div style={{ flex: 1, overflowY: 'auto', display: 'flex', flexDirection: 'column', padding: '24px 24px 0', gap: '16px' }}>
         <AnimatePresence mode="wait">
           <motion.div
             key={step}

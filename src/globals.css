@@ -145,3 +145,45 @@ nav,
   -moz-user-select: none;
   -ms-user-select: none;
 }
+
+/* ===== MOBILE ONLY ===== */
+
+html, body {
+  overflow-x: hidden;
+  max-width: 100vw;
+}
+
+@media (min-width: 768px) {
+  #desktop-block {
+    display: flex !important;
+  }
+  #root {
+    display: none !important;
+  }
+}
+
+@media (max-width: 767px) {
+  #desktop-block {
+    display: none !important;
+  }
+  #root {
+    display: block !important;
+  }
+}
+
+.page-fullscreen {
+  height: 100dvh;
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+body {
+  overscroll-behavior: none;
+  -webkit-overflow-scrolling: touch;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}

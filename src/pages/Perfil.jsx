@@ -1,272 +1,209 @@
-import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { base44 } from "@/api/base44Client";
-import { createPageUrl } from "@/utils";
-import { motion, AnimatePresence } from "framer-motion";
-import { ArrowLeft, LogOut, Star, Coins, BookOpen, Calendar, Trash2 } from "lucide-react";
-import BottomNav from "@/components/shared/BottomNav";
-import AudioSystem from "@/components/shared/AudioSystem";
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { base44 } from '@/api/base44Client';
+import { createPageUrl } from '@/utils';
+import BottomNav from '@/components/shared/BottomNav';
 
 export default function Perfil() {
   const navigate = useNavigate();
   const [usuario, setUsuario] = useState(null);
-  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [confirmDelete, setConfirmDelete] = useState(false);
 
   useEffect(() => {
-    const load = async () => {
-      const userId = localStorage.getItem("toligado_user_id");
-      if (!userId) { navigate(createPageUrl("Entrar")); return; }
-      const users = await base44.entities.Usuario.filter({ id: userId });
-      if (users.length > 0) setUsuario(users[0]);
-    };
-    load();
+    carregarPerfil();
   }, []);
 
-  const handleLogout = () => {
-    localStorage.removeItem("toligado_user_id");
-    localStorage.removeItem("toligado_user_nome");
-    navigate(createPageUrl("Entrar"));
+  const carregarPerfil = async () => {
+    try {
+      const userId = localStorage.getItem('toligado_user_id');
+      if (!userId) { navigate(createPageUrl('Entrar')); return; }
+      const users = await base44.entities.Usuario.filter({ id: userId });
+      if (users.length === 0) { navigate(createPageUrl('Entrar')); return; }
+      setUsuario(users[0]);
+    } catch (e) {
+      console.error(e);
+    }
+    setLoading(false);
   };
 
-  const handleDeleteAccount = async () => {
-    if (!usuario) return;
+  const calcularIdade = (dataNasc) => {
+    if (!dataNasc) return null;
+    const nasc = new Date(dataNasc + 'T00:00:00');
+    const hoje = new Date();
+    let idade = hoje.getFullYear() - nasc.getFullYear();
+    const m = hoje.getMonth() - nasc.getMonth();
+    if (m < 0 || (m === 0 && hoje.getDate() < nasc.getDate())) idade--;
+    return idade;
+  };
+
+  const calcularDiasAniversario = (dataNasc) => {
+    if (!dataNasc) return null;
+    const nasc = new Date(dataNasc + 'T00:00:00');
+    const hoje = new Date();
+    const proximo = new Date(hoje.getFullYear(), nasc.getMonth(), nasc.getDate());
+    if (proximo < hoje) proximo.setFullYear(hoje.getFullYear() + 1);
+    return Math.ceil((proximo - hoje) / (1000 * 60 * 60 * 24));
+  };
+
+  const formatarData = (data) => {
+    if (!data) return '—';
+    return new Date(data + 'T00:00:00').toLocaleDateString('pt-BR', {
+      day: '2-digit', month: 'long', year: 'numeric'
+    });
+  };
+
+  const formatarDataCurta = (data) => {
+    if (!data) return '—';
+    return new Date(data).toLocaleDateString('pt-BR');
+  };
+
+  const sair = () => {
+    localStorage.removeItem('toligado_user_id');
+    localStorage.removeItem('toligado_user_nome');
+    navigate(createPageUrl('Entrar'));
+  };
+
+  const excluirConta = async () => {
+    if (!confirmDelete) { setConfirmDelete(true); return; }
     try {
       await base44.entities.Usuario.delete(usuario.id);
-      localStorage.removeItem("toligado_user_id");
-      localStorage.removeItem("toligado_user_nome");
-      navigate(createPageUrl("Entrar"));
+      localStorage.removeItem('toligado_user_id');
+      localStorage.removeItem('toligado_user_nome');
+      navigate(createPageUrl('Entrar'));
     } catch (e) {
-      console.error('Delete error:', e);
+      console.error('Erro ao excluir conta:', e);
     }
   };
 
-  if (!usuario) {
-    return (
-      <div
-        className="min-h-screen flex items-center justify-center"
-        style={{ background: "linear-gradient(135deg, #F8F0FF, #EDE0FF)" }}
-      >
-        <motion.div animate={{ scale: [1, 1.2, 1] }} transition={{ duration: 1, repeat: Infinity }}>
-          <span className="text-6xl">⚡</span>
-        </motion.div>
-      </div>
-    );
-  }
+  if (loading) return (
+    <div style={{ height: '100dvh', background: 'linear-gradient(160deg, #5C2E7F, #A67EC8)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', gap: '16px', color: '#fff' }}>
+      <div style={{ width: '40px', height: '40px', border: '4px solid rgba(255,255,255,0.3)', borderTopColor: '#fff', borderRadius: '50%', animation: 'spin 0.8s linear infinite' }} />
+      <p style={{ fontSize: '16px', opacity: 0.8 }}>Carregando perfil...</p>
+    </div>
+  );
 
-  const stats = [
-    { icon: Star, label: "Nível", value: usuario.nivel_atual || 1, color: "#F3984B" },
-    { icon: Coins, label: "Moedas", value: usuario.moedas || 0, color: "#FFD080" },
-    { icon: BookOpen, label: "Módulos", value: (usuario.modulos_completos || []).length, color: "#5C2E7F" },
-  ];
+  if (!usuario) return null;
+
+  const idade = calcularIdade(usuario.data_nascimento);
+  const diasAniv = calcularDiasAniversario(usuario.data_nascimento);
+  const avatar = usuario.sexo === 'Mulher' ? '👩' : '👨';
+  const modulos = (usuario.modulos_completos || []).length;
+  const anivHoje = diasAniv === 0 || diasAniv === 365;
 
   return (
-    <div
-      className="min-h-screen pb-24 bg-background dark:bg-gray-900"
-      style={{ background: "linear-gradient(180deg, #5C2E7F 0%, #A67EC8 30%, #F8F0FF 60%, #FFFFFF 100%)" }}
-    >
-      <div className="px-5 pt-6 pb-4 flex items-center justify-between pt-[env(safe-area-inset-top)]">
-        <button
-          onClick={() => navigate(createPageUrl("Home"))}
-          className="p-2 rounded-xl bg-white/20 text-white active:scale-90 transition-all"
-        >
-          <ArrowLeft className="w-5 h-5" />
-        </button>
-        <h1 className="text-2xl font-black text-white">👤 Perfil</h1>
-        <div className="w-9" />
+    <div style={{ height: '100dvh', background: 'linear-gradient(160deg, #5C2E7F 0%, #A67EC8 100%)', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+
+      {/* HEADER com avatar */}
+      <div style={{ flex: '0 0 auto', padding: '52px 24px 20px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '12px' }}>
+        <div style={{ width: '88px', height: '88px', borderRadius: '50%', background: 'rgba(255,255,255,0.2)', border: '3px solid rgba(255,255,255,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '52px', boxShadow: '0 4px 20px rgba(0,0,0,0.2)' }}>
+          {avatar}
+        </div>
+        <div style={{ textAlign: 'center' }}>
+          <h1 style={{ color: '#fff', fontSize: '22px', fontWeight: '800', margin: '0 0 4px', letterSpacing: '-0.3px' }}>
+            {usuario.nome}
+          </h1>
+          {idade && (
+            <p style={{ color: 'rgba(255,255,255,0.8)', fontSize: '15px', margin: 0 }}>
+              {idade} anos • {usuario.sexo}
+            </p>
+          )}
+        </div>
+        {diasAniv !== null && (
+          <div style={{ background: anivHoje ? 'linear-gradient(135deg, #F3984B, #e67e22)' : 'rgba(255,255,255,0.15)', borderRadius: '20px', padding: '8px 18px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <span style={{ fontSize: '18px' }}>{anivHoje ? '🎂' : '🎁'}</span>
+            <span style={{ color: '#fff', fontSize: '13px', fontWeight: '700' }}>
+              {anivHoje ? 'Feliz Aniversário! 🎉' : diasAniv === 1 ? 'Amanhã é seu aniversário! 🥳' : `Aniversário em ${diasAniv} dias`}
+            </span>
+          </div>
+        )}
       </div>
 
-      <motion.div
-        initial={{ y: 20, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        className="flex flex-col items-center mt-4 mb-8"
-      >
-        <div
-          className="w-28 h-28 rounded-full flex items-center justify-center text-6xl shadow-xl border-4 border-white"
-          style={{ background: "linear-gradient(135deg, #EDE0FF, #FFFFFF)" }}
-        >
-          {usuario.sexo === "Homem" ? "👨" : "👩"}
-        </div>
-        <h2 className="text-2xl font-black text-white mt-4">{usuario.nome}</h2>
-        <p className="text-white/70 font-semibold text-base mt-1">
-          Membro desde {new Date(usuario.created_date).toLocaleDateString("pt-BR", { month: "long", year: "numeric" })}
-        </p>
-      </motion.div>
+      {/* CONTEÚDO SCROLLÁVEL */}
+      <div style={{ flex: 1, overflowY: 'auto', padding: '0 16px 100px', display: 'flex', flexDirection: 'column', gap: '12px' }}>
 
-      <div className="px-5">
-        <div className="grid grid-cols-3 gap-3 mb-6">
-          {stats.map((s, i) => (
-            <motion.div
-              key={s.label}
-              initial={{ y: 20, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              transition={{ delay: 0.1 + i * 0.1 }}
-              className="bg-white rounded-2xl p-4 text-center shadow-md"
-            >
-              <s.icon className="w-6 h-6 mx-auto mb-2" style={{ color: s.color }} />
-              <p className="text-2xl font-black text-[#5C2E7F]">{s.value}</p>
-              <p className="text-xs text-gray-400 font-semibold">{s.label}</p>
-            </motion.div>
+        {/* Stats do jogo */}
+        <div style={{ background: '#fff', borderRadius: '20px', padding: '16px', display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '8px' }}>
+          {[
+            { icon: '⭐', valor: usuario.nivel_atual || 1, label: 'Nível' },
+            { icon: '🪙', valor: usuario.moedas || 0, label: 'Moedas' },
+            { icon: '📚', valor: modulos, label: 'Módulos' },
+          ].map((s, i) => (
+            <div key={i} style={{ textAlign: 'center', padding: '12px 8px', background: '#f8f5ff', borderRadius: '14px' }}>
+              <div style={{ fontSize: '24px', marginBottom: '4px' }}>{s.icon}</div>
+              <div style={{ fontSize: '22px', fontWeight: '800', color: '#5C2E7F', lineHeight: 1 }}>{s.valor}</div>
+              <div style={{ fontSize: '11px', color: '#999', marginTop: '4px', fontWeight: '600' }}>{s.label}</div>
+            </div>
           ))}
         </div>
 
-        <motion.div
-          initial={{ y: 20, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ delay: 0.4 }}
-          className="bg-white rounded-3xl p-5 shadow-md space-y-4"
-        >
-          <div className="flex items-center gap-3">
-            <Calendar className="w-5 h-5 text-[#5C2E7F]" />
-            <div>
-              <p className="text-sm text-gray-400 font-medium">Data de nascimento</p>
-              <p className="font-bold text-[#5C2E7F]">
-                {usuario.data_nascimento
-                  ? new Date(usuario.data_nascimento + "T00:00:00").toLocaleDateString("pt-BR")
-                  : "-"}
-              </p>
+        {/* Informações pessoais */}
+        <div style={{ background: '#fff', borderRadius: '20px', padding: '20px', display: 'flex', flexDirection: 'column', gap: '0' }}>
+          <h3 style={{ margin: '0 0 16px', fontSize: '15px', fontWeight: '800', color: '#5C2E7F' }}>👤 Informações Pessoais</h3>
+          {[
+            { icon: '📛', label: 'Nome completo', valor: usuario.nome },
+            { icon: '🎂', label: 'Data de nascimento', valor: formatarData(usuario.data_nascimento) },
+            { icon: '🎁', label: 'Próximo aniversário', valor: diasAniv === 0 ? '🎉 Hoje!' : diasAniv === 1 ? 'Amanhã! 🥳' : diasAniv !== null ? `Em ${diasAniv} dias` : '—' },
+            { icon: '👤', label: 'Gênero', valor: usuario.sexo || '—' },
+            { icon: '📅', label: 'Membro desde', valor: formatarDataCurta(usuario.created_date) },
+          ].map((item, i, arr) => (
+            <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '12px', paddingBottom: i < arr.length - 1 ? '16px' : '0', marginBottom: i < arr.length - 1 ? '16px' : '0', borderBottom: i < arr.length - 1 ? '1px solid #f0f0f0' : 'none' }}>
+              <div style={{ width: '40px', height: '40px', background: '#f0e8ff', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '20px', flexShrink: 0 }}>
+                {item.icon}
+              </div>
+              <div style={{ flex: 1 }}>
+                <div style={{ fontSize: '12px', color: '#999', fontWeight: '600', marginBottom: '2px' }}>{item.label}</div>
+                <div style={{ fontSize: '15px', color: '#333', fontWeight: '700' }}>{item.valor}</div>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Progresso no jogo */}
+        <div style={{ background: '#fff', borderRadius: '20px', padding: '20px' }}>
+          <h3 style={{ margin: '0 0 16px', fontSize: '15px', fontWeight: '800', color: '#5C2E7F' }}>🎮 Progresso no Jogo</h3>
+          <div style={{ marginBottom: '12px' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px' }}>
+              <span style={{ fontSize: '13px', color: '#666', fontWeight: '600' }}>Módulos concluídos</span>
+              <span style={{ fontSize: '13px', color: '#5C2E7F', fontWeight: '800' }}>{modulos}/8</span>
+            </div>
+            <div style={{ height: '10px', background: '#f0f0f0', borderRadius: '5px', overflow: 'hidden' }}>
+              <div style={{ height: '100%', width: `${(modulos / 8) * 100}%`, background: 'linear-gradient(90deg, #5C2E7F, #F3984B)', borderRadius: '5px', transition: 'width 0.5s ease' }} />
             </div>
           </div>
-          <div className="flex items-center gap-3">
-            <span className="text-xl">🪙</span>
-            <div>
-              <p className="text-sm text-gray-400 font-medium">XP Total</p>
-              <p className="font-bold text-[#5C2E7F]">{usuario.xp_total || 0} pontos</p>
+          {modulos === 0 && (
+            <p style={{ color: '#999', fontSize: '13px', margin: 0 }}>Complete módulos para ver seu histórico! 📚</p>
+          )}
+          {modulos > 0 && (
+            <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap', marginTop: '8px' }}>
+              {(usuario.modulos_completos || []).map((m, i) => (
+                <div key={i} style={{ background: '#f0e8ff', borderRadius: '8px', padding: '5px 10px', fontSize: '12px', color: '#5C2E7F', fontWeight: '700' }}>
+                  ✅ {m}
+                </div>
+              ))}
             </div>
-          </div>
-        </motion.div>
+          )}
+        </div>
 
-        <VoiceSettings />
-
-        <motion.button
-          initial={{ y: 20, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ delay: 0.5 }}
-          whileTap={{ scale: 0.95 }}
-          onClick={handleLogout}
-          className="ripple-btn w-full mt-6 py-4 rounded-2xl bg-red-50 dark:bg-red-900/20 border-2 border-red-200 dark:border-red-800 text-red-500 dark:text-red-400 font-bold text-lg flex items-center justify-center gap-2 active:bg-red-100 transition-all"
-        >
-          <LogOut className="w-5 h-5" />
-          Sair da conta
-        </motion.button>
-
-        <motion.button
-          initial={{ y: 20, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ delay: 0.55 }}
-          whileTap={{ scale: 0.95 }}
-          onClick={() => setShowDeleteDialog(true)}
-          className="ripple-btn w-full mt-3 py-4 rounded-2xl bg-gray-50 dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-400 font-bold text-lg flex items-center justify-center gap-2 active:bg-gray-100 transition-all"
-        >
-          <Trash2 className="w-5 h-5" />
-          Excluir conta
-        </motion.button>
+        {/* Botões de conta */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+          <button onClick={sair} style={{ width: '100%', padding: '16px', borderRadius: '16px', border: '2px solid rgba(231,76,60,0.3)', background: 'rgba(231,76,60,0.08)', color: '#e74c3c', fontSize: '16px', fontWeight: '700', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
+            🚪 Sair da conta
+          </button>
+          <button onClick={excluirConta} style={{ width: '100%', padding: '14px', borderRadius: '16px', border: confirmDelete ? '2px solid #e74c3c' : '1px solid #eee', background: confirmDelete ? 'rgba(231,76,60,0.1)' : '#fafafa', color: confirmDelete ? '#e74c3c' : '#999', fontSize: '14px', fontWeight: '600', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
+            🗑️ {confirmDelete ? 'Confirmar exclusão da conta' : 'Excluir conta'}
+          </button>
+          {confirmDelete && (
+            <button onClick={() => setConfirmDelete(false)} style={{ background: 'none', border: 'none', color: '#999', fontSize: '13px', cursor: 'pointer', textDecoration: 'underline' }}>
+              Cancelar
+            </button>
+          )}
+        </div>
       </div>
-
-      <AnimatePresence>
-        {showDeleteDialog && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-5"
-            onClick={() => setShowDeleteDialog(false)}
-          >
-            <motion.div
-              initial={{ scale: 0.9 }}
-              animate={{ scale: 1 }}
-              exit={{ scale: 0.9 }}
-              onClick={(e) => e.stopPropagation()}
-              className="bg-white dark:bg-gray-800 rounded-3xl p-6 max-w-sm w-full"
-            >
-              <div className="text-center mb-4">
-                <div className="text-5xl mb-3">⚠️</div>
-                <h3 className="text-xl font-black text-gray-900 dark:text-white mb-2">Excluir conta?</h3>
-                <p className="text-gray-600 dark:text-gray-400 text-sm">
-                  Todos os seus dados e progresso serão permanentemente excluídos. Esta ação não pode ser desfeita.
-                </p>
-              </div>
-              <div className="space-y-2">
-                <button
-                  onClick={handleDeleteAccount}
-                  className="w-full py-3 rounded-xl bg-red-500 text-white font-bold active:scale-95 transition-transform"
-                >
-                  Sim, excluir conta
-                </button>
-                <button
-                  onClick={() => setShowDeleteDialog(false)}
-                  className="w-full py-3 rounded-xl bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white font-bold active:scale-95 transition-transform"
-                >
-                  Cancelar
-                </button>
-              </div>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
 
       <BottomNav />
+
+      <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
     </div>
-  );
-}
-
-function VoiceSettings() {
-  const [apiKey, setApiKey] = useState(localStorage.getItem('elevenlabs_key') || '');
-  const [testing, setTesting] = useState(false);
-  const [saved, setSaved] = useState(false);
-
-  const saveKey = () => {
-    window.ELEVENLABS_API_KEY = apiKey;
-    localStorage.setItem('elevenlabs_key', apiKey);
-    setSaved(true);
-    setTimeout(() => setSaved(false), 2000);
-  };
-
-  const testVoice = async () => {
-    setTesting(true);
-    try {
-      await AudioSystem.speak('Olá! Estou aqui para te ajudar a aprender!');
-    } catch (e) {
-      console.error('Test voice error:', e);
-    }
-    setTesting(false);
-  };
-
-  return (
-    <motion.div
-      initial={{ y: 20, opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
-      transition={{ delay: 0.45 }}
-      className="bg-white rounded-3xl p-5 shadow-md mt-6"
-    >
-      <div className="flex items-center gap-2 mb-3">
-        <span className="text-2xl">🔊</span>
-        <h3 className="text-lg font-black text-[#5C2E7F]">Configurações de Voz</h3>
-      </div>
-      <p className="text-sm text-gray-600 mb-4">
-        Para uma voz mais natural, insira sua chave ElevenLabs (opcional)
-      </p>
-      <input
-        type="password"
-        placeholder="Chave API ElevenLabs (opcional)"
-        value={apiKey}
-        onChange={(e) => setApiKey(e.target.value)}
-        className="w-full p-3 border-2 border-gray-300 rounded-xl text-sm mb-3 focus:border-[#5C2E7F] focus:outline-none"
-      />
-      <div className="flex gap-2">
-        <button
-          onClick={saveKey}
-          className="flex-1 bg-[#5C2E7F] text-white py-3 rounded-xl font-bold text-sm active:scale-95 transition-transform"
-        >
-          {saved ? "✅ Salvo!" : "💾 Salvar"}
-        </button>
-        <button
-          onClick={testVoice}
-          disabled={testing}
-          className="flex-1 bg-[#F3984B] text-white py-3 rounded-xl font-bold text-sm active:scale-95 transition-transform disabled:opacity-50"
-        >
-          {testing ? "🔊 Testando..." : "▶️ Testar"}
-        </button>
-      </div>
-    </motion.div>
   );
 }

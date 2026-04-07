@@ -12,16 +12,15 @@ const audioCache = new Map();
 
 const VozSistema = {
 
-  apiKey: localStorage.getItem('elevenlabs_key') || '',
+  apiKey: 'sk_3bb1c5982852fc29ca0ce10bb6c3818e7a7aa2be8ebeeb8d',
   audioAtual: null,
 
   setApiKey(key) {
     this.apiKey = key;
-    localStorage.setItem('elevenlabs_key', key);
   },
 
   temApiKey() {
-    return !!this.apiKey && this.apiKey.length > 10;
+    return true;
   },
 
   limparTexto(texto) {
@@ -79,7 +78,7 @@ const VozSistema = {
             similarity_boost: 0.85,
             style: 0.2,
             use_speaker_boost: true,
-            speed: 0.88
+            speed: 0.85
           }
         })
       }

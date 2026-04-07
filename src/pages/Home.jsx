@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import PullToRefresh from '@/components/shared/PullToRefresh';
 import { createPageUrl } from '@/utils';
 import { base44 } from '@/api/base44Client';
 import BottomNav from '@/components/shared/BottomNav';
@@ -20,18 +21,21 @@ export default function Home() {
   const [usuario, setUsuario] = useState(null);
   const [saudacao, setSaudacao] = useState('');
 
+  const carregarDados = () => {
+    const userId = localStorage.getItem('toligado_user_id');
+    if (!userId) { navigate(createPageUrl('Entrar')); return; }
+    return base44.entities.Usuario.filter({ id: userId }).then(users => {
+      if (users.length === 0) { navigate(createPageUrl('Entrar')); return; }
+      setUsuario(users[0]);
+    });
+  };
+
   useEffect(() => {
     const h = new Date().getHours();
     if (h >= 5 && h < 12) setSaudacao('Bom dia');
     else if (h >= 12 && h < 18) setSaudacao('Boa tarde');
     else setSaudacao('Boa noite');
-
-    const userId = localStorage.getItem('toligado_user_id');
-    if (!userId) { navigate(createPageUrl('Entrar')); return; }
-    base44.entities.Usuario.filter({ id: userId }).then(users => {
-      if (users.length === 0) { navigate(createPageUrl('Entrar')); return; }
-      setUsuario(users[0]);
-    });
+    carregarDados();
   }, []);
 
   if (!usuario) return (
@@ -69,7 +73,9 @@ export default function Home() {
       </div>
 
       {/* CONTEÚDO SCROLLÁVEL */}
-      <div style={{ flex: 1, overflowY: 'auto', padding: '0 16px 100px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
+      <div style={{ flex: 1, overflow: 'hidden' }}>
+      <PullToRefresh onRefresh={carregarDados}>
+      <div style={{ padding: '0 16px 100px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
 
         {/* CARD NÍVEL + PROGRESSO */}
         <div style={{ background: 'rgba(255,255,255,0.15)', borderRadius: '24px', padding: '20px', border: '1px solid rgba(255,255,255,0.2)' }}>
@@ -168,6 +174,8 @@ export default function Home() {
           </div>
         </div>
 
+      </div>
+      </PullToRefresh>
       </div>
 
       <BottomNav />

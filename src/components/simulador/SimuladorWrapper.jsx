@@ -46,7 +46,7 @@ export default function SimuladorWrapper({
   }, [passoAtual]);
 
   return (
-    <div className="min-h-screen flex flex-col bg-gradient-to-b from-[#F8F0FF] to-[#EDE0FF] pb-6">
+    <div className="min-h-screen flex flex-col bg-gradient-to-b from-[#F8F0FF] to-[#EDE0FF] pb-6" style={{ userSelect: 'none', WebkitUserSelect: 'none' }}>
       {/* Header */}
       <div className="px-5 pt-6 pb-3 flex items-center justify-between">
         <button

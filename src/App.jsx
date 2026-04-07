@@ -82,6 +82,14 @@ function App() {
     });
   }, []);
 
+  useEffect(() => {
+    const mq = window.matchMedia('(prefers-color-scheme: dark)');
+    const applyDark = (e) => document.documentElement.classList.toggle('dark', e.matches);
+    applyDark(mq);
+    mq.addEventListener('change', applyDark);
+    return () => mq.removeEventListener('change', applyDark);
+  }, []);
+
   const instalarApp = async () => {
     if (!deferredPrompt) return;
     deferredPrompt.prompt();

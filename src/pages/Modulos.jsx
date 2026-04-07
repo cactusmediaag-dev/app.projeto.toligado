@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import PullToRefresh from '@/components/shared/PullToRefresh';
 import { createPageUrl } from '@/utils';
 import BottomNav from '@/components/shared/BottomNav';
 import { base44 } from '@/api/base44Client';
@@ -11,12 +12,16 @@ export default function Modulos() {
   const [moduloSelecionado, setModuloSelecionado] = useState(null);
   const [mostrarModalRevisao, setMostrarModalRevisao] = useState(false);
 
-  useEffect(() => {
+  const carregarModulos = () => {
     const userId = localStorage.getItem('toligado_user_id');
     if (!userId) { navigate(createPageUrl('Entrar')); return; }
-    base44.entities.Usuario.filter({ id: userId }).then(users => {
+    return base44.entities.Usuario.filter({ id: userId }).then(users => {
       if (users.length > 0) setModulosCompletos(users[0].modulos_completos || []);
     });
+  };
+
+  useEffect(() => {
+    carregarModulos();
   }, []);
 
   const modulos = [
@@ -76,7 +81,9 @@ export default function Modulos() {
       </div>
 
       {/* LISTA */}
-      <div style={{ flex: 1, padding: '16px', display: 'flex', flexDirection: 'column', gap: '12px', paddingBottom: '100px' }}>
+      <div style={{ flex: 1, overflow: 'hidden' }}>
+      <PullToRefresh onRefresh={carregarModulos}>
+      <div style={{ padding: '16px', display: 'flex', flexDirection: 'column', gap: '12px', paddingBottom: '100px' }}>
         {modulos.map((modulo, index) => {
           const status = getStatus(modulo, index);
           const bloqueado = status === 'bloqueado';
@@ -130,6 +137,8 @@ export default function Modulos() {
             </div>
           );
         })}
+      </div>
+      </PullToRefresh>
       </div>
 
       <BottomNav />

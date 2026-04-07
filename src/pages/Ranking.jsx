@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
+import PullToRefresh from '@/components/shared/PullToRefresh';
 import { base44 } from '@/api/base44Client';
 import BottomNav from '@/components/shared/BottomNav';
 
@@ -135,7 +136,9 @@ export default function Ranking() {
 
       {/* Conteúdo */}
       {!loading && (
-        <div style={{ flex: 1, overflowY: 'auto', paddingBottom: '90px' }}>
+        <div style={{ flex: 1, overflow: 'hidden' }}>
+        <PullToRefresh onRefresh={carregarRanking}>
+        <div style={{ paddingBottom: '90px' }}>
 
           {jogadores.length === 0 && (
             <div style={{ textAlign: 'center', padding: '60px 24px', color: '#fff' }}>
@@ -302,6 +305,8 @@ export default function Ranking() {
               </div>
             </div>
           )}
+        </div>
+        </PullToRefresh>
         </div>
       )}
 

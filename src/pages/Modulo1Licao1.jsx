@@ -1,259 +1,396 @@
-import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { motion } from "framer-motion";
-import { createPageUrl } from "@/utils";
-import { base44 } from "@/api/base44Client";
-import SimuladorWrapper from "@/components/simulador/SimuladorWrapper";
-import ElementoClicavel from "@/components/simulador/ElementoClicavel";
-import ValidacaoQuiz from "@/components/simulador/ValidacaoQuiz";
-import { Sons, MoedasAnimadas, FeedbackAcerto, FeedbackErro } from "@/components/shared/GameFeedback";
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { createPageUrl } from '../utils';
+import { Sons, MoedasAnimadas, FeedbackAcerto, FeedbackErro } from '../components/shared/GameFeedback';
 
 export default function Modulo1Licao1() {
   const navigate = useNavigate();
   const [passo, setPasso] = useState(1);
   const [telaAcesa, setTelaAcesa] = useState(false);
-  const [volumeVisivel, setVolumeVisivel] = useState(false);
-  const [bateriaVisivel, setBateriaVisivel] = useState(false);
-  const [mostrarValidacao, setMostrarValidacao] = useState(false);
-  const [dica, setDica] = useState("");
+  const [volumeAtivo, setVolumeAtivo] = useState(false);
+  const [bateriaVisto, setBateriaVisto] = useState(false);
   const [mostrarDica, setMostrarDica] = useState(false);
+  const [mostrarMoedas, setMostrarMoedas] = useState(false);
   const [feedbackAcerto, setFeedbackAcerto] = useState(false);
   const [feedbackErro, setFeedbackErro] = useState(false);
-  const [mostrarMoedas, setMostrarMoedas] = useState(false);
   const [mensagemFeedback, setMensagemFeedback] = useState('');
+  const totalPassos = 3;
 
-  const handleCliqueCerto = (proximoPasso, acao) => {
-    // Som de acerto
-    const audio = new Audio('data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2/LDciUFLIHO8tiJNwgZaLvt559NEAxQp+PwtmMcBjiR1/LMeSwFJHfH8N2QQAoUXrTp66hVFApGn+DyvmwhBSuBzvLZiTYIGGi77eeeTRALUKjo77RgGgU7k9jxzHkrBSh+zPHajkILElyx6OyrWBUIRp/h8rBsGwU2idXx0n8qBSl5yO/bj0QKElqx5+iwWRQJP5jb8L90IAU2jdrzzoErByh1xe/akUALD1ap5earWRULRp7h8bJuHQU0hdLu0IEtBSh2yPDamT4JFlux6OanVxYLPJPY78p2KQUodMju2phACRZYr+XmqlgVCz2V2/DLdioFKHLG7tqZPwkWWLDn56lXFgk9ldrvy3cqBSl0yO/amkEJFVew5+aoVxYIPZXb78p3KgUqdsrw2plACBVWsOjnp1cWCT2V2+/KdioFKXbH79qZQAgVV7Dn56hYFQk9lNvvy3cqBSl2ye/amUAIFVew5+eoVxYJPJTa78t3KgUpdsjv2plACBVYsOjnqFgVCTyU2u/LdioFKXbJ79qZQQgVWLDo56hYFQk8lNrvy3cqBSl2yO/amUEIFVew6OeoWBUJPJPa78x4KgUpdsnu25lBCBVXsefnqFgVCTyU2u/MdyoFKXbI79uZQQgVWLHn56hYFQk8lNrvy3cqBSl2yO/bmUEIFVix5+eoWRUJPJPa78x3KgUpdsjv25lBCBVYsefnqFgVCTyT2u/MdyoFKXXI79uZQQgVWLHn56hZFQk8k9rvzHcqBSl1yO/bmUEIFVmx5+epWRUJO5Pa78x3KwUpdcjv25lBCBVYsejnqFgVCTuT2u/NdyoFKXXI79qZQQgVWLHn56hZFQk7k9rvzHcqBSl1yO/bmUEIFVmx6OeoWRUJO5Pa78x3KgUpdcjv25lBCBVZsejnqFkVCTuT2u/MdyoFKXXI79uZQQgVWbHo56hZFQk7k9rvzHcqBSl1yO/bmUEIFVmx6OeoWRUJO5Pa78x3KgUpdcjv25lBCBVZsejnqFkVCTuT2u/MdyoFKXXI79uZQQgVWbHo56hZFQk7k9rvzHcqBSl1yO/bmUEIFVmx6OeoWRUJO5Pa78x3KgUpdcjv25lBCBVZsejnqFkVCTuT2u/MdyoFKXXI79uZQQgVWbHo56hZFQk7k9rvzHcqBSl1yO/bmUEIFVmx6OeoWRUJO5Pa78x3KgUp');
-    audio.volume = 0.3;
-    audio.play().catch(() => {});
-
-    if (acao) acao();
-    setTimeout(() => setPasso(proximoPasso), 600);
-    setDica("");
-  };
-
-  const handleCliqueErrado = (mensagem) => {
-    navigator.vibrate?.(200);
-    setDica(mensagem);
-    setTimeout(() => setDica(""), 3000);
+  const instrucoes = {
+    1: 'Olá! Vou te mostrar os botões do celular. Toque no botão de LIGAR a tela! 💡',
+    2: 'Ótimo! Agora toque no botão de VOLUME para aumentar o som! 🔊',
+    3: 'Muito bem! Agora toque no ícone da BATERIA para ver a carga! 🔋',
   };
 
   useEffect(() => {
-    if (passo === 1 && !telaAcesa) {
-      const timer = setTimeout(() => setMostrarDica(true), 5000);
-      return () => clearTimeout(timer);
-    }
-  }, [passo, telaAcesa]);
+    setMostrarDica(false);
+    const t = setTimeout(() => setMostrarDica(true), 5000);
+    return () => clearTimeout(t);
+  }, [passo]);
 
-  const handleConcluirValidacao = async () => {
-    const userId = localStorage.getItem("toligado_user_id");
-    if (userId) {
-      const users = await base44.entities.Usuario.filter({ id: userId });
-      if (users.length > 0) {
-        const user = users[0];
-        await base44.entities.Usuario.update(userId, {
-          moedas: (user.moedas || 0) + 10,
-        });
-      }
-    }
-    navigate(createPageUrl("Modulo1Licao2"));
+  useEffect(() => {
+    const texto = instrucoes[passo];
+    if (!texto) return;
+    setTimeout(() => falar(texto), 400);
+  }, [passo]);
+
+  const falar = (texto) => {
+    try {
+      window.speechSynthesis.cancel();
+      const u = new SpeechSynthesisUtterance(texto);
+      u.lang = 'pt-BR';
+      u.rate = 0.82;
+      u.pitch = 1.05;
+      const voices = window.speechSynthesis.getVoices();
+      const voz = voices.find(v => v.lang.includes('pt')) || null;
+      if (voz) u.voice = voz;
+      window.speechSynthesis.speak(u);
+    } catch(e) {}
   };
 
-  if (mostrarValidacao) {
-    return (
-      <ValidacaoQuiz
-        pergunta="Qual botão você usa para ligar a tela do celular?"
-        opcoes={[
-          "🔊 O botão de volume",
-          "⚡ O botão de ligar/desligar ✅",
-          "🏠 O botão home",
-        ]}
-        respostaCorreta={1}
-        onConcluir={handleConcluirValidacao}
-        moedas={10}
-      />
-    );
-  }
+  const avancarPasso = () => {
+    Sons.avancar();
+    if (passo < totalPassos) {
+      setPasso(p => p + 1);
+    } else {
+      setMensagemFeedback('Você conhece os botões do celular! 🎉');
+      setFeedbackAcerto(true);
+    }
+  };
 
-  const passos = [
-    {
-      instrucao: "Olá! Vou te mostrar os botões do celular. Toque no botão de LIGAR a tela! 💡",
-      audio: "Olá! Vou te mostrar os botões do celular. Toque no botão de ligar a tela!",
-    },
-    {
-      instrucao: "Ótimo! Agora toque no botão de AUMENTAR O VOLUME 🔊",
-      audio: "Ótimo! Agora toque no botão de aumentar o volume!",
-    },
-    {
-      instrucao: "Você viu? A bateria está fraca! Toque no ícone da bateria para ver o nível 🔋",
-      audio: "Você viu? A bateria está fraca! Toque no ícone da bateria para ver o nível!",
-    },
-  ];
+  const handleContinuar = () => {
+    setFeedbackAcerto(false);
+    setMostrarMoedas(true);
+    Sons.avancar();
+  };
+
+  const handleMoedasFim = () => {
+    setMostrarMoedas(false);
+    navigate(createPageUrl('Modulo1Licao2'));
+  };
+
+  const hora = new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
 
   return (
-    <SimuladorWrapper
-      instrucao={passos[passo - 1].instrucao}
-      audioText={passos[passo - 1].audio}
-      passoAtual={passo}
-      totalPassos={3}
-      onVoltar={() => navigate(createPageUrl("Modulos"))}
-    >
-      {/* Tela simulada do celular */}
-      <div className={`w-full h-full transition-all duration-500 ${telaAcesa ? "bg-gradient-to-b from-blue-50 to-blue-100" : "bg-black"}`}>
-        {/* Status bar */}
-        {telaAcesa && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className="bg-white/90 px-4 py-2 flex justify-between items-center text-xs mt-6"
-          >
-            <span className="font-semibold text-gray-700">14:30</span>
-            <div className="flex gap-2 items-center">
-              {passo >= 3 ? (
-                <ElementoClicavel
-                  onClick={() => {
-                    setBateriaVisivel(true);
-                    setTimeout(() => {}, 100);
-                  }}
-                  posicao="bottom"
-                >
-                  <div className="flex items-center gap-1 text-red-500 font-bold cursor-pointer p-2">
-                    <span className="text-lg">🔋</span>
-                    <span className="text-sm">15%</span>
-                  </div>
-                </ElementoClicavel>
-              ) : (
-                <div className="flex items-center gap-1 text-gray-600">
-                  <span>🔋</span>
-                  <span className="text-xs">15%</span>
+    <div style={{
+      minHeight: '100dvh',
+      background: 'linear-gradient(160deg, #ede8f5 0%, #d8cff0 100%)',
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      overflow: 'hidden'
+    }}>
+
+      {/* HEADER */}
+      <div style={{
+        width: '100%',
+        padding: 'calc(env(safe-area-inset-top,44px) + 8px) 20px 12px',
+        display: 'flex',
+        alignItems: 'center',
+        gap: '12px',
+        background: 'transparent'
+      }}>
+        <button onClick={() => navigate(-1)} style={{
+          background: '#fff', border: 'none',
+          borderRadius: '50%', width: '40px', height: '40px',
+          display: 'flex', alignItems: 'center',
+          justifyContent: 'center', cursor: 'pointer',
+          fontSize: '18px', color: '#5C2E7F',
+          boxShadow: '0 2px 8px rgba(0,0,0,0.1)', flexShrink: 0
+        }}>←</button>
+
+        <div style={{ flex: 1 }}>
+          <div style={{
+            height: '8px', background: 'rgba(92,46,127,0.15)',
+            borderRadius: '4px', overflow: 'hidden'
+          }}>
+            <div style={{
+              height: '100%',
+              width: `${(passo / totalPassos) * 100}%`,
+              background: 'linear-gradient(90deg, #5C2E7F, #9B59B6)',
+              borderRadius: '4px',
+              transition: 'width 0.5s ease'
+            }}/>
+          </div>
+          <p style={{
+            textAlign: 'center', fontSize: '13px',
+            color: '#5C2E7F', fontWeight: '700',
+            margin: '4px 0 0'
+          }}>
+            Passo {passo} de {totalPassos}
+          </p>
+        </div>
+
+        <button onClick={() => falar(instrucoes[passo])} style={{
+          background: '#5C2E7F', border: 'none',
+          borderRadius: '50%', width: '40px', height: '40px',
+          display: 'flex', alignItems: 'center',
+          justifyContent: 'center', cursor: 'pointer',
+          fontSize: '18px', flexShrink: 0
+        }}>🔊</button>
+      </div>
+
+      {/* MOCKUP DO CELULAR */}
+      <div style={{ position: 'relative', marginTop: '8px', flexShrink: 0 }}>
+
+        {/* Moldura */}
+        <div style={{
+          width: '260px',
+          background: '#1a1a1a',
+          borderRadius: '40px',
+          padding: '10px',
+          boxShadow: '0 0 0 2px #333, 0 0 0 4px #555, 0 20px 50px rgba(0,0,0,0.4)',
+          position: 'relative'
+        }}>
+
+          {/* BOTÃO POWER — lateral direita */}
+          <div
+            onClick={() => {
+              if (passo === 1) {
+                setTelaAcesa(true);
+                setMostrarDica(false);
+                Sons.avancar();
+                if (navigator.vibrate) navigator.vibrate(50);
+                setTimeout(() => avancarPasso(), 800);
+              }
+            }}
+            style={{
+              position: 'absolute',
+              right: '-10px', top: '130px',
+              width: '10px', height: '50px',
+              background: passo === 1 ? (mostrarDica ? '#F3984B' : '#666') : '#444',
+              borderRadius: '0 5px 5px 0',
+              cursor: passo === 1 ? 'pointer' : 'default',
+              zIndex: 20,
+              transition: 'background 0.3s ease',
+              boxShadow: mostrarDica && passo === 1 ? '4px 0 16px rgba(243,152,75,0.9)' : 'none',
+              animation: mostrarDica && passo === 1 ? 'buttonPulse 1s ease infinite' : 'none'
+            }}
+          />
+
+          {/* BOTÃO VOLUME + — lateral esquerda */}
+          <div
+            onClick={() => {
+              if (passo === 2) {
+                setVolumeAtivo(true);
+                setMostrarDica(false);
+                Sons.avancar();
+                if (navigator.vibrate) navigator.vibrate(50);
+                setTimeout(() => avancarPasso(), 800);
+              }
+            }}
+            style={{
+              position: 'absolute',
+              left: '-10px', top: '110px',
+              width: '10px', height: '35px',
+              background: passo === 2 ? (mostrarDica ? '#F3984B' : '#666') : '#444',
+              borderRadius: '5px 0 0 5px',
+              cursor: passo === 2 ? 'pointer' : 'default',
+              zIndex: 20,
+              transition: 'background 0.3s ease',
+              boxShadow: mostrarDica && passo === 2 ? '-4px 0 16px rgba(243,152,75,0.9)' : 'none',
+              animation: mostrarDica && passo === 2 ? 'buttonPulse 1s ease infinite' : 'none'
+            }}
+          />
+
+          {/* BOTÃO VOLUME - */}
+          <div style={{
+            position: 'absolute',
+            left: '-10px', top: '155px',
+            width: '10px', height: '35px',
+            background: '#444',
+            borderRadius: '5px 0 0 5px',
+            zIndex: 20
+          }}/>
+
+          {/* Notch */}
+          <div style={{
+            position: 'absolute',
+            top: '10px', left: '50%',
+            transform: 'translateX(-50%)',
+            width: '100px', height: '24px',
+            background: '#1a1a1a',
+            borderRadius: '0 0 16px 16px',
+            zIndex: 10,
+            display: 'flex', alignItems: 'center', justifyContent: 'center'
+          }}>
+            <div style={{ width: '8px', height: '8px', background: '#333', borderRadius: '50%' }}/>
+          </div>
+
+          {/* TELA */}
+          <div style={{
+            width: '100%', height: '500px',
+            background: telaAcesa ? 'linear-gradient(160deg, #e8f0fe, #f0e8ff)' : '#000',
+            borderRadius: '32px',
+            overflow: 'hidden',
+            position: 'relative',
+            transition: 'background 0.6s ease',
+            display: 'flex', flexDirection: 'column'
+          }}>
+
+            {/* Status bar */}
+            {telaAcesa && (
+              <div style={{
+                display: 'flex', justifyContent: 'space-between',
+                alignItems: 'center',
+                padding: '28px 16px 4px',
+                fontSize: '12px', fontWeight: '600', color: '#333'
+              }}>
+                <span>{hora}</span>
+                <div style={{ display: 'flex', gap: '4px', alignItems: 'center' }}>
+                  <span>📶</span>
+                  <span>🛜</span>
+                  <div
+                    onClick={() => {
+                      if (passo === 3) {
+                        setBateriaVisto(true);
+                        Sons.avancar();
+                        if (navigator.vibrate) navigator.vibrate(50);
+                        setTimeout(() => avancarPasso(), 600);
+                      }
+                    }}
+                    style={{
+                      cursor: passo === 3 ? 'pointer' : 'default',
+                      padding: '2px 4px', borderRadius: '6px',
+                      background: passo === 3 ? 'rgba(243,152,75,0.3)' : 'transparent',
+                      border: passo === 3 ? '2px solid #F3984B' : '2px solid transparent',
+                      animation: mostrarDica && passo === 3 ? 'softPulse 1s ease infinite' : 'none',
+                      transition: 'all 0.3s ease', fontSize: '14px'
+                    }}
+                  >🔋</div>
                 </div>
-              )}
-            </div>
-          </motion.div>
-        )}
+              </div>
+            )}
 
-        {/* Conteúdo da tela */}
-        {telaAcesa && (
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            className="flex items-center justify-center h-[calc(100%-60px)] text-gray-400"
-          >
-            <div className="text-center">
-              <div className="text-6xl mb-2">📱</div>
-              <p className="text-sm font-semibold">Tela Inicial</p>
-            </div>
-          </motion.div>
-        )}
+            {/* Tela apagada */}
+            {!telaAcesa && (
+              <div style={{
+                flex: 1, display: 'flex', flexDirection: 'column',
+                alignItems: 'center', justifyContent: 'center', gap: '8px'
+              }}>
+                <div style={{ fontSize: '28px', opacity: 0.2 }}>📵</div>
+                <p style={{ color: '#333', fontSize: '12px', opacity: 0.2 }}>Tela desligada</p>
+              </div>
+            )}
 
-        {/* Volume indicator */}
-        {volumeVisivel && (
-          <motion.div
-            initial={{ scale: 0 }}
-            animate={{ scale: 1 }}
-            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-black/80 text-white px-6 py-4 rounded-2xl"
-          >
-            <div className="text-center">
-              <div className="text-4xl mb-2">🔊</div>
-              <div className="flex gap-1">
-                {[1, 2, 3, 4, 5].map((i) => (
-                  <div key={i} className="w-2 h-8 bg-white rounded" />
+            {/* Apps */}
+            {telaAcesa && (
+              <div style={{
+                flex: 1, padding: '12px',
+                display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)',
+                gap: '10px', alignContent: 'start'
+              }}>
+                {[
+                  { emoji: '⚙️', nome: 'Config', cor: '#607D8B' },
+                  { emoji: '🔍', nome: 'Google', cor: '#4285F4' },
+                  { emoji: '📷', nome: 'Câmera', cor: '#FF5722' },
+                  { emoji: '📱', nome: 'Telefone', cor: '#4CAF50' },
+                  { emoji: '💬', nome: 'WhatsApp', cor: '#25D366' },
+                  { emoji: '📸', nome: 'Fotos', cor: '#E91E63' },
+                  { emoji: '🎵', nome: 'Música', cor: '#9C27B0' },
+                  { emoji: '🌐', nome: 'Chrome', cor: '#FF9800' },
+                ].map((app, i) => (
+                  <div key={i} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '4px' }}>
+                    <div style={{
+                      width: '44px', height: '44px', background: app.cor,
+                      borderRadius: '12px', display: 'flex', alignItems: 'center',
+                      justifyContent: 'center', fontSize: '22px',
+                      boxShadow: '0 2px 6px rgba(0,0,0,0.2)'
+                    }}>{app.emoji}</div>
+                    <span style={{ fontSize: '9px', color: '#333', fontWeight: '600', textAlign: 'center' }}>{app.nome}</span>
+                  </div>
                 ))}
               </div>
-            </div>
-          </motion.div>
-        )}
-
-        {/* Bateria popup */}
-        {bateriaVisivel && (
-          <motion.div
-            initial={{ scale: 0 }}
-            animate={{ scale: 1 }}
-            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white rounded-2xl p-6 shadow-2xl border-2 border-red-200"
-          >
-            <div className="text-center">
-              <div className="text-5xl mb-3">🔋</div>
-              <p className="text-2xl font-bold text-red-500 mb-1">15%</p>
-              <p className="text-sm text-gray-600 font-semibold">Bateria Baixa!</p>
-              <p className="text-xs text-gray-500 mt-2">Conecte o carregador</p>
-              <button
-                onClick={() => setMostrarValidacao(true)}
-                className="mt-4 bg-[#F3984B] text-white px-6 py-2 rounded-xl font-bold text-sm active:scale-95"
-              >
-                OK
-              </button>
-            </div>
-          </motion.div>
-        )}
-      </div>
-
-      {/* Botões físicos do celular */}
-      <div className="absolute -right-2 top-32 flex flex-col gap-8" style={{ position: 'absolute' }}>
-        {passo === 1 && (
-          <>
-            <div
-              onClick={() => { setMostrarDica(false); handleCliqueCerto(2, () => setTelaAcesa(true)); }}
-              style={{
-                width: '8px', height: '52px',
-                background: mostrarDica ? '#F3984B' : '#9ca3af',
-                borderRadius: '0 4px 4px 0',
-                cursor: 'pointer',
-                animation: mostrarDica ? 'buttonPulse 1s ease infinite' : 'none',
-                boxShadow: mostrarDica ? '4px 0 12px rgba(243,152,75,0.8)' : 'none',
-                transition: 'all 0.3s ease'
-              }}
-            />
-            {mostrarDica && !telaAcesa && (
-              <div style={{
-                position: 'absolute', right: '-42px', top: '10px',
-                animation: 'arrowPulse 0.8s ease infinite alternate',
-                fontSize: '20px', zIndex: 21, pointerEvents: 'none'
-              }}>👉</div>
             )}
-          </>
+
+            {/* Nav bar Android */}
+            <div style={{
+              height: '30px', background: 'rgba(240,240,240,0.9)',
+              display: 'flex', alignItems: 'center',
+              justifyContent: 'space-around',
+              borderTop: '0.5px solid #ddd', flexShrink: 0
+            }}>
+              <span style={{ fontSize: '14px', color: '#555', cursor: 'pointer' }}>‹</span>
+              <div style={{ width: '14px', height: '14px', border: '2px solid #555', borderRadius: '3px' }}/>
+              <div style={{ width: '12px', height: '12px', border: '2px solid #555', borderRadius: '2px', boxShadow: '2px 2px 0 #555' }}/>
+            </div>
+          </div>
+        </div>
+
+        {/* Setas indicativas */}
+        {mostrarDica && passo === 1 && (
+          <div style={{
+            position: 'absolute', right: '-52px', top: '148px',
+            fontSize: '24px', animation: 'arrowPulse 0.7s ease infinite alternate',
+            zIndex: 30, pointerEvents: 'none'
+          }}>👉</div>
         )}
-        {passo >= 2 && (
-          <div className="w-8 h-16 bg-gray-300 rounded-l-lg" />
+        {mostrarDica && passo === 2 && (
+          <div style={{
+            position: 'absolute', left: '-52px', top: '120px',
+            fontSize: '24px', animation: 'arrowPulse2 0.7s ease infinite alternate',
+            zIndex: 30, pointerEvents: 'none'
+          }}>👈</div>
+        )}
+        {mostrarDica && passo === 3 && (
+          <div style={{
+            position: 'absolute', right: '20px', top: '32px',
+            fontSize: '20px', animation: 'arrowPulse 0.7s ease infinite alternate',
+            zIndex: 30, pointerEvents: 'none'
+          }}>⬆️</div>
         )}
       </div>
 
-      <div className="absolute -left-2 top-24 flex flex-col gap-3">
-        {passo === 2 ? (
-          <>
-            <ElementoClicavel
-              onClick={() => handleCliqueCerto(3, () => setVolumeVisivel(true))}
-              posicao="left"
-            >
-              <div className="w-8 h-12 bg-gray-300 rounded-r-lg cursor-pointer active:bg-gray-400" />
-            </ElementoClicavel>
-            <div
-              onClick={() => handleCliqueErrado("Quase lá! Tente o botão de cima, o de AUMENTAR 😊")}
-              className="w-8 h-12 bg-gray-300 rounded-r-lg cursor-pointer active:bg-gray-400"
-            />
-          </>
-        ) : (
-          <>
-            <div className="w-8 h-12 bg-gray-300 rounded-r-lg" />
-            <div className="w-8 h-12 bg-gray-300 rounded-r-lg" />
-          </>
-        )}
+      {/* BALÃO DE INSTRUÇÃO */}
+      <div style={{
+        position: 'fixed',
+        bottom: 0, left: 0, right: 0,
+        background: '#fff',
+        borderRadius: '24px 24px 0 0',
+        padding: '16px 20px calc(env(safe-area-inset-bottom,20px) + 16px)',
+        boxShadow: '0 -4px 20px rgba(92,46,127,0.15)',
+        display: 'flex', alignItems: 'center', gap: '12px', zIndex: 50
+      }}>
+        <div style={{
+          width: '48px', height: '48px', borderRadius: '50%',
+          background: 'linear-gradient(135deg, #5C2E7F, #9B59B6)',
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          fontSize: '26px', flexShrink: 0
+        }}>🧓</div>
+        <p style={{ flex: 1, margin: 0, fontSize: '15px', lineHeight: 1.5, color: '#333', fontWeight: '600' }}>
+          {instrucoes[passo]}
+        </p>
+        <button onClick={() => falar(instrucoes[passo])} style={{
+          width: '44px', height: '44px', borderRadius: '50%', border: 'none',
+          background: 'linear-gradient(135deg, #F3984B, #e67e22)',
+          color: '#fff', fontSize: '20px', cursor: 'pointer', flexShrink: 0,
+          boxShadow: '0 2px 8px rgba(243,152,75,0.4)'
+        }}>🔊</button>
       </div>
 
-      {/* Dica de erro */}
-      {dica && (
-        <motion.div
-          initial={{ y: -20, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          className="absolute top-20 left-1/2 -translate-x-1/2 bg-red-100 border-2 border-red-300 text-red-700 px-4 py-2 rounded-2xl text-sm font-semibold shadow-lg z-20 max-w-[280px] text-center"
-        >
-          {dica}
-        </motion.div>
-      )}
+      {/* OVERLAYS */}
+      {mostrarMoedas && <MoedasAnimadas quantidade={10} onFim={handleMoedasFim}/>}
+      {feedbackAcerto && <FeedbackAcerto mensagem={mensagemFeedback} onContinuar={handleContinuar}/>}
+      {feedbackErro && <FeedbackErro dica={mensagemFeedback} onTentar={() => setFeedbackErro(false)}/>}
 
-      {mostrarMoedas && <MoedasAnimadas quantidade={10} onFim={() => setMostrarMoedas(false)} />}
-      {feedbackAcerto && <FeedbackAcerto mensagem={mensagemFeedback} onContinuar={() => { setFeedbackAcerto(false); setMostrarMoedas(true); Sons.avancar(); }} />}
-      {feedbackErro && <FeedbackErro dica={mensagemFeedback} onTentar={() => setFeedbackErro(false)} />}
-    </SimuladorWrapper>
+      <style>{`
+        @keyframes arrowPulse {
+          from { transform: translateX(0); }
+          to   { transform: translateX(8px); }
+        }
+        @keyframes arrowPulse2 {
+          from { transform: translateX(0); }
+          to   { transform: translateX(-8px); }
+        }
+        @keyframes buttonPulse {
+          0%   { box-shadow: 4px 0 8px rgba(243,152,75,0.4); }
+          100% { box-shadow: 4px 0 20px rgba(243,152,75,1); }
+        }
+        @keyframes softPulse {
+          0%   { box-shadow: 0 0 0 0 rgba(243,152,75,0.7); }
+          100% { box-shadow: 0 0 0 8px rgba(243,152,75,0); }
+        }
+      `}</style>
+    </div>
   );
 }

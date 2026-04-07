@@ -1,114 +1,160 @@
-// Sistema de áudio híbrido com ElevenLabs + Web Speech API fallback
+// Sistema de voz híbrido — funciona em browser E APK Android
 
-const AudioSystem = {
-  elevenLabsConfig: {
-    voiceId: 'EXAVITQu4vr4xnSDxMaL', // Sarah - natural
-    modelId: 'eleven_multilingual_v2',
+const VozSistema = {
+
+  isAndroid() {
+    return /Android/i.test(navigator.userAgent);
   },
 
-  currentAudio: null,
-
-  async speak(text) {
-    try {
-      await this.speakElevenLabs(text);
-    } catch (e) {
-      console.log('ElevenLabs fallback to Web Speech API:', e.message);
-      this.speakFallback(text);
-    }
+  isAndroidAPK() {
+    return /wv/.test(navigator.userAgent) ||
+           window.Android !== undefined ||
+           (/Android/.test(navigator.userAgent) &&
+            !/Chrome\/[.0-9]*\s/.test(navigator.userAgent));
   },
 
-  async speakElevenLabs(text) {
-    const apiKey = window.ELEVENLABS_API_KEY || localStorage.getItem('elevenlabs_key');
-    if (!apiKey) throw new Error('No API key');
-
-    const response = await fetch(
-      `https://api.elevenlabs.io/v1/text-to-speech/${this.elevenLabsConfig.voiceId}`,
-      {
-        method: 'POST',
-        headers: {
-          'Accept': 'audio/mpeg',
-          'xi-api-key': apiKey,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          text: text,
-          model_id: this.elevenLabsConfig.modelId,
-          voice_settings: {
-            stability: 0.75,
-            similarity_boost: 0.85,
-            style: 0.3,
-            use_speaker_boost: true
-          }
-        })
-      }
-    );
-
-    if (!response.ok) throw new Error('ElevenLabs failed');
-
-    const audioBlob = await response.blob();
-    const audioUrl = URL.createObjectURL(audioBlob);
-    const audio = new Audio(audioUrl);
-    audio.playbackRate = 0.95;
-
-    this.currentAudio = audio;
-    await audio.play();
-
-    return new Promise(resolve => {
-      audio.onended = () => {
-        URL.revokeObjectURL(audioUrl);
-        this.currentAudio = null;
-        resolve();
+  async getVozes() {
+    return new Promise((resolve) => {
+      const vozes = window.speechSynthesis.getVoices();
+      if (vozes.length > 0) { resolve(vozes); return; }
+      let tentativas = 0;
+      const interval = setInterval(() => {
+        const v = window.speechSynthesis.getVoices();
+        tentativas++;
+        if (v.length > 0 || tentativas > 20) {
+          clearInterval(interval);
+          resolve(v);
+        }
+      }, 100);
+      window.speechSynthesis.onvoiceschanged = () => {
+        clearInterval(interval);
+        resolve(window.speechSynthesis.getVoices());
       };
     });
   },
 
-  speakFallback(text) {
-    if (typeof window === 'undefined' || !window.speechSynthesis) return;
-    
-    window.speechSynthesis.cancel();
+  async falar(texto) {
+    if (!texto) return;
+    const textoLimpo = texto
+      .replace(/[\u{1F300}-\u{1F9FF}]/gu, '')
+      .replace(/[⚡🔊📱💡🔋]/g, '')
+      .trim();
 
-    const utterance = new SpeechSynthesisUtterance(text);
+    // Android Bridge nativa (Capacitor/Cordova)
+    if (window.Android && window.Android.speak) {
+      try { window.Android.speak(textoLimpo); return; } catch(e) {}
+    }
+
+    if ('speechSynthesis' in window) {
+      try { await this.falarSpeechSynthesis(textoLimpo); return; } catch(e) {}
+    }
+
+    this.falarVisual(textoLimpo);
+  },
+
+  async falarSpeechSynthesis(texto) {
+    window.speechSynthesis.cancel();
+    await new Promise(r => setTimeout(r, 100));
+
+    const utterance = new SpeechSynthesisUtterance(texto);
     utterance.lang = 'pt-BR';
     utterance.rate = 0.82;
     utterance.pitch = 1.05;
     utterance.volume = 1.0;
 
-    const voices = window.speechSynthesis.getVoices();
-    const ptVoices = voices.filter(v =>
-      v.lang.includes('pt') || v.lang.includes('BR')
+    const vozes = await this.getVozes();
+    const vozPT = vozes.find(v =>
+      v.lang === 'pt-BR' || v.lang === 'pt_BR' || v.lang.startsWith('pt')
     );
+    if (vozPT) utterance.voice = vozPT;
 
-    const femaleVoice = ptVoices.find(v =>
-      v.name.toLowerCase().includes('female') ||
-      v.name.toLowerCase().includes('luciana') ||
-      v.name.toLowerCase().includes('vitoria') ||
-      v.name.toLowerCase().includes('francisca')
-    );
+    // Fix Android WebView — mantém fala ativa
+    const fixAndroid = setInterval(() => {
+      if (window.speechSynthesis.speaking) {
+        window.speechSynthesis.pause();
+        window.speechSynthesis.resume();
+      } else {
+        clearInterval(fixAndroid);
+      }
+    }, 5000);
 
-    if (femaleVoice) utterance.voice = femaleVoice;
-    else if (ptVoices.length > 0) utterance.voice = ptVoices[0];
-
-    window.speechSynthesis.speak(utterance);
+    return new Promise((resolve, reject) => {
+      utterance.onend = () => { clearInterval(fixAndroid); resolve(); };
+      utterance.onerror = (e) => { clearInterval(fixAndroid); reject(e); };
+      try {
+        window.speechSynthesis.speak(utterance);
+        // Workaround Android: se não começar em 1s, fala vazio primeiro
+        if (this.isAndroid()) {
+          setTimeout(() => {
+            if (!window.speechSynthesis.speaking) {
+              const u0 = new SpeechSynthesisUtterance('');
+              window.speechSynthesis.speak(u0);
+              window.speechSynthesis.speak(utterance);
+            }
+          }, 1000);
+        }
+      } catch(e) { reject(e); }
+    });
   },
 
-  stop() {
-    if (this.currentAudio) {
-      this.currentAudio.pause();
-      this.currentAudio = null;
-    }
-    if (typeof window !== 'undefined' && window.speechSynthesis) {
-      window.speechSynthesis.cancel();
-    }
-  }
+  // Fallback visual quando TTS falha totalmente
+  falarVisual(texto) {
+    const existente = document.getElementById('voz-fallback');
+    if (existente) existente.remove();
+    const div = document.createElement('div');
+    div.id = 'voz-fallback';
+    div.style.cssText = `
+      position: fixed;
+      bottom: 120px;
+      left: 16px; right: 16px;
+      background: rgba(92,46,127,0.95);
+      color: white;
+      padding: 14px 18px;
+      border-radius: 16px;
+      font-size: 16px;
+      font-weight: 600;
+      line-height: 1.5;
+      z-index: 99999;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+      animation: slideUpFeedback 0.3s ease;
+      text-align: center;
+    `;
+    div.innerHTML = `🧓 ${texto}`;
+    document.body.appendChild(div);
+    setTimeout(() => div?.remove(), 4000);
+  },
+
+  parar() {
+    try { window.speechSynthesis?.cancel(); } catch(e) {}
+  },
+
+  // Compatibilidade com AudioSystem antigo
+  async speak(text) { return this.falar(text); },
+  stop() { this.parar(); }
 };
 
-if (typeof window !== 'undefined') {
-  window.AudioSystem = AudioSystem;
-  
-  const savedKey = localStorage.getItem('elevenlabs_key');
-  if (savedKey) {
-    window.ELEVENLABS_API_KEY = savedKey;
-  }
-}
+// Desbloqueio de áudio no primeiro toque (obrigatório no Android)
+let audioDesbloqueado = false;
+const desbloquearAudio = () => {
+  if (audioDesbloqueado) return;
+  audioDesbloqueado = true;
+  try {
+    const u = new SpeechSynthesisUtterance('');
+    window.speechSynthesis.speak(u);
+    window.speechSynthesis.cancel();
+  } catch(e) {}
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const buf = ctx.createBuffer(1, 1, 22050);
+    const src = ctx.createBufferSource();
+    src.buffer = buf;
+    src.connect(ctx.destination);
+    src.start(0);
+    ctx.resume();
+  } catch(e) {}
+};
+document.addEventListener('touchstart', desbloquearAudio, { once: true, passive: true });
+document.addEventListener('click', desbloquearAudio, { once: true, passive: true });
 
-export default AudioSystem;
+export default VozSistema;
+export { VozSistema };

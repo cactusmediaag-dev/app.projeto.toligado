@@ -1,27 +1,24 @@
-import React, { useState, useEffect } from "react";
-import { motion } from "framer-motion";
+import { useState, useEffect } from 'react';
+import { motion } from 'framer-motion';
+import VozSistema from '../shared/AudioSystem';
 
 export default function InstructionBalloon({ text, onRepeat, mascot = "🧓" }) {
   const [falando, setFalando] = useState(false);
 
-  const falar = () => {
+  const falar = async () => {
     setFalando(true);
-    const u = new SpeechSynthesisUtterance(text);
-    u.lang = 'pt-BR';
-    u.rate = 0.82;
-    u.pitch = 1.05;
-    const voices = speechSynthesis.getVoices();
-    const ptVoz = voices.find(v => v.lang.includes('pt') && (v.name.includes('Luciana') || v.name.includes('Francisca') || v.name.includes('female'))) || voices.find(v => v.lang.includes('pt'));
-    if (ptVoz) u.voice = ptVoz;
-    u.onend = () => setFalando(false);
-    speechSynthesis.cancel();
-    speechSynthesis.speak(u);
+    await VozSistema.falar(text);
+    setTimeout(() => setFalando(false), 500);
     onRepeat && onRepeat();
   };
 
   useEffect(() => {
-    const timer = setTimeout(() => falar(), 500);
-    return () => { clearTimeout(timer); speechSynthesis.cancel(); };
+    if (!text) return;
+    const t = setTimeout(() => falar(), 500);
+    return () => {
+      clearTimeout(t);
+      VozSistema.parar();
+    };
   }, [text]);
 
   return (
@@ -40,7 +37,6 @@ export default function InstructionBalloon({ text, onRepeat, mascot = "🧓" }) 
         gap: '12px'
       }}
     >
-      {/* Mascote animado */}
       <div style={{
         width: '48px', height: '48px',
         borderRadius: '50%',
@@ -54,7 +50,6 @@ export default function InstructionBalloon({ text, onRepeat, mascot = "🧓" }) 
         {mascot}
       </div>
 
-      {/* Texto */}
       <p style={{
         flex: 1, margin: 0,
         fontSize: '15px', lineHeight: 1.5,
@@ -63,7 +58,6 @@ export default function InstructionBalloon({ text, onRepeat, mascot = "🧓" }) 
         {text}
       </p>
 
-      {/* Botão repetir */}
       <button onClick={falar} style={{
         width: '40px', height: '40px',
         borderRadius: '50%', border: 'none',

@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { createPageUrl } from '../utils';
+import VozSistema from '../components/shared/AudioSystem';
 import { Sons, MoedasAnimadas, FeedbackAcerto, FeedbackErro } from '../components/shared/GameFeedback';
 
 export default function Modulo1Licao1() {
@@ -35,17 +36,7 @@ export default function Modulo1Licao1() {
   }, [passo]);
 
   const falar = (texto) => {
-    try {
-      window.speechSynthesis.cancel();
-      const u = new SpeechSynthesisUtterance(texto);
-      u.lang = 'pt-BR';
-      u.rate = 0.82;
-      u.pitch = 1.05;
-      const voices = window.speechSynthesis.getVoices();
-      const voz = voices.find(v => v.lang.includes('pt')) || null;
-      if (voz) u.voice = voz;
-      window.speechSynthesis.speak(u);
-    } catch(e) {}
+    VozSistema.falar(texto);
   };
 
   const avancarPasso = () => {

@@ -14,9 +14,15 @@ const VozSistema = {
 
   apiKey: 'sk_3bb1c5982852fc29ca0ce10bb6c3818e7a7aa2be8ebeeb8d',
   audioAtual: null,
+  usuarioInteragiu: false,
+  _textosPendentes: [],
 
   setApiKey(key) {
     this.apiKey = key;
+  },
+
+  marcarInteracao() {
+    this.usuarioInteragiu = true;
   },
 
   temApiKey() {
@@ -31,11 +37,16 @@ const VozSistema = {
       .trim();
   },
 
-  async falar(texto) {
+  async falar(texto, forcado = false) {
     if (!texto) return;
+
+    if (!this.usuarioInteragiu && !forcado) {
+      this._textosPendentes.push(texto);
+      return;
+    }
+
     const textoLimpo = this.limparTexto(texto);
     if (!textoLimpo) return;
-
     this.parar();
 
     if (this.temApiKey()) {
@@ -52,6 +63,11 @@ const VozSistema = {
     } catch(e) {
       this.mostrarTextoVisual(texto);
     }
+  },
+
+  async falarForcado(texto) {
+    this.marcarInteracao();
+    return this.falar(texto, true);
   },
 
   async falarElevenLabs(texto) {
@@ -186,10 +202,10 @@ const VozSistema = {
 };
 
 // Desbloquear áudio no primeiro toque (obrigatório Android)
-let desbloqueado = false;
 const desbloquear = () => {
-  if (desbloqueado) return;
-  desbloqueado = true;
+  if (VozSistema.usuarioInteragiu) return;
+  VozSistema.marcarInteracao();
+
   try {
     const ctx = new (window.AudioContext || window.webkitAudioContext)();
     ctx.resume();
@@ -199,11 +215,21 @@ const desbloquear = () => {
     src.connect(ctx.destination);
     src.start(0);
   } catch(e) {}
+
   try {
     const u = new SpeechSynthesisUtterance('');
     window.speechSynthesis.speak(u);
     window.speechSynthesis.cancel();
   } catch(e) {}
+
+  setTimeout(() => {
+    const pendentes = VozSistema._textosPendentes;
+    if (pendentes.length > 0) {
+      const ultimo = pendentes[pendentes.length - 1];
+      VozSistema._textosPendentes = [];
+      VozSistema.falar(ultimo, true);
+    }
+  }, 300);
 };
 
 ['touchstart', 'click', 'keydown'].forEach(ev =>

@@ -7,14 +7,20 @@ export default function InstructionBalloon({ text, onRepeat, mascot = "🧓" }) 
 
   const falar = async () => {
     setFalando(true);
-    await VozSistema.falar(text);
+    await VozSistema.falarForcado(text);
     setTimeout(() => setFalando(false), 500);
     onRepeat && onRepeat();
   };
 
   useEffect(() => {
     if (!text) return;
-    const t = setTimeout(() => falar(), 500);
+    const t = setTimeout(() => {
+      if (VozSistema.usuarioInteragiu) {
+        VozSistema.falar(text);
+      } else {
+        VozSistema._textosPendentes = [text];
+      }
+    }, 500);
     return () => {
       clearTimeout(t);
       VozSistema.parar();

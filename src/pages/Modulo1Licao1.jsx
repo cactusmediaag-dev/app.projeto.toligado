@@ -32,11 +32,12 @@ export default function Modulo1Licao1() {
   useEffect(() => {
     const texto = instrucoes[passo];
     if (!texto) return;
-    setTimeout(() => falar(texto), 400);
+    const t = setTimeout(() => VozSistema.falar(texto), 600);
+    return () => clearTimeout(t);
   }, [passo]);
 
   const falar = (texto) => {
-    VozSistema.falar(texto);
+    VozSistema.falarForcado(texto);
   };
 
   const avancarPasso = () => {

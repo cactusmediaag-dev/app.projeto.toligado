@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { createPageUrl } from '@/utils';
 import PullToRefresh from '@/components/shared/PullToRefresh';
 import { base44 } from '@/api/base44Client';
 import BottomNav from '@/components/shared/BottomNav';
@@ -80,7 +81,7 @@ export default function Ranking() {
         flexShrink: 0
       }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '16px' }}>
-          <button onClick={() => navigate(-1)} style={{
+          <button onClick={() => navigate(createPageUrl('Home'))} style={{
             background: 'rgba(255,255,255,0.2)', border: 'none', borderRadius: '10px',
             width: '36px', height: '36px', display: 'flex', alignItems: 'center',
             justifyContent: 'center', cursor: 'pointer', fontSize: '18px', color: '#fff', flexShrink: 0

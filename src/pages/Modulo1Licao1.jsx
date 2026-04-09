@@ -82,7 +82,7 @@ export default function Modulo1Licao1() {
         gap: '12px',
         background: 'transparent'
       }}>
-        <button onClick={() => navigate(-1)} style={{
+        <button onClick={() => navigate(createPageUrl('Modulos'))} style={{
           background: '#fff', border: 'none',
           borderRadius: '50%', width: '40px', height: '40px',
           display: 'flex', alignItems: 'center',

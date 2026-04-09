@@ -1,4 +1,5 @@
 import { useNavigate } from 'react-router-dom';
+import { createPageUrl } from '@/utils';
 
 export default function PoliticaPrivacidade() {
   const navigate = useNavigate();
@@ -62,7 +63,7 @@ export default function PoliticaPrivacidade() {
       {/* HEADER */}
       <div style={{ background: 'linear-gradient(135deg, #5C2E7F, #7B3FA0)', padding: 'calc(env(safe-area-inset-top, 44px) + 12px) 20px 20px', flexShrink: 0 }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '12px' }}>
-          <button onClick={() => navigate(-1)} style={{ background: 'rgba(255,255,255,0.2)', border: 'none', borderRadius: '10px', width: '36px', height: '36px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', fontSize: '18px', color: '#fff', flexShrink: 0 }}>
+          <button onClick={() => navigate(createPageUrl('Home'))} style={{ background: 'rgba(255,255,255,0.2)', border: 'none', borderRadius: '10px', width: '36px', height: '36px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', fontSize: '18px', color: '#fff', flexShrink: 0 }}>
             ←
           </button>
           <h1 style={{ color: '#fff', fontSize: '20px', fontWeight: '800', margin: 0 }}>Política de Privacidade</h1>

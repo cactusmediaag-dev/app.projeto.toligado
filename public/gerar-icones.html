@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head><title>Gerar Ícones</title></head>
+<body>
+<canvas id="c192" width="192" height="192"></canvas>
+<canvas id="c512" width="512" height="512"></canvas>
+<button onclick="baixar()">Baixar ícones</button>
+
+<script>
+function desenharIcone(canvas, size) {
+  const ctx = canvas.getContext('2d');
+  const r = size * 0.15;
+
+  // Fundo roxo
+  ctx.fillStyle = '#5C2E7F';
+  ctx.beginPath();
+  ctx.roundRect(0, 0, size, size, r);
+  ctx.fill();
+
+  // Raio laranja
+  ctx.fillStyle = '#F3984B';
+  ctx.font = `bold ${size * 0.55}px Arial`;
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText('⚡', size/2, size * 0.42);
+
+  // Texto branco
+  ctx.fillStyle = '#FFFFFF';
+  ctx.font = `bold ${size * 0.12}px Arial`;
+  ctx.fillText('Tô Ligado', size/2, size * 0.82);
+}
+
+function baixar() {
+  const c192 = document.getElementById('c192');
+  const c512 = document.getElementById('c512');
+
+  desenharIcone(c192, 192);
+  desenharIcone(c512, 512);
+
+  // Baixar 192x192
+  const a192 = document.createElement('a');
+  a192.download = 'icon-192.png';
+  a192.href = c192.toDataURL('image/png');
+  a192.click();
+
+  // Baixar 512x512
+  setTimeout(() => {
+    const a512 = document.createElement('a');
+    a512.download = 'icon-512.png';
+    a512.href = c512.toDataURL('image/png');
+    a512.click();
+  }, 500);
+}
+
+// Desenhar preview
+window.onload = () => {
+  desenharIcone(document.getElementById('c192'), 192);
+  desenharIcone(document.getElementById('c512'), 512);
+};
+</script>
+</body>
+</html>

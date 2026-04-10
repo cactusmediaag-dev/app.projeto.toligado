@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import BotaoVoltar from '../components/shared/BotaoVoltar';
 import { useNavigate } from 'react-router-dom';
 import PullToRefresh from '@/components/shared/PullToRefresh';
 import { createPageUrl } from '@/utils';
@@ -71,12 +72,12 @@ export default function Modulos() {
         position: 'sticky', top: 0, zIndex: 10,
         boxShadow: '0 2px 12px rgba(92,46,127,0.08)'
       }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-          <button onClick={() => navigate(createPageUrl('Home'))} style={{ background: '#f0e8ff', border: 'none', borderRadius: '10px', width: '36px', height: '36px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', fontSize: '18px', color: '#5C2E7F', flexShrink: 0 }}>
-            ←
-          </button>
-          <span style={{ fontSize: '24px' }}>📚</span>
-          <h1 style={{ fontSize: '22px', fontWeight: '800', color: '#5C2E7F', margin: 0, letterSpacing: '-0.3px' }}>Módulos</h1>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+          <BotaoVoltar destino="Home" cor="#5C2E7F" />
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <span style={{ fontSize: '24px' }}>📚</span>
+            <h1 style={{ fontSize: '22px', fontWeight: '800', color: '#5C2E7F', margin: 0, letterSpacing: '-0.3px' }}>Módulos</h1>
+          </div>
         </div>
       </div>
 

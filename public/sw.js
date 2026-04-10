@@ -1,52 +1,45 @@
-const CACHE_NAME = 'toligado-v1';
-const URLS_PARA_CACHE = [
+const CACHE_NAME = 'toligado-v2';
+const URLS_CACHE = [
   '/',
-  '/index.html',
-  '/logo_to_ligado.png',
+  '/index.html'
 ];
 
-// Instalar service worker
-self.addEventListener('install', (event) => {
-  event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => {
-      return cache.addAll(URLS_PARA_CACHE);
-    })
+self.addEventListener('install', (e) => {
+  e.waitUntil(
+    caches.open(CACHE_NAME)
+      .then(cache => cache.addAll(URLS_CACHE))
+      .then(() => self.skipWaiting())
   );
-  self.skipWaiting();
 });
 
-// Ativar e limpar caches antigos
-self.addEventListener('activate', (event) => {
-  event.waitUntil(
-    caches.keys().then((keys) => {
-      return Promise.all(
+self.addEventListener('activate', (e) => {
+  e.waitUntil(
+    caches.keys().then(keys =>
+      Promise.all(
         keys.filter(k => k !== CACHE_NAME)
             .map(k => caches.delete(k))
-      );
-    })
+      )
+    ).then(() => self.clients.claim())
   );
-  self.clients.claim();
 });
 
-// Interceptar requisições
-self.addEventListener('fetch', (event) => {
-  if (event.request.method !== 'GET') return;
+self.addEventListener('fetch', (e) => {
+  if (e.request.method !== 'GET') return;
+  if (!e.request.url.startsWith('http')) return;
 
-  event.respondWith(
-    caches.match(event.request).then((cached) => {
-      return cached || fetch(event.request).then((response) => {
+  e.respondWith(
+    fetch(e.request)
+      .then(response => {
         if (response && response.status === 200) {
           const clone = response.clone();
-          caches.open(CACHE_NAME).then((cache) => {
-            cache.put(event.request, clone);
-          });
+          caches.open(CACHE_NAME)
+            .then(cache => cache.put(e.request, clone));
         }
         return response;
-      }).catch(() => {
-        if (event.request.destination === 'document') {
-          return caches.match('/index.html');
-        }
-      });
-    })
+      })
+      .catch(() => caches.match(e.request)
+        .then(cached => cached ||
+          caches.match('/index.html'))
+      )
   );
 });

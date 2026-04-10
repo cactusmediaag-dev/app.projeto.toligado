@@ -63,7 +63,16 @@ const AssistenteVoz = ({ onSuccess, onSkip }) => {
     <div style={{ height:'100%', background:'#1a1a2e', display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center', color:'#fff', padding:'24px', textAlign:'center', gap:'24px' }}>
       <div style={{ display:'flex', gap:'6px' }}>{['#4285F4','#EA4335','#FBBC05','#34A853'].map((c,i)=>(<div key={i} style={{ width:'14px', height:'14px', borderRadius:'50%', background:c, animation: status === 'listening' ? `bounce 0.6s ease ${i*0.1}s infinite alternate` : 'none' }}/>))}</div>
       <p style={{ fontSize:'17px', lineHeight:1.5, maxWidth:'260px' }}>{status === 'listening' ? 'Ouvindo... fale agora! 🎤' : 'Toque no microfone e diga: "Ok Google!"'}</p>
-      <button onClick={startListening} style={{ width:'88px', height:'88px', borderRadius:'50%', border:'none', cursor:'pointer', background: status === 'listening' ? 'radial-gradient(circle, #EA4335, #c0392b)' : 'rgba(255,255,255,0.15)', fontSize:'36px', boxShadow: status === 'listening' ? '0 0 0 12px rgba(234,67,53,0.2)' : 'none', transition:'all 0.3s ease' }}>🎤</button>
+      <button onClick={() => {
+        if (status === 'listening') {
+          recognitionRef.current?.stop();
+          setStatus('heard');
+          setTranscript(t => t || 'Ok Google');
+          setTimeout(() => onSuccess(transcript || 'Ok Google'), 800);
+        } else {
+          startListening();
+        }
+      }} style={{ width:'88px', height:'88px', borderRadius:'50%', border:'none', cursor:'pointer', background: status === 'listening' ? 'radial-gradient(circle, #EA4335, #c0392b)' : 'rgba(255,255,255,0.15)', fontSize:'36px', boxShadow: status === 'listening' ? '0 0 0 12px rgba(234,67,53,0.2)' : 'none', transition:'all 0.3s ease' }}>🎤</button>
       {status === 'listening' && (
         <div style={{ display:'flex', gap:'4px', alignItems:'center', height:'36px' }}>{[1,2,3,4,5,4,3,2,1].map((h,i)=>(<div key={i} style={{ width:'4px', borderRadius:'2px', background:'#4285F4', height:`${h*6}px`, animation:`audioWave 0.5s ease ${i*0.06}s infinite alternate` }}/>))}</div>
       )}
@@ -156,11 +165,11 @@ export default function Modulo1Licao2() {
           <div className="grid grid-cols-4 gap-6 mt-8">
             {passo === 4 && (
               <ElementoClicavel
-                onClick={() => handleCliqueCerto(999, () => setBuscaAberta(true))}
+                onClick={() => handleCliqueCerto(4, () => setBuscaAberta(true))}
                 posicao="bottom"
               >
                 <div className="flex flex-col items-center gap-2">
-                  <div className="w-14 h-14 bg-white rounded-2xl flex items-center justify-center text-2xl shadow-md">
+                  <div className="w-14 h-14 bg-white rounded-2xl flex items-center justify-center text-2xl shadow-md" style={{ color: '#4285F4', fontWeight: '900', fontSize: '28px' }}>
                     G
                   </div>
                   <span className="text-xs text-gray-600 font-semibold">Google</span>
@@ -169,7 +178,7 @@ export default function Modulo1Licao2() {
             )}
             {passo !== 4 && (
               <div className="flex flex-col items-center gap-2">
-                <div className="w-14 h-14 bg-white rounded-2xl flex items-center justify-center text-2xl shadow-md">
+                <div className="w-14 h-14 bg-white rounded-2xl flex items-center justify-center shadow-md" style={{ color: '#4285F4', fontWeight: '900', fontSize: '28px' }}>
                   G
                 </div>
                 <span className="text-xs text-gray-600 font-semibold">Google</span>

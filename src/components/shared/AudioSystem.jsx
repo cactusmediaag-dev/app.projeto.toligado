@@ -164,24 +164,8 @@ const VozSistema = {
     });
   },
 
-  mostrarTextoVisual(texto) {
-    const id = 'voz-visual-fallback';
-    document.getElementById(id)?.remove();
-    const div = document.createElement('div');
-    div.id = id;
-    div.style.cssText = `
-      position: fixed;
-      bottom: 130px; left: 16px; right: 16px;
-      background: rgba(92,46,127,0.96);
-      color: #fff; padding: 14px 18px;
-      border-radius: 16px; font-size: 16px;
-      font-weight: 600; line-height: 1.5;
-      z-index: 99999; text-align: center;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
-    `;
-    div.textContent = texto;
-    document.body.appendChild(div);
-    setTimeout(() => div?.remove(), 5000);
+  mostrarTextoVisual(_texto) {
+    // desativado — texto já visível no balão branco
   },
 
   parar() {

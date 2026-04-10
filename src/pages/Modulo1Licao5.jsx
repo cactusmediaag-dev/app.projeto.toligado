@@ -149,43 +149,38 @@ export default function Modulo1Licao5() {
       )}
 
       {fotoSelecionada && !menuCompartilhar && (
-        <div className="w-full h-full bg-black relative">
-          <div className="absolute inset-0 flex items-center justify-center">
-            <div className="text-9xl">{fotoSelecionada}</div>
+        <div style={{ width:'100%', height:'100%', background:'#000', display:'flex', flexDirection:'column', overflow:'hidden' }}>
+          {/* Foto */}
+          <div style={{ flex:1, display:'flex', alignItems:'center', justifyContent:'center', position:'relative', minHeight:0 }}>
+            <div style={{ fontSize:'100px' }}>{fotoSelecionada}</div>
+            <button
+              onClick={() => { setFotoSelecionada(null); setPasso(2); }}
+              style={{ position:'absolute', top:'8px', left:'12px', color:'#fff', background:'none', border:'none', fontSize:'24px', cursor:'pointer' }}
+            >
+              ←
+            </button>
           </div>
-          <button
-            onClick={() => { setFotoSelecionada(null); setPasso(2); }}
-            className="absolute top-8 left-4 text-white text-2xl"
-          >
-            ←
-          </button>
-          <div className="absolute bottom-6 left-0 right-0 px-6 flex justify-around">
-            {passo === 3 && (
+          {/* Barra de ações */}
+          <div style={{ flexShrink:0, background:'rgba(0,0,0,0.8)', padding:'12px 24px 20px', display:'flex', justifyContent:'space-around' }}>
+            {passo === 3 ? (
               <ElementoClicavel
                 onClick={() => handleCliqueCerto(4, () => setMenuCompartilhar(true))}
                 posicao="top"
               >
-                <div className="flex flex-col items-center gap-1 cursor-pointer">
-                  <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center">
-                    <span className="text-2xl">📤</span>
-                  </div>
-                  <span className="text-white text-xs font-semibold">Compartilhar</span>
+                <div style={{ display:'flex', flexDirection:'column', alignItems:'center', gap:'4px', cursor:'pointer' }}>
+                  <div style={{ width:'48px', height:'48px', background:'rgba(255,255,255,0.2)', borderRadius:'50%', display:'flex', alignItems:'center', justifyContent:'center', fontSize:'22px' }}>📤</div>
+                  <span style={{ color:'#fff', fontSize:'11px', fontWeight:'600' }}>Compartilhar</span>
                 </div>
               </ElementoClicavel>
-            )}
-            {passo !== 3 && (
-              <div className="flex flex-col items-center gap-1">
-                <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center">
-                  <span className="text-2xl">📤</span>
-                </div>
-                <span className="text-white text-xs font-semibold">Compartilhar</span>
+            ) : (
+              <div style={{ display:'flex', flexDirection:'column', alignItems:'center', gap:'4px' }}>
+                <div style={{ width:'48px', height:'48px', background:'rgba(255,255,255,0.2)', borderRadius:'50%', display:'flex', alignItems:'center', justifyContent:'center', fontSize:'22px' }}>📤</div>
+                <span style={{ color:'#fff', fontSize:'11px', fontWeight:'600' }}>Compartilhar</span>
               </div>
             )}
-            {["✏️", "🗑️"].map((emoji, i) => (
-              <div key={i} className="flex flex-col items-center gap-1">
-                <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center">
-                  <span className="text-2xl">{emoji}</span>
-                </div>
+            {['✏️','🗑️'].map((emoji, i) => (
+              <div key={i} style={{ display:'flex', flexDirection:'column', alignItems:'center', gap:'4px' }}>
+                <div style={{ width:'48px', height:'48px', background:'rgba(255,255,255,0.2)', borderRadius:'50%', display:'flex', alignItems:'center', justifyContent:'center', fontSize:'22px' }}>{emoji}</div>
               </div>
             ))}
           </div>

@@ -50,12 +50,12 @@ const PesquisaReal = ({ onClose }) => {
   };
 
   return (
-    <div style={{ height:'100%', background:'#fff', display:'flex', flexDirection:'column', fontSize:'13px' }}>
+    <div style={{ height:'100%', background:'#fff', display:'flex', flexDirection:'column', fontSize:'13px', overflow:'hidden', boxSizing:'border-box' }}>
       <div style={{ padding:'10px 12px', borderBottom:'1px solid #e0e0e0', display:'flex', alignItems:'center', gap:'8px' }}>
         <button onClick={onClose} style={{ background:'#5C2E7F', color:'#fff', border:'none', borderRadius:'8px', padding:'6px 12px', fontSize:'12px', fontWeight:'700', cursor:'pointer' }}>← Voltar</button>
-        <div style={{ flex:1, display:'flex', alignItems:'center', gap:'6px', background:'#f1f3f4', borderRadius:'22px', padding:'7px 14px', border:'1px solid #dfe1e5' }}>
+        <div style={{ flex:1, display:'flex', alignItems:'center', gap:'6px', background:'#f1f3f4', borderRadius:'22px', padding:'7px 14px', border:'1px solid #dfe1e5', minWidth:0, overflow:'hidden' }}>
           <span>🔍</span>
-          <input value={query} onChange={e => setQuery(e.target.value)} onKeyDown={e => e.key === 'Enter' && search(query)} style={{ flex:1, border:'none', background:'transparent', fontSize:'13px', outline:'none', color:'#202124' }}/>
+          <input value={query} onChange={e => setQuery(e.target.value)} onKeyDown={e => e.key === 'Enter' && search(query)} style={{ flex:1, border:'none', background:'transparent', fontSize:'13px', outline:'none', color:'#202124', minWidth:0, width:'100%' }}/>
           <button onClick={() => search(query)} style={{ background:'none', border:'none', color:'#4285F4', fontSize:'12px', fontWeight:'700', cursor:'pointer' }}>Buscar</button>
         </div>
       </div>

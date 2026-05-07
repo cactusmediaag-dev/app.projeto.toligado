@@ -1,0 +1,59 @@
+{
+  "name": "Usuario",
+  "type": "object",
+  "properties": {
+    "nome": {
+      "type": "string",
+      "description": "Nome completo do usu\u00e1rio"
+    },
+    "sexo": {
+      "type": "string",
+      "enum": [
+        "Homem",
+        "Mulher"
+      ],
+      "description": "Sexo do usu\u00e1rio"
+    },
+    "data_nascimento": {
+      "type": "string",
+      "format": "date",
+      "description": "Data de nascimento"
+    },
+    "senha_hash": {
+      "type": "string",
+      "description": "Hash da senha num\u00e9rica de 6 d\u00edgitos"
+    },
+    "nivel_atual": {
+      "type": "number",
+      "default": 1,
+      "description": "N\u00edvel atual no game"
+    },
+    "moedas": {
+      "type": "number",
+      "default": 0,
+      "description": "Saldo de moedas"
+    },
+    "modulos_completos": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Lista de IDs de m\u00f3dulos conclu\u00eddos"
+    },
+    "xp_total": {
+      "type": "number",
+      "default": 0,
+      "description": "XP total acumulado"
+    },
+    "celular": {
+      "type": "string",
+      "description": "N\u00famero de celular usado como login (formato: 11999999999)"
+    }
+  },
+  "required": [
+    "nome",
+    "sexo",
+    "data_nascimento",
+    "senha_hash"
+  ]
+}

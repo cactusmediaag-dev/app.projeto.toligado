@@ -9,6 +9,9 @@ export default function Perfil() {
   const [usuario, setUsuario] = useState(null);
   const [loading, setLoading] = useState(true);
   const [confirmDelete, setConfirmDelete] = useState(false);
+  const [novoCelular, setNovoCelular] = useState('');
+  const [salvandoCelular, setSalvandoCelular] = useState(false);
+  const [celularPerfilErro, setCelularPerfilErro] = useState('');
 
   useEffect(() => {
     carregarPerfil();
@@ -56,6 +59,27 @@ export default function Perfil() {
   const formatarDataCurta = (data) => {
     if (!data) return '—';
     return new Date(data).toLocaleDateString('pt-BR');
+  };
+
+  const salvarCelular = async () => {
+    const limpo = novoCelular.replace(/\D/g, '');
+    if (limpo.length !== 11) {
+      setCelularPerfilErro('Digite um celular válido com DDD!');
+      return;
+    }
+    setSalvandoCelular(true);
+    const existentes = await base44.entities.Usuario.filter({ celular: limpo });
+    if (existentes.length > 0) {
+      setCelularPerfilErro('Este celular já está cadastrado!');
+      setSalvandoCelular(false);
+      return;
+    }
+    await base44.entities.Usuario.update(usuario.id, { celular: limpo });
+    setUsuario(prev => ({ ...prev, celular: limpo }));
+    setNovoCelular('');
+    setCelularPerfilErro('');
+    setSalvandoCelular(false);
+    alert('✅ Celular cadastrado! Agora você pode entrar com seu número.');
   };
 
   const sair = () => {
@@ -121,6 +145,67 @@ export default function Perfil() {
 
       {/* CONTEÚDO SCROLLÁVEL */}
       <div style={{ flex: 1, overflowY: 'auto', padding: '0 16px 100px', display: 'flex', flexDirection: 'column', gap: '12px' }}>
+
+        {/* Banner migração celular */}
+        {!usuario.celular && (
+          <div style={{ background: 'linear-gradient(135deg, #F3984B, #e67e22)', borderRadius: '20px', padding: '16px', border: '2px solid rgba(255,255,255,0.3)' }}>
+            <div style={{ display: 'flex', gap: '12px', alignItems: 'flex-start', marginBottom: '12px' }}>
+              <span style={{ fontSize: '28px', flexShrink: 0 }}>📱</span>
+              <div>
+                <p style={{ color: '#fff', fontSize: '15px', fontWeight: '800', margin: '0 0 4px' }}>Cadastre seu celular!</p>
+                <p style={{ color: 'rgba(255,255,255,0.9)', fontSize: '13px', margin: 0, lineHeight: 1.5 }}>
+                  Com o celular cadastrado, você entra no app sem precisar lembrar o nome. Muito mais fácil! 😊
+                </p>
+              </div>
+            </div>
+            {!salvandoCelular ? (
+              <div style={{ display: 'flex', gap: '8px' }}>
+                <input
+                  value={novoCelular}
+                  onChange={e => {
+                    const n = e.target.value.replace(/\D/g, '');
+                    if (n.length <= 2) setNovoCelular(n);
+                    else if (n.length <= 7) setNovoCelular(`(${n.slice(0,2)}) ${n.slice(2)}`);
+                    else if (n.length <= 11) setNovoCelular(`(${n.slice(0,2)}) ${n.slice(2,7)}-${n.slice(7)}`);
+                    else setNovoCelular(`(${n.slice(0,2)}) ${n.slice(2,7)}-${n.slice(7,11)}`);
+                    setCelularPerfilErro('');
+                  }}
+                  placeholder="(65) 99999-9999"
+                  inputMode="numeric"
+                  maxLength={16}
+                  style={{ flex: 1, padding: '12px 14px', borderRadius: '12px', border: 'none', fontSize: '16px', outline: 'none', background: '#fff', color: '#333', fontWeight: '600' }}
+                />
+                <button
+                  onClick={salvarCelular}
+                  style={{ padding: '12px 16px', borderRadius: '12px', border: 'none', background: '#fff', color: '#F3984B', fontSize: '14px', fontWeight: '800', cursor: 'pointer', whiteSpace: 'nowrap' }}
+                >
+                  Salvar 💾
+                </button>
+              </div>
+            ) : (
+              <div style={{ textAlign: 'center', color: '#fff', fontSize: '14px' }}>⏳ Salvando...</div>
+            )}
+            {celularPerfilErro && (
+              <p style={{ color: '#fff', fontSize: '12px', marginTop: '8px', fontWeight: '600', margin: '8px 0 0' }}>⚠️ {celularPerfilErro}</p>
+            )}
+          </div>
+        )}
+
+        {/* Celular cadastrado — exibir mascarado */}
+        {usuario.celular && (
+          <div style={{ background: '#fff', borderRadius: '20px', padding: '16px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+              <div style={{ width: '40px', height: '40px', background: '#f0e8ff', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '20px' }}>📱</div>
+              <div style={{ flex: 1 }}>
+                <p style={{ fontSize: '12px', color: '#999', fontWeight: '600', margin: '0 0 2px' }}>Celular (login)</p>
+                <p style={{ fontSize: '15px', color: '#333', fontWeight: '700', margin: 0 }}>
+                  ({usuario.celular.slice(0,2)}) {usuario.celular.slice(2,3)}****-{usuario.celular.slice(-4)}
+                </p>
+              </div>
+              <span style={{ background: '#e8f8f0', color: '#27AE60', fontSize: '11px', fontWeight: '800', padding: '4px 10px', borderRadius: '10px' }}>✅ Ativo</span>
+            </div>
+          </div>
+        )}
 
         {/* Stats do jogo */}
         <div style={{ background: '#fff', borderRadius: '20px', padding: '16px', display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '8px' }}>

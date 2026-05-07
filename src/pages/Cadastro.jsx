@@ -6,19 +6,24 @@ import { base44 } from "@/api/base44Client";
 import { createPageUrl } from "@/utils";
 import ProgressBar from "@/components/auth/ProgressBar";
 import PinInput from "@/components/auth/PinInput";
-import ActionButton from "@/components/shared/ActionButton";
 import Confetti from "@/components/shared/Confetti";
 
-const MONTHS = [
-  "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho",
-  "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"
-];
+const TOTAL_STEPS = 5;
+
+const formatarCelular = (valor) => {
+  const n = valor.replace(/\D/g, '');
+  if (n.length <= 2) return n;
+  if (n.length <= 7) return `(${n.slice(0,2)}) ${n.slice(2)}`;
+  if (n.length <= 11) return `(${n.slice(0,2)}) ${n.slice(2,7)}-${n.slice(7)}`;
+  return `(${n.slice(0,2)}) ${n.slice(2,7)}-${n.slice(7,11)}`;
+};
 
 export default function Cadastro() {
   const navigate = useNavigate();
   const [step, setStep] = useState(0);
   const [sexo, setSexo] = useState("");
   const [nome, setNome] = useState("");
+  const [celular, setCelular] = useState("");
   const [dia, setDia] = useState("");
   const [mes, setMes] = useState("");
   const [ano, setAno] = useState("");
@@ -37,7 +42,7 @@ export default function Cadastro() {
     return hashArray.map((b) => b.toString(16).padStart(2, "0")).join("");
   };
 
-  const validateStep = () => {
+  const validateStep = async () => {
     setError("");
     switch (step) {
       case 0:
@@ -47,13 +52,20 @@ export default function Cadastro() {
         if (nome.trim().length < 3) { setError("Digite seu nome completo (mínimo 3 letras) ✏️"); return false; }
         return true;
       case 2: {
+        const limpo = celular.replace(/\D/g, '');
+        if (limpo.length !== 11) { setError("Digite um celular válido com DDD! Ex: (65) 99999-9999"); return false; }
+        const existentes = await base44.entities.Usuario.filter({ celular: limpo });
+        if (existentes.length > 0) { setError("Este celular já está cadastrado. Tente fazer login! 😊"); return false; }
+        return true;
+      }
+      case 3: {
         const d = parseInt(dia), m = parseInt(mes), a = parseInt(ano);
         if (!d || !m || !a || d < 1 || d > 31 || m < 1 || m > 12 || a < 1900 || a > new Date().getFullYear()) {
           setError("Data de nascimento inválida 📅"); return false;
         }
         return true;
       }
-      case 3:
+      case 4:
         if (senha.length !== 6) { setError("A senha precisa ter 6 números 🔢"); return false; }
         if (senha !== confirmarSenha) { setError("As senhas não são iguais 🔐"); return false; }
         return true;
@@ -62,9 +74,12 @@ export default function Cadastro() {
   };
 
   const handleNext = async () => {
-    if (!validateStep()) return;
+    setLoading(true);
+    const valid = await validateStep();
+    setLoading(false);
+    if (!valid) return;
 
-    if (step < 3) {
+    if (step < TOTAL_STEPS - 1) {
       setStep(step + 1);
       setError("");
     } else {
@@ -84,6 +99,7 @@ export default function Cadastro() {
         sexo,
         data_nascimento: dataNasc,
         senha_hash: hash,
+        celular: celular.replace(/\D/g, ''),
         nivel_atual: 1,
         moedas: 0,
         modulos_completos: [],
@@ -115,16 +131,15 @@ export default function Cadastro() {
   const podeAvancar = (() => {
     if (step === 0) return !!sexo;
     if (step === 1) return nome.trim().length >= 3;
-    if (step === 2) return !!(dia && mes && ano);
-    if (step === 3) return senha.length === 6 && confirmarSenha.length === 6;
+    if (step === 2) return celular.replace(/\D/g, '').length === 11;
+    if (step === 3) return !!(dia && mes && ano);
+    if (step === 4) return senha.length === 6 && confirmarSenha.length === 6;
     return true;
   })();
 
   if (showSuccess) {
     return (
-      <div
-        style={{ height: '100dvh', background: 'linear-gradient(135deg, #5C2E7F 0%, #A67EC8 100%)', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '24px', boxSizing: 'border-box' }}
-      >
+      <div style={{ height: '100dvh', background: 'linear-gradient(135deg, #5C2E7F 0%, #A67EC8 100%)', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '24px', boxSizing: 'border-box' }}>
         <Confetti active={showConfetti} />
         <motion.div
           initial={{ scale: 0.5, opacity: 0 }}
@@ -148,10 +163,8 @@ export default function Cadastro() {
     <div style={{
       height: '100dvh',
       background: 'linear-gradient(160deg, #5C2E7F 0%, #A67EC8 100%)',
-      display: 'flex',
-      flexDirection: 'column',
-      overflow: 'hidden',
-      boxSizing: 'border-box'
+      display: 'flex', flexDirection: 'column',
+      overflow: 'hidden', boxSizing: 'border-box'
     }}>
 
       {/* TOPO — Progress + voltar */}
@@ -166,7 +179,7 @@ export default function Cadastro() {
             </button>
           )}
         </div>
-        <ProgressBar currentStep={step} totalSteps={4} />
+        <ProgressBar currentStep={step} totalSteps={TOTAL_STEPS} />
       </div>
 
       {/* MEIO — Conteúdo do step */}
@@ -181,6 +194,7 @@ export default function Cadastro() {
             transition={{ duration: 0.25 }}
             style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}
           >
+            {/* Step 0 — Sexo */}
             {step === 0 && (
               <>
                 <h2 style={{ fontSize: '26px', fontWeight: '800', color: '#fff', margin: 0 }}>Você é? 😊</h2>
@@ -205,6 +219,7 @@ export default function Cadastro() {
               </>
             )}
 
+            {/* Step 1 — Nome */}
             {step === 1 && (
               <>
                 <h2 style={{ fontSize: '26px', fontWeight: '800', color: '#fff', margin: 0 }}>Qual é o seu nome? 🌟</h2>
@@ -223,7 +238,37 @@ export default function Cadastro() {
               </>
             )}
 
+            {/* Step 2 — Celular (NOVO) */}
             {step === 2 && (
+              <>
+                <h2 style={{ fontSize: '24px', fontWeight: '800', color: '#fff', margin: 0 }}>Qual é seu celular? 📱</h2>
+                <p style={{ color: 'rgba(255,255,255,0.75)', fontSize: '14px', margin: 0, lineHeight: 1.5 }}>
+                  Seu número será usado para entrar no app — mais fácil que lembrar o nome!
+                </p>
+                <input
+                  value={celular}
+                  onChange={e => { setCelular(formatarCelular(e.target.value)); setError(''); }}
+                  placeholder="(65) 99999-9999"
+                  inputMode="numeric"
+                  maxLength={16}
+                  style={{
+                    width: '100%', padding: '18px',
+                    borderRadius: '16px', border: 'none',
+                    fontSize: '22px', outline: 'none',
+                    boxSizing: 'border-box',
+                    background: '#fff', color: '#333',
+                    fontWeight: '700', textAlign: 'center',
+                    letterSpacing: '1px'
+                  }}
+                />
+                <p style={{ color: 'rgba(255,255,255,0.6)', fontSize: '12px', margin: 0, textAlign: 'center', lineHeight: 1.5 }}>
+                  🔒 Seu número fica guardado com segurança
+                </p>
+              </>
+            )}
+
+            {/* Step 3 — Data de nascimento */}
+            {step === 3 && (
               <>
                 <h2 style={{ fontSize: '26px', fontWeight: '800', color: '#fff', margin: 0 }}>Quando você nasceu? 🎂</h2>
                 <div style={{ display: 'flex', gap: '12px' }}>
@@ -255,7 +300,8 @@ export default function Cadastro() {
               </>
             )}
 
-            {step === 3 && (
+            {/* Step 4 — Senha */}
+            {step === 4 && (
               <>
                 <h2 style={{ fontSize: '24px', fontWeight: '800', color: '#fff', margin: 0 }}>Crie sua senha 🔐</h2>
                 <p style={{ fontSize: '15px', color: 'rgba(255,255,255,0.8)', fontWeight: '600', margin: 0 }}>Use 6 números que você vai lembrar</p>
@@ -285,7 +331,7 @@ export default function Cadastro() {
       <div style={{ flex: '0 0 auto', padding: '16px 24px 40px' }}>
         <button
           onClick={handleNext}
-          disabled={loading}
+          disabled={loading || !podeAvancar}
           style={{
             width: '100%', padding: '18px', borderRadius: '16px', border: 'none',
             background: podeAvancar && !loading
@@ -297,9 +343,9 @@ export default function Cadastro() {
             boxShadow: podeAvancar && !loading ? '0 4px 20px rgba(243,152,75,0.4)' : 'none'
           }}
         >
-          {loading ? 'Criando sua conta...' : step === 3 ? 'Criar minha conta! 🚀' : 'Próximo →'}
+          {loading ? (step === 2 ? 'Verificando...' : 'Criando sua conta...') : step === 4 ? 'Criar minha conta! 🚀' : 'Próximo →'}
         </button>
-        {step === 3 && (
+        {step === 4 && (
           <p style={{ color: 'rgba(255,255,255,0.6)', fontSize: '12px', textAlign: 'center', margin: '4px 0 0' }}>
             Ao criar sua conta você concorda com nossa{' '}
             <span onClick={() => navigate('/PoliticaPrivacidade')} style={{ color: 'rgba(255,255,255,0.9)', textDecoration: 'underline', cursor: 'pointer', fontWeight: '700' }}>
@@ -308,7 +354,6 @@ export default function Cadastro() {
           </p>
         )}
       </div>
-
     </div>
   );
 }

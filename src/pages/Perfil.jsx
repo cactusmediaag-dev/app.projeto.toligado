@@ -187,6 +187,9 @@ export default function Perfil() {
 
         {/* Botões de conta */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+          <button onClick={() => navigate(createPageUrl('ComoInstalar'))} style={{ width: '100%', padding: '14px', borderRadius: '16px', border: '1.5px solid rgba(92,46,127,0.2)', background: '#f9f5ff', color: '#5C2E7F', fontSize: '14px', fontWeight: '700', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', marginBottom: '2px' }}>
+            📱 Como instalar o app
+          </button>
           <button onClick={() => navigate('/PoliticaPrivacidade')} style={{ width: '100%', padding: '14px', borderRadius: '16px', border: '1px solid #eee', background: '#fafafa', color: '#5C2E7F', fontSize: '14px', fontWeight: '600', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
             ⚖️ Política de Privacidade
           </button>

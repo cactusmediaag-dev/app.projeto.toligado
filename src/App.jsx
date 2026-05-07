@@ -6,6 +6,7 @@ import { pagesConfig } from './pages.config'
 import { HashRouter as Router, Route, Routes } from 'react-router-dom';
 import PageNotFound from './lib/PageNotFound';
 import PoliticaPrivacidade from './pages/PoliticaPrivacidade';
+import ComoInstalar from './pages/ComoInstalar';
 import { AuthProvider, useAuth } from '@/lib/AuthContext';
 import UserNotRegisteredError from '@/components/UserNotRegisteredError';
 
@@ -60,6 +61,7 @@ const AuthenticatedApp = () => {
         />
       ))}
       <Route path="/PoliticaPrivacidade" element={<PoliticaPrivacidade />} />
+      <Route path="/ComoInstalar" element={<ComoInstalar />} />
       <Route path="*" element={<PageNotFound />} />
     </Routes>
   );

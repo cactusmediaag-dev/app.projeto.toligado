@@ -27,7 +27,10 @@ export default function Entrar() {
   const [erro, setErro] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const eCelular = (valor) => /^\d/.test(valor.trim());
+  const eCelular = (valor) => {
+    const apenasNumeros = valor.replace(/\D/g, '');
+    return apenasNumeros.length >= 10 && apenasNumeros.length <= 11 && /^\d+$/.test(apenasNumeros);
+  };
 
   const handleIdentificador = (valor) => {
     if (eCelular(valor)) {
@@ -46,34 +49,44 @@ export default function Entrar() {
     setLoading(true);
     setErro('');
 
-    const hash = await simpleHash(senha);
-    let user = null;
+    try {
+      const hash = await simpleHash(senha);
+      let user = null;
 
-    if (eCelular(identificador)) {
-      const celularLimpo = somenteNumeros(identificador);
-      const users = await base44.entities.Usuario.filter({ celular: celularLimpo });
-      user = users.find(u => u.senha_hash === hash);
+      if (eCelular(identificador)) {
+        const celularLimpo = somenteNumeros(identificador);
+        const todosUsers = await base44.entities.Usuario.list();
+        user = todosUsers.find(u => u.celular === celularLimpo && u.senha_hash === hash);
 
-      if (!user) {
-        setErro('Celular não encontrado ou senha incorreta. Se você se cadastrou antes, use seu nome! 😊');
-        setLoading(false);
-        return;
+        if (!user) {
+          const celularExiste = todosUsers.find(u => u.celular === celularLimpo);
+          setErro(celularExiste
+            ? 'Senha incorreta. Tente novamente! 🔐'
+            : 'Celular não encontrado. Verifique o número ou crie uma conta! 😊'
+          );
+          setLoading(false);
+          return;
+        }
+      } else {
+        const users = await base44.entities.Usuario.filter({ nome: identificador.trim() });
+        user = users.find(u => u.senha_hash === hash);
+
+        if (!user) {
+          setErro('Nome ou senha incorretos. Tente novamente! 😊');
+          setLoading(false);
+          return;
+        }
       }
-    } else {
-      const users = await base44.entities.Usuario.filter({ nome: identificador.trim() });
-      user = users.find(u => u.senha_hash === hash);
 
-      if (!user) {
-        setErro('Nome ou senha incorretos. Tente novamente! 😊');
-        setLoading(false);
-        return;
-      }
+      localStorage.setItem('toligado_user_id', user.id);
+      localStorage.setItem('toligado_user_nome', user.nome);
+      navigate(createPageUrl('Home'));
+    } catch (e) {
+      console.error('Erro no login:', e);
+      setErro('Erro ao conectar. Tente novamente! 😊');
     }
 
-    localStorage.setItem('toligado_user_id', user.id);
-    localStorage.setItem('toligado_user_nome', user.nome);
     setLoading(false);
-    navigate(createPageUrl('Home'));
   };
 
   return (

@@ -116,10 +116,10 @@ export default function Perfil() {
   const anivHoje = diasAniv === 0 || diasAniv === 365;
 
   return (
-    <div style={{ height: '100dvh', background: 'linear-gradient(160deg, #5C2E7F 0%, #A67EC8 100%)', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+    <div style={{ minHeight: '100dvh', background: 'linear-gradient(160deg, #5C2E7F 0%, #A67EC8 100%)', overflowX: 'hidden' }}>
 
       {/* HEADER com avatar */}
-      <div style={{ flex: '0 0 auto', padding: '52px 24px 20px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '12px' }}>
+      <div style={{ padding: 'calc(env(safe-area-inset-top, 44px) + 12px) 24px 24px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '12px' }}>
         <div style={{ width: '88px', height: '88px', borderRadius: '50%', background: 'rgba(255,255,255,0.2)', border: '3px solid rgba(255,255,255,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '52px', boxShadow: '0 4px 20px rgba(0,0,0,0.2)' }}>
           {avatar}
         </div>
@@ -143,8 +143,8 @@ export default function Perfil() {
         )}
       </div>
 
-      {/* CONTEÚDO SCROLLÁVEL */}
-      <div style={{ flex: 1, overflowY: 'auto', padding: '0 16px 100px', display: 'flex', flexDirection: 'column', gap: '12px' }}>
+      {/* CONTEÚDO */}
+      <div style={{ padding: '0 16px', paddingBottom: 'calc(env(safe-area-inset-bottom, 20px) + 100px)', display: 'flex', flexDirection: 'column', gap: '12px' }}>
 
         {/* Banner migração celular */}
         {!usuario.celular && (

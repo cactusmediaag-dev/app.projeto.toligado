@@ -23,7 +23,8 @@ export default function BottomNav() {
             <Link
               key={item.page}
               to={createPageUrl(item.page)}
-              className={`flex flex-col items-center gap-1 py-1 px-3 rounded-xl transition-all duration-200 active:scale-90
+              style={{ touchAction: 'manipulation', WebkitTapHighlightColor: 'rgba(92,46,127,0.15)' }}
+              className={`flex flex-col items-center gap-1 py-2 px-4 rounded-xl transition-all duration-200 active:scale-90
                 ${isActive ? "text-[#5C2E7F]" : "text-gray-400"}
               `}
             >

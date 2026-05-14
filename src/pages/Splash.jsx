@@ -32,7 +32,7 @@ export default function Splash() {
       // SEM pointer-events bloqueados, SEM z-index desnecessário
     }}>
 
-      {/* Logo — transição suave via CSS, sem framer-motion */}
+      {/* Cena acolhedora — idosos conectados */}
       <div style={{
         opacity: fase >= 0 ? 1 : 0,
         transform: fase >= 0 ? 'scale(1)' : 'scale(0.7)',
@@ -40,35 +40,80 @@ export default function Splash() {
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        gap: '16px'
+        gap: '20px'
       }}>
-        <img
-          src="/logo_to_ligado.png"
-          alt="Tô Ligado"
-          style={{
-            width: '120px',
-            height: '120px',
-            objectFit: 'contain',
-            borderRadius: '28px',
-            boxShadow: '0 8px 32px rgba(0,0,0,0.25)'
-          }}
-          onError={e => {
-            // Fallback se logo não carregar: emoji amigável
-            e.target.style.display = 'none';
-            e.target.nextSibling.style.display = 'flex';
-          }}
-        />
-        {/* Fallback de logo */}
+        {/* Ilustração — avatares conectados */}
         <div style={{
-          display: 'none',
-          width: '120px', height: '120px',
-          background: 'rgba(255,255,255,0.2)',
-          borderRadius: '28px',
-          alignItems: 'center',
-          justifyContent: 'center',
-          fontSize: '64px'
-        }}>📱</div>
+          position: 'relative',
+          width: '200px',
+          height: '200px',
+          animation: 'gentleFloat 3s ease-in-out infinite'
+        }}>
+          {/* Círculo de fundo suave */}
+          <div style={{
+            position: 'absolute',
+            inset: 0,
+            borderRadius: '50%',
+            background: 'radial-gradient(circle, rgba(255,255,255,0.25) 0%, rgba(255,255,255,0) 70%)',
+            animation: 'pulseGlow 2s ease-in-out infinite'
+          }}/>
 
+          {/* Avatares */}
+          <div style={{
+            position: 'relative',
+            width: '100%', height: '100%',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center'
+          }}>
+            {/* Idosa */}
+            <div style={{
+              position: 'absolute',
+              left: '20px', top: '50%',
+              transform: 'translateY(-50%)',
+              width: '70px', height: '70px',
+              borderRadius: '50%',
+              background: '#fff',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              fontSize: '42px',
+              boxShadow: '0 4px 16px rgba(0,0,0,0.2)',
+              animation: 'gentleBounce 2s ease infinite'
+            }}>
+              👵
+            </div>
+
+            {/* Coração conectando */}
+            <div style={{
+              fontSize: '32px',
+              animation: 'heartBeat 1.2s ease infinite',
+              zIndex: 2
+            }}>
+              💜
+            </div>
+
+            {/* Idoso */}
+            <div style={{
+              position: 'absolute',
+              right: '20px', top: '50%',
+              transform: 'translateY(-50%)',
+              width: '70px', height: '70px',
+              borderRadius: '50%',
+              background: '#fff',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              fontSize: '42px',
+              boxShadow: '0 4px 16px rgba(0,0,0,0.2)',
+              animation: 'gentleBounce 2s ease infinite 0.3s'
+            }}>
+              👴
+            </div>
+          </div>
+        </div>
+
+        {/* Título */}
         <h1 style={{
           color: '#fff',
           fontSize: '36px',
@@ -91,20 +136,13 @@ export default function Splash() {
       }}>
         <p style={{
           color: 'rgba(255,255,255,0.95)',
-          fontSize: '20px',
+          fontSize: '18px',
           fontWeight: '700',
           margin: 0,
           lineHeight: 1.4
         }}>
-          Aprender nunca teve idade! 🎓
-        </p>
-        <p style={{
-          color: 'rgba(255,255,255,0.7)',
-          fontSize: '15px',
-          fontWeight: '600',
-          margin: '8px 0 0'
-        }}>
-          Seu app de educação digital
+          Inclusão digital que<br/>
+          transforma vidas 💜
         </p>
       </div>
 
@@ -148,6 +186,24 @@ export default function Splash() {
         @keyframes splashProgress {
           from { width: 0%; }
           to { width: 100%; }
+        }
+        @keyframes gentleFloat {
+          0%, 100% { transform: translateY(0); }
+          50% { transform: translateY(-8px); }
+        }
+        @keyframes gentleBounce {
+          0%, 100% { transform: translateY(-50%) scale(1); }
+          50% { transform: translateY(-50%) scale(1.05); }
+        }
+        @keyframes heartBeat {
+          0%, 100% { transform: scale(1); }
+          25% { transform: scale(1.15); }
+          50% { transform: scale(1); }
+          75% { transform: scale(1.15); }
+        }
+        @keyframes pulseGlow {
+          0%, 100% { opacity: 0.6; transform: scale(1); }
+          50% { opacity: 1; transform: scale(1.1); }
         }
       `}</style>
     </div>

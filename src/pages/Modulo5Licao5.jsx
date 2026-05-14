@@ -15,6 +15,7 @@ export default function Modulo5Licao5() {
   const [cameraFrontal, setCameraFrontal] = useState(false);
   const [selfieTirada, setSelfieTirada] = useState(false);
   const [mostrarValidacao, setMostrarValidacao] = useState(false);
+  const [virando, setVirando] = useState(false); // proteção duplo clique
 
   const handleCliqueCerto = (proximoPasso, acao) => {
     const audio = new Audio('data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2/LDciUFLIHO8tiJNwgZaLvt559NEAxQp+PwtmMcBjiR1/LMeSwFJHfH8N2QQAoUXrTp66hVFApGn+DyvmwhBSuBzvLZiTYIGGi77eeeTRALUKjo77RgGgU7k9jxzHkrBSh+zPHajkILElyx6OyrWBUIRp/h8rBsGwU2idXx0n8qBSl5yO/bj0QKElqx5+iwWRQJP5jb8L90IAU2jdrzzoErByh1xe/akUALD1ap5earWRULRp7h8bJuHQU0hdLu0IEtBSh2yPDamT4JFlux6OanVxYLPJPY78p2KQUodMju2phACRZYr+XmqlgVCz2V2/DLdioFKHLG7tqZPwkWWLDn56lXFgk9ldrvy3cqBSl0yO/amkEJFVew5+aoVxYIPZXb78p3KgUqdsrw2plACBVWsOjnp1cWCT2V2+/KdioFKXbH79qZQAgVV7Dn56hYFQk9lNvvy3cqBSl2ye/amUAIFVew5+eoVxYJPJTa78t3KgUpdsjv2plACBVYsOjnqFgVCTyU2u/LdioFKXbJ79qZQQgVWLDo56hYFQk8lNrvy3cqBSl2yO/amUEIFVew6OeoWBUJPJPa78x4KgUpdsnu25lBCBVXsefnqFgVCTyU2u/MdyoFKXbI79uZQQgVWLHn56hYFQk8lNrvy3cqBSl2yO/bmUEIFVix5+eoWRUJPJPa78x3KgUpdsjv25lBCBVYsefnqFgVCTyT2u/MdyoFKXXI79uZQQgVWLHn56hZFQk8k9rvzHcqBSl1yO/bmUEIFVmx5+epWRUJO5Pa78x3KwUpdcjv25lBCBVYsejnqFgVCTuT2u/NdyoFKXXI79qZQQgVWLHn56hZFQk7k9rvzHcqBSl1yO/bmUEIFVmx6OeoWRUJO5Pa78x3KgUpdcjv25lBCBVZsejnqFkVCTuT2u/MdyoFKXXI79uZQQgVWbHo56hZFQk7k9rvzHcqBSl1yO/bmUEIFVmx6OeoWRUJO5Pa78x3KgUpdcjv25lBCBVZsejnqFkVCTuT2u/MdyoFKXXI79uZQQgVWbHo56hZFQk7k9rvzHcqBSl1yO/bmUEIFVmx6OeoWRUJO5Pa78x3KgUpdcjv25lBCBVZsejnqFkVCTuT2u/MdyoFKXXI79uZQQgVWbHo56hZFQk7k9rvzHcqBSl1yO/bmUEIFVmx6OeoWRUJO5Pa78x3KgUp');
@@ -22,6 +23,18 @@ export default function Modulo5Licao5() {
     audio.play().catch(() => {});
     if (acao) acao();
     setTimeout(() => setPasso(proximoPasso), 600);
+  };
+
+  // Função segura para virar câmera — sem câmera real, só simulação
+  const virarCamera = () => {
+    if (virando) return; // bloqueia cliques múltiplos
+    setVirando(true);
+    handleCliqueCerto(4, () => {
+      setTimeout(() => {
+        setCameraFrontal(true);
+        setVirando(false);
+      }, 300);
+    });
   };
 
   const handleConcluirValidacao = async () => {
@@ -97,11 +110,26 @@ export default function Modulo5Licao5() {
           <div className="absolute top-16 left-4 right-4 flex items-center justify-between">
             <button onClick={() => setCameraAberta(false)} className="text-white text-2xl">✕</button>
             {passo === 3 && !cameraFrontal && (
-              <ElementoClicavel onClick={() => handleCliqueCerto(4, () => setCameraFrontal(true))} posicao="left">
-                <button className="text-white text-3xl">🔄</button>
+              <ElementoClicavel onClick={virarCamera} posicao="left">
+                <button
+                  disabled={virando}
+                  style={{
+                    opacity: virando ? 0.5 : 1,
+                    cursor: virando ? 'wait' : 'pointer',
+                    touchAction: 'manipulation',
+                    WebkitTapHighlightColor: 'transparent',
+                    fontSize: '30px',
+                    background: 'none',
+                    border: 'none',
+                    color: '#fff',
+                    transition: 'opacity 0.2s'
+                  }}
+                >
+                  {virando ? '⏳' : '🔄'}
+                </button>
               </ElementoClicavel>
             )}
-            {passo !== 3 && <button className="text-white text-3xl">🔄</button>}
+            {passo !== 3 && <button className="text-white text-3xl" style={{ opacity: 0.4 }}>🔄</button>}
           </div>
 
           <div className="text-9xl">🏞️</div>

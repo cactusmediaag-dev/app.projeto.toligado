@@ -6,6 +6,7 @@ import { base44 } from "@/api/base44Client";
 import SimuladorWrapper from "@/components/simulador/SimuladorWrapper";
 import ElementoClicavel from "@/components/simulador/ElementoClicavel";
 import ValidacaoQuiz from "@/components/simulador/ValidacaoQuiz";
+import { Sons } from "@/components/shared/GameFeedback";
 
 export default function Modulo5Licao5() {
   const navigate = useNavigate();
@@ -25,16 +26,16 @@ export default function Modulo5Licao5() {
     setTimeout(() => setPasso(proximoPasso), 600);
   };
 
-  // Função segura para virar câmera — sem câmera real, só simulação
   const virarCamera = () => {
-    if (virando) return; // bloqueia cliques múltiplos
+    if (virando || passo !== 3) return;
     setVirando(true);
-    handleCliqueCerto(4, () => {
-      setTimeout(() => {
-        setCameraFrontal(true);
-        setVirando(false);
-      }, 300);
-    });
+    Sons.avancar();
+    if (navigator.vibrate) navigator.vibrate(50);
+    setTimeout(() => setCameraFrontal(true), 200);
+    setTimeout(() => {
+      setPasso(4);
+      setVirando(false);
+    }, 800);
   };
 
   const handleConcluirValidacao = async () => {
@@ -109,28 +110,36 @@ export default function Modulo5Licao5() {
         <div className="w-full h-full bg-gradient-to-b from-sky-200 to-green-300 pt-12 relative flex items-center justify-center">
           <div className="absolute top-16 left-4 right-4 flex items-center justify-between">
             <button onClick={() => setCameraAberta(false)} className="text-white text-2xl">✕</button>
-            {passo === 3 && !cameraFrontal && (
-              <ElementoClicavel onClick={virarCamera} posicao="left">
-                <button
-                  disabled={virando}
-                  style={{
-                    opacity: virando ? 0.5 : 1,
-                    cursor: virando ? 'wait' : 'pointer',
-                    touchAction: 'manipulation',
-                    WebkitTapHighlightColor: 'transparent',
-                    fontSize: '30px',
-                    background: 'none',
-                    border: 'none',
-                    color: '#fff',
-                    transition: 'opacity 0.2s'
-                  }}
-                >
-                  {virando ? '⏳' : '🔄'}
-                </button>
-              </ElementoClicavel>
-            )}
-            {passo !== 3 && <button className="text-white text-3xl" style={{ opacity: 0.4 }}>🔄</button>}
           </div>
+
+          {/* Botão virar câmera — direto, sem ElementoClicavel */}
+          <button
+            onClick={virarCamera}
+            disabled={virando || passo < 3}
+            style={{
+              position: 'absolute',
+              top: '12px',
+              right: '12px',
+              width: '52px',
+              height: '52px',
+              borderRadius: '50%',
+              background: passo === 3 ? 'rgba(243,152,75,0.95)' : 'rgba(255,255,255,0.4)',
+              border: passo === 3 ? '3px solid #fff' : '2px solid rgba(255,255,255,0.6)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              fontSize: '26px',
+              cursor: (virando || passo < 3) ? 'default' : 'pointer',
+              opacity: (virando || passo < 3) ? 0.5 : 1,
+              touchAction: 'manipulation',
+              WebkitTapHighlightColor: 'transparent',
+              boxShadow: passo === 3 ? '0 4px 16px rgba(243,152,75,0.6)' : 'none',
+              zIndex: 100,
+              transition: 'all 0.3s ease'
+            }}
+          >
+            {virando ? '⏳' : '🔄'}
+          </button>
 
           <div className="text-9xl">🏞️</div>
 

@@ -73,16 +73,37 @@ function App() {
   const [mostrarBanner, setMostrarBanner] = useState(false);
 
   useEffect(() => {
-    window.addEventListener('beforeinstallprompt', (e) => {
+    const handleInstallPrompt = (e) => {
       e.preventDefault();
       setDeferredPrompt(e);
-      setTimeout(() => setMostrarBanner(true), 3000);
-    });
+
+      // Verificar se fechou há menos de 24h
+      const fechado = localStorage.getItem('banner_instalar_fechado');
+      if (fechado) {
+        const dif = Date.now() - parseInt(fechado);
+        if (dif < 24 * 60 * 60 * 1000) return;
+      }
+      setTimeout(() => setMostrarBanner(true), 4000);
+    };
+
+    window.addEventListener('beforeinstallprompt', handleInstallPrompt);
     window.addEventListener('appinstalled', () => {
       setMostrarBanner(false);
       setDeferredPrompt(null);
     });
+
+    return () => window.removeEventListener('beforeinstallprompt', handleInstallPrompt);
   }, []);
+
+  // Auto-dismiss banner após 5 segundos
+  useEffect(() => {
+    if (!mostrarBanner) return;
+    const timer = setTimeout(() => {
+      setMostrarBanner(false);
+      localStorage.setItem('banner_instalar_fechado', Date.now().toString());
+    }, 5000);
+    return () => clearTimeout(timer);
+  }, [mostrarBanner]);
 
   useEffect(() => {
     const mq = window.matchMedia('(prefers-color-scheme: dark)');
@@ -125,13 +146,13 @@ function App() {
               <p style={{ fontSize: '16px', fontWeight: '800', color: '#5C2E7F', margin: '0 0 2px' }}>Instalar Tô Ligado 📱</p>
               <p style={{ fontSize: '13px', color: '#666', margin: 0, lineHeight: 1.4 }}>Adicione na tela inicial para acessar mais fácil!</p>
             </div>
-            <button onClick={() => setMostrarBanner(false)}
+            <button onClick={() => { setMostrarBanner(false); localStorage.setItem('banner_instalar_fechado', Date.now().toString()); }}
               style={{ background: 'none', border: 'none', fontSize: '20px', cursor: 'pointer', color: '#999', padding: '4px', flexShrink: 0 }}>
               ✕
             </button>
           </div>
           <div style={{ display: 'flex', gap: '10px' }}>
-            <button onClick={() => setMostrarBanner(false)}
+            <button onClick={() => { setMostrarBanner(false); localStorage.setItem('banner_instalar_fechado', Date.now().toString()); }}
               style={{ flex: 1, padding: '12px', borderRadius: '12px', border: '1.5px solid #eee', background: '#fafafa', color: '#999', fontSize: '14px', fontWeight: '700', cursor: 'pointer' }}>
               Agora não
             </button>

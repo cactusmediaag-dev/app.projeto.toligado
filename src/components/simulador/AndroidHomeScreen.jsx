@@ -13,7 +13,7 @@ export default function AndroidHomeScreen({ onAppClick }) {
     { icon: '🌐', label: 'Chrome', bg: '#4285F4', id: 'chrome' },
     { icon: '⚙️', label: 'Config.', bg: '#607D8B', id: 'settings' },
     { icon: '📸', label: 'Fotos', bg: '#FF5722', id: 'photos' },
-    { icon: '🔍', label: 'Google', bg: '#fff', id: 'google' },
+    { icon: '🔍', label: 'Google', bg: '#4285F4', id: 'google' },
     { icon: '🎵', label: 'Música', bg: '#E91E63', id: 'music' },
   ];
 

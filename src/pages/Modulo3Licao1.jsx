@@ -105,7 +105,7 @@ export default function Modulo3Licao1() {
                 </div>
               </ElementoClicavel>
             )}
-            {["G", "📷", "📱", "📧", "🎵", "📍", "💬"].map((emoji, i) => (
+            {["🔍", "📷", "📱", "📧", "🎵", "📍", "💬"].map((emoji, i) => (
               <div key={i} className="flex flex-col items-center gap-2">
                 <div className="w-14 h-14 bg-white rounded-2xl flex items-center justify-center text-2xl shadow-md">
                   {emoji}

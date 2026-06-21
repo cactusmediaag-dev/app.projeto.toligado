@@ -38,6 +38,12 @@ const VozSistema = {
   },
 
   async falar(texto, forcado = false) {
+    console.log('[VOZ] falar chamado:', texto);
+    console.log('[VOZ] usuarioInteragiu:', this.usuarioInteragiu);
+    console.log('[VOZ] forcado:', forcado);
+    console.log('[VOZ] apiKey existe:', !!this.apiKey);
+    console.log('[VOZ] temApiKey():', this.temApiKey());
+
     if (!texto) return;
 
     if (!this.usuarioInteragiu && !forcado) {
@@ -71,11 +77,17 @@ const VozSistema = {
   },
 
   async falarElevenLabs(texto) {
+    console.log('[ELEVENLABS] Iniciando fetch...');
+    console.log('[ELEVENLABS] voiceId:', ELEVENLABS_CONFIG.voiceId);
+    console.log('[ELEVENLABS] URL:', `${ELEVENLABS_CONFIG.apiUrl}/${ELEVENLABS_CONFIG.voiceId}`);
+
     const cacheKey = texto.substring(0, 50);
     if (audioCache.has(cacheKey)) {
+      console.log('[ELEVENLABS] Cache HIT — tocando do cache');
       await this.tocarAudio(audioCache.get(cacheKey));
       return;
     }
+    console.log('[ELEVENLABS] Cache MISS — fazendo fetch');
 
     const response = await fetch(
       `${ELEVENLABS_CONFIG.apiUrl}/${ELEVENLABS_CONFIG.voiceId}`,
@@ -100,13 +112,22 @@ const VozSistema = {
       }
     );
 
+    console.log('[ELEVENLABS] Status:', response.status);
+    console.log('[ELEVENLABS] Status text:', response.statusText);
+
     if (!response.ok) {
-      const err = await response.text();
-      throw new Error(`ElevenLabs: ${response.status} — ${err}`);
+      const errorText = await response.text();
+      console.error('[ELEVENLABS] ERRO:', errorText);
+      throw new Error(`ElevenLabs: ${response.status} — ${errorText}`);
     }
 
+    console.log('[ELEVENLABS] Fetch sucesso! Processando blob...');
     const blob = await response.blob();
+    console.log('[ELEVENLABS] Blob size:', blob.size, 'bytes');
+    console.log('[ELEVENLABS] Blob type:', blob.type);
+
     const url = URL.createObjectURL(blob);
+    console.log('[ELEVENLABS] URL gerada:', url);
 
     if (audioCache.size > 20) {
       const primeiraChave = audioCache.keys().next().value;
@@ -115,17 +136,37 @@ const VozSistema = {
     }
     audioCache.set(cacheKey, url);
 
+    console.log('[ELEVENLABS] Tentando tocar áudio...');
     await this.tocarAudio(url);
+    console.log('[ELEVENLABS] Áudio finalizado!');
   },
 
   tocarAudio(url) {
+    console.log('[AUDIO] Criando elemento Audio com URL:', url);
     return new Promise((resolve, reject) => {
       const audio = new Audio(url);
       audio.playbackRate = 1.0;
       this.audioAtual = audio;
-      audio.onended = () => { this.audioAtual = null; resolve(); };
-      audio.onerror = reject;
-      audio.play().catch(reject);
+      audio.oncanplay = () => console.log('[AUDIO] canplay disparado');
+      audio.onplay = () => console.log('[AUDIO] play disparado');
+      audio.onended = () => {
+        console.log('[AUDIO] ended disparado');
+        this.audioAtual = null;
+        resolve();
+      };
+      audio.onerror = (e) => {
+        console.error('[AUDIO] ERRO no audio:', e);
+        console.error('[AUDIO] error.code:', audio.error?.code);
+        console.error('[AUDIO] error.message:', audio.error?.message);
+        reject(e);
+      };
+      console.log('[AUDIO] Chamando play()...');
+      audio.play()
+        .then(() => console.log('[AUDIO] play() resolved'))
+        .catch(err => {
+          console.error('[AUDIO] play() rejeitado:', err);
+          reject(err);
+        });
     });
   },
 

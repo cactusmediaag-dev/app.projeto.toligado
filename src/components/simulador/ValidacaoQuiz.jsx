@@ -1,104 +1,300 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import ActionButton from "@/components/shared/ActionButton";
+import { CheckCircle2, XCircle, Trophy } from "lucide-react";
+import Confetti from "@/components/shared/Confetti";
+import AudioSystem from "@/components/shared/AudioSystem";
 
-export default function ValidacaoQuiz({ 
-  pergunta, 
-  opcoes, 
-  respostaCorreta, 
+export default function ValidacaoQuiz({
+  pergunta,
+  opcoes,
+  respostaCorreta,
   onConcluir,
-  moedas = 10,
+  moedas = 10
 }) {
   const [selecionada, setSelecionada] = useState(null);
   const [mostrarResultado, setMostrarResultado] = useState(false);
+  const [acertou, setAcertou] = useState(false);
 
-  const handleSelecionar = (index) => {
-    setSelecionada(index);
-    setMostrarResultado(true);
+  const handleSelecionar = (idx) => {
+    if (selecionada !== null) return;
+    setSelecionada(idx);
+    const certo = idx === respostaCorreta;
+    setAcertou(certo);
 
-    if (index === respostaCorreta) {
-      // Som de acerto
-      const audio = new Audio('data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2/LDciUFLIHO8tiJNwgZaLvt559NEAxQp+PwtmMcBjiR1/LMeSwFJHfH8N2QQAoUXrTp66hVFApGn+DyvmwhBSuBzvLZiTYIGGi77eeeTRALUKjo77RgGgU7k9jxzHkrBSh+zPHajkILElyx6OyrWBUIRp/h8rBsGwU2idXx0n8qBSl5yO/bj0QKElqx5+iwWRQJP5jb8L90IAU2jdrzzoErByh1xe/akUALD1ap5earWRULRp7h8bJuHQU0hdLu0IEtBSh2yPDamT4JFlux6OanVxYLPJPY78p2KQUodMju2phACRZYr+XmqlgVCz2V2/DLdioFKHLG7tqZPwkWWLDn56lXFgk9ldrvy3cqBSl0yO/amkEJFVew5+aoVxYIPZXb78p3KgUqdsrw2plACBVWsOjnp1cWCT2V2+/KdioFKXbH79qZQAgVV7Dn56hYFQk9lNvvy3cqBSl2ye/amUAIFVew5+eoVxYJPJTa78t3KgUpdsjv2plACBVYsOjnqFgVCTyU2u/LdioFKXbJ79qZQQgVWLDo56hYFQk8lNrvy3cqBSl2yO/amUEIFVew6OeoWBUJPJPa78x4KgUpdsnu25lBCBVXsefnqFgVCTyU2u/MdyoFKXbI79uZQQgVWLHn56hYFQk8lNrvy3cqBSl2yO/bmUEIFVix5+eoWRUJPJPa78x3KgUpdsjv25lBCBVYsefnqFgVCTyT2u/MdyoFKXXI79uZQQgVWLHn56hZFQk8k9rvzHcqBSl1yO/bmUEIFVmx5+epWRUJO5Pa78x3KwUpdcjv25lBCBVYsejnqFgVCTuT2u/NdyoFKXXI79qZQQgVWLHn56hZFQk7k9rvzHcqBSl1yO/bmUEIFVmx6OeoWRUJO5Pa78x3KgUpdcjv25lBCBVZsejnqFkVCTuT2u/MdyoFKXXI79uZQQgVWbHo56hZFQk7k9rvzHcqBSl1yO/bmUEIFVmx6OeoWRUJO5Pa78x3KgUpdcjv25lBCBVZsejnqFkVCTuT2u/MdyoFKXXI79uZQQgVWbHo56hZFQk7k9rvzHcqBSl1yO/bmUEIFVmx6OeoWRUJO5Pa78x3KgUpdcjv25lBCBVZsejnqFkVCTuT2u/MdyoFKXXI79uZQQgVWbHo56hZFQk7k9rvzHcqBSl1yO/bmUEIFVmx6OeoWRUJO5Pa78x3KgUp');
-      audio.volume = 0.3;
-      audio.play().catch(() => {});
-    } else {
-      // Vibração
-      navigator.vibrate?.(200);
-    }
+    setTimeout(() => {
+      setMostrarResultado(true);
+      if (certo) {
+        AudioSystem.speak(`Perfeito! Você ganhou ${moedas} moedas!`);
+      } else {
+        AudioSystem.speak('Quase! Tente de novo na próxima!');
+      }
+    }, 600);
   };
 
-  const acertou = selecionada === respostaCorreta;
+  const handleTentarNovamente = () => {
+    setSelecionada(null);
+    setMostrarResultado(false);
+    setAcertou(false);
+  };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-[#F8F0FF] to-[#EDE0FF] flex flex-col items-center justify-center px-5 py-8">
-      <motion.div
-        initial={{ scale: 0.9, opacity: 0 }}
-        animate={{ scale: 1, opacity: 1 }}
-        className="w-full max-w-md"
-      >
-        <div className="text-center mb-8">
-          <div className="text-6xl mb-4">❓</div>
-          <h2 className="text-2xl font-black text-[#5C2E7F] mb-2">Validação</h2>
-          <p className="text-lg text-gray-600 font-semibold">{pergunta}</p>
-        </div>
+    <div
+      style={{
+        position: 'fixed',
+        inset: 0,
+        background: 'rgba(92,46,127,0.75)',
+        backdropFilter: 'blur(8px)',
+        WebkitBackdropFilter: 'blur(8px)',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: '20px',
+        zIndex: 9999,
+        overflow: 'hidden'
+      }}
+    >
+      <AnimatePresence mode="wait">
+        {!mostrarResultado && (
+          <motion.div
+            key="quiz"
+            initial={{ scale: 0.85, opacity: 0, y: 20 }}
+            animate={{ scale: 1, opacity: 1, y: 0 }}
+            exit={{ scale: 0.85, opacity: 0 }}
+            transition={{ type: 'spring', damping: 22 }}
+            style={{
+              width: '100%',
+              maxWidth: '420px',
+              maxHeight: '90dvh',
+              background: '#fff',
+              borderRadius: '28px',
+              overflow: 'hidden',
+              boxShadow: '0 30px 80px rgba(0,0,0,0.4)',
+              display: 'flex',
+              flexDirection: 'column'
+            }}
+          >
+            {/* HEADER */}
+            <div style={{
+              padding: '24px 24px 16px',
+              background: 'linear-gradient(135deg, #5C2E7F, #9B59B6)',
+              color: '#fff',
+              textAlign: 'center',
+              flexShrink: 0
+            }}>
+              <div style={{ fontSize: '40px', lineHeight: 1, marginBottom: '8px' }}>❓</div>
+              <h2 style={{ fontSize: '20px', fontWeight: '800', margin: '0 0 6px', letterSpacing: '-0.3px' }}>
+                Pergunta rápida!
+              </h2>
+              <p style={{ fontSize: '15px', margin: 0, opacity: 0.95, lineHeight: 1.4, fontWeight: '500' }}>
+                {pergunta}
+              </p>
+            </div>
 
-        <div className="space-y-3 mb-6">
-          {opcoes.map((opcao, index) => (
-            <motion.button
-              key={index}
-              whileTap={{ scale: 0.97 }}
-              onClick={() => !mostrarResultado && handleSelecionar(index)}
-              disabled={mostrarResultado}
-              className={`w-full p-5 rounded-2xl text-left font-bold text-lg transition-all shadow-md
-                ${!mostrarResultado
-                  ? "bg-white text-[#5C2E7F] border-2 border-[#EDE0FF] active:shadow-lg"
-                  : selecionada === index
-                  ? acertou
-                    ? "bg-green-100 border-2 border-green-400 text-green-700"
-                    : "bg-red-100 border-2 border-red-400 text-red-700"
-                  : index === respostaCorreta
-                  ? "bg-green-50 border-2 border-green-300 text-green-600"
-                  : "bg-gray-100 text-gray-400 border-2 border-gray-200"
+            {/* OPÇÕES */}
+            <div style={{
+              flex: 1,
+              overflowY: 'auto',
+              padding: '20px',
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '12px'
+            }}>
+              {opcoes.map((opcao, idx) => {
+                const isSelecionada = selecionada === idx;
+                const isCorreta = idx === respostaCorreta;
+                const mostrarFeedback = selecionada !== null;
+
+                let bgCor = '#f5f0fa';
+                let bordaCor = 'transparent';
+                let textoCor = '#333';
+
+                if (mostrarFeedback && isSelecionada) {
+                  if (isCorreta) { bgCor = '#d4edda'; bordaCor = '#27ae60'; textoCor = '#1e7e34'; }
+                  else { bgCor = '#f8d7da'; bordaCor = '#dc3545'; textoCor = '#a71d2a'; }
+                } else if (mostrarFeedback && isCorreta) {
+                  bgCor = '#d4edda'; bordaCor = '#27ae60'; textoCor = '#1e7e34';
                 }
-              `}
-            >
-              {opcao}
-            </motion.button>
-          ))}
-        </div>
 
-        <AnimatePresence>
-          {mostrarResultado && (
+                return (
+                  <motion.button
+                    key={idx}
+                    onClick={() => handleSelecionar(idx)}
+                    disabled={selecionada !== null}
+                    whileTap={{ scale: 0.97 }}
+                    style={{
+                      padding: '16px 18px',
+                      borderRadius: '16px',
+                      background: bgCor,
+                      border: `2.5px solid ${bordaCor}`,
+                      color: textoCor,
+                      fontSize: '16px',
+                      fontWeight: '700',
+                      textAlign: 'left',
+                      cursor: selecionada !== null ? 'default' : 'pointer',
+                      transition: 'all 0.3s ease',
+                      lineHeight: 1.4,
+                      touchAction: 'manipulation',
+                      WebkitTapHighlightColor: 'transparent',
+                      minHeight: '54px',
+                      display: 'flex',
+                      alignItems: 'center'
+                    }}
+                  >
+                    {opcao}
+                  </motion.button>
+                );
+              })}
+            </div>
+          </motion.div>
+        )}
+
+        {mostrarResultado && acertou && (
+          <motion.div
+            key="acertou"
+            initial={{ scale: 0.7, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            exit={{ scale: 0.7, opacity: 0 }}
+            transition={{ type: 'spring', damping: 18 }}
+            style={{
+              width: '100%',
+              maxWidth: '380px',
+              background: '#fff',
+              borderRadius: '28px',
+              padding: '32px 24px',
+              textAlign: 'center',
+              boxShadow: '0 30px 80px rgba(0,0,0,0.4)',
+              position: 'relative'
+            }}
+          >
+            <Confetti />
+
             <motion.div
-              initial={{ y: 20, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              className="text-center"
+              initial={{ scale: 0, rotate: -180 }}
+              animate={{ scale: 1, rotate: 0 }}
+              transition={{ delay: 0.2, type: 'spring' }}
+              style={{
+                width: '90px', height: '90px',
+                borderRadius: '50%',
+                background: 'linear-gradient(135deg, #27AE60, #2ecc71)',
+                margin: '0 auto 16px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                boxShadow: '0 10px 30px rgba(39,174,96,0.5)'
+              }}
             >
-              <div className={`p-6 rounded-3xl mb-4 ${acertou ? "bg-green-50 border-2 border-green-200" : "bg-red-50 border-2 border-red-200"}`}>
-                <div className="text-5xl mb-3">{acertou ? "🎉" : "😅"}</div>
-                <p className={`text-xl font-bold mb-2 ${acertou ? "text-green-700" : "text-red-600"}`}>
-                  {acertou ? "Perfeito!" : "Quase lá!"}
-                </p>
-                <p className="text-base font-semibold text-gray-600">
-                  {acertou ? `Você ganhou +${moedas} moedas! 🪙` : "Tente novamente! Você consegue! 💪"}
-                </p>
-              </div>
-
-              {acertou && (
-                <ActionButton onClick={onConcluir} variant="primary">
-                  Continuar! 🚀
-                </ActionButton>
-              )}
-
-              {!acertou && (
-                <ActionButton onClick={() => { setSelecionada(null); setMostrarResultado(false); }} variant="secondary">
-                  Tentar Novamente
-                </ActionButton>
-              )}
+              <CheckCircle2 size={56} color="#fff" strokeWidth={2.5} />
             </motion.div>
-          )}
-        </AnimatePresence>
-      </motion.div>
+
+            <h2 style={{ fontSize: '26px', fontWeight: '900', color: '#27ae60', margin: '0 0 8px' }}>
+              Perfeito!
+            </h2>
+            <p style={{ fontSize: '15px', color: '#666', margin: '0 0 16px', lineHeight: 1.5 }}>
+              Você respondeu corretamente!
+            </p>
+
+            <motion.div
+              initial={{ scale: 0 }}
+              animate={{ scale: 1 }}
+              transition={{ delay: 0.5, type: 'spring' }}
+              style={{
+                background: 'linear-gradient(135deg, #FFF3CD, #FFE69C)',
+                borderRadius: '16px',
+                padding: '14px',
+                marginBottom: '20px',
+                border: '2px solid #F3984B'
+              }}
+            >
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px' }}>
+                <Trophy size={32} color="#F3984B" />
+                <div>
+                  <p style={{ fontSize: '13px', color: '#856404', margin: 0, fontWeight: '700' }}>Você ganhou</p>
+                  <p style={{ fontSize: '24px', color: '#5C2E7F', margin: 0, fontWeight: '900' }}>+{moedas} moedas 🪙</p>
+                </div>
+              </div>
+            </motion.div>
+
+            <button
+              onClick={onConcluir}
+              style={{
+                width: '100%',
+                padding: '18px',
+                borderRadius: '16px',
+                border: 'none',
+                background: 'linear-gradient(135deg, #F3984B, #e67e22)',
+                color: '#fff',
+                fontSize: '18px',
+                fontWeight: '800',
+                cursor: 'pointer',
+                boxShadow: '0 6px 20px rgba(243,152,75,0.5)',
+                touchAction: 'manipulation',
+                WebkitTapHighlightColor: 'transparent'
+              }}
+            >
+              Continuar →
+            </button>
+          </motion.div>
+        )}
+
+        {mostrarResultado && !acertou && (
+          <motion.div
+            key="errou"
+            initial={{ scale: 0.7, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            exit={{ scale: 0.7, opacity: 0 }}
+            transition={{ type: 'spring', damping: 18 }}
+            style={{
+              width: '100%',
+              maxWidth: '380px',
+              background: '#fff',
+              borderRadius: '28px',
+              padding: '32px 24px',
+              textAlign: 'center',
+              boxShadow: '0 30px 80px rgba(0,0,0,0.4)'
+            }}
+          >
+            <div style={{
+              width: '90px', height: '90px',
+              borderRadius: '50%',
+              background: 'linear-gradient(135deg, #F3984B, #e67e22)',
+              margin: '0 auto 16px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              boxShadow: '0 10px 30px rgba(243,152,75,0.5)'
+            }}>
+              <XCircle size={56} color="#fff" strokeWidth={2.5} />
+            </div>
+
+            <h2 style={{ fontSize: '26px', fontWeight: '900', color: '#F3984B', margin: '0 0 8px' }}>
+              Quase lá!
+            </h2>
+            <p style={{ fontSize: '15px', color: '#666', margin: '0 0 24px', lineHeight: 1.5 }}>
+              Não foi dessa vez, mas você consegue! Tente de novo 💪
+            </p>
+
+            <button
+              onClick={handleTentarNovamente}
+              style={{
+                width: '100%',
+                padding: '18px',
+                borderRadius: '16px',
+                border: 'none',
+                background: 'linear-gradient(135deg, #5C2E7F, #9B59B6)',
+                color: '#fff',
+                fontSize: '18px',
+                fontWeight: '800',
+                cursor: 'pointer',
+                boxShadow: '0 6px 20px rgba(92,46,127,0.5)',
+                touchAction: 'manipulation',
+                WebkitTapHighlightColor: 'transparent'
+              }}
+            >
+              🔄 Tentar novamente
+            </button>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

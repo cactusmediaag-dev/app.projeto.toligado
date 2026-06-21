@@ -136,6 +136,7 @@ export default function SimuladorImersivo({
           position: 'relative',
           overflow: 'hidden',
           background: contentTheme === 'dark' ? '#000' : '#fff',
+          color: contentTheme === 'dark' ? '#ffffff' : '#1a1a1a',
           paddingBottom: showMascote ? '120px' : '20px'
         }}
       >
@@ -160,7 +161,8 @@ export default function SimuladorImersivo({
             bottom: 0, left: 0, right: 0,
             zIndex: 100,
             paddingBottom: 'env(safe-area-inset-bottom, 0px)',
-            background: 'linear-gradient(180deg, transparent 0%, rgba(241,233,247,0.95) 30%)'
+            background: 'linear-gradient(180deg, transparent 0%, rgba(241,233,247,0.95) 30%)',
+            color: '#1a1a1a'
           }}
         >
           <InstructionBalloon

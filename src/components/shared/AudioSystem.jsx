@@ -2,17 +2,17 @@
 // Funciona em browser E APK Android
 
 const ELEVENLABS_CONFIG = {
-  voiceId: 'EXAVITQu4vr4xnSDxMaL',
+  voiceId: 'qPfM2laM0pRL4rrZtBGl', // Sandro Dutra — PT-BR
   modelId: 'eleven_multilingual_v2',
   apiUrl: 'https://api.elevenlabs.io/v1/text-to-speech',
 };
 
-// Cache de áudios gerados para economizar créditos
+// Cache local — limpa ao trocar voz
 const audioCache = new Map();
 
 const VozSistema = {
 
-  apiKey: 'sk_3bb1c5982852fc29ca0ce10bb6c3818e7a7aa2be8ebeeb8d',
+  apiKey: 'sk_9a19343954a7c36d8f6f2f0efbe085d1440e48532e45fcf6',
   audioAtual: null,
   usuarioInteragiu: false,
   _textosPendentes: [],
@@ -90,11 +90,11 @@ const VozSistema = {
           text: texto,
           model_id: ELEVENLABS_CONFIG.modelId,
           voice_settings: {
-            stability: 0.75,
-            similarity_boost: 0.85,
-            style: 0.2,
+            stability: 0.70,
+            similarity_boost: 0.80,
+            style: 0.15,
             use_speaker_boost: true,
-            speed: 0.85
+            speed: 0.92
           }
         })
       }

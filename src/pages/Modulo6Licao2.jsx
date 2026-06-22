@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { createPageUrl } from "@/utils";
 import { base44 } from "@/api/base44Client";
-import SimuladorWrapper from "@/components/simulador/SimuladorWrapper";
+import SimuladorImersivo from "@/components/simulador/SimuladorImersivo";
 import ElementoClicavel from "@/components/simulador/ElementoClicavel";
 import ValidacaoQuiz from "@/components/simulador/ValidacaoQuiz";
 
@@ -70,7 +70,7 @@ export default function Modulo6Licao2() {
   ];
 
   return (
-    <SimuladorWrapper
+    <SimuladorImersivo
       instrucao={passos[passo - 1]?.instrucao}
       audioText={passos[passo - 1]?.audio}
       passoAtual={passo}
@@ -350,6 +350,6 @@ export default function Modulo6Licao2() {
           </div>
         </motion.div>
       )}
-    </SimuladorWrapper>
+    </SimuladorImersivo>
   );
 }

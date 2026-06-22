@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { createPageUrl } from "@/utils";
 import { base44 } from "@/api/base44Client";
-import SimuladorWrapper from "@/components/simulador/SimuladorWrapper";
+import SimuladorImersivo from "@/components/simulador/SimuladorImersivo";
 import ElementoClicavel from "@/components/simulador/ElementoClicavel";
 import ValidacaoQuiz from "@/components/simulador/ValidacaoQuiz";
 import { Sons, MoedasAnimadas, FeedbackAcerto, FeedbackErro } from "@/components/shared/GameFeedback";
@@ -70,7 +70,7 @@ export default function Modulo4Licao2() {
   ];
 
   return (
-    <SimuladorWrapper
+    <SimuladorImersivo
       instrucao={passos[passo - 1]?.instrucao}
       audioText={passos[passo - 1]?.audio}
       passoAtual={passo}
@@ -266,6 +266,6 @@ export default function Modulo4Licao2() {
       {mostrarMoedas && <MoedasAnimadas quantidade={10} onFim={() => setMostrarMoedas(false)} />}
       {feedbackAcerto && <FeedbackAcerto mensagem={mensagemFeedback} onContinuar={() => { setFeedbackAcerto(false); setMostrarMoedas(true); Sons.avancar(); }} />}
       {feedbackErro && <FeedbackErro dica={mensagemFeedback} onTentar={() => setFeedbackErro(false)} />}
-    </SimuladorWrapper>
+    </SimuladorImersivo>
   );
 }

@@ -16,6 +16,7 @@ const VozSistema = {
   audioAtual: null,
   usuarioInteragiu: false,
   _textosPendentes: [],
+  _chamadaAtual: 0,
 
   setApiKey(key) {
     this.apiKey = key;
@@ -55,20 +56,19 @@ const VozSistema = {
     if (!textoLimpo) return;
     this.parar();
 
+    this._chamadaAtual++;
+    const minhaChamada = this._chamadaAtual;
+
     if (this.temApiKey()) {
       try {
-        await this.falarElevenLabs(textoLimpo);
+        await this.falarElevenLabs(textoLimpo, minhaChamada);
         return;
       } catch(e) {
         console.warn('ElevenLabs falhou:', e.message);
       }
     }
-
-    try {
-      await this.falarWebSpeech(textoLimpo);
-    } catch(e) {
-      this.mostrarTextoVisual(texto);
-    }
+    // Sem fallback de voz — se ElevenLabs falhar, app fica em silêncio
+    // (o texto já aparece visualmente no balão de instrução)
   },
 
   async falarForcado(texto) {
@@ -76,7 +76,7 @@ const VozSistema = {
     return this.falar(texto, true);
   },
 
-  async falarElevenLabs(texto) {
+  async falarElevenLabs(texto, minhaChamada) {
     console.log('[ELEVENLABS] Iniciando fetch...');
     console.log('[ELEVENLABS] voiceId:', ELEVENLABS_CONFIG.voiceId);
     console.log('[ELEVENLABS] URL:', `${ELEVENLABS_CONFIG.apiUrl}/${ELEVENLABS_CONFIG.voiceId}`);
@@ -84,6 +84,10 @@ const VozSistema = {
     const cacheKey = texto.substring(0, 50);
     if (audioCache.has(cacheKey)) {
       console.log('[ELEVENLABS] Cache HIT — tocando do cache');
+      if (this._chamadaAtual !== minhaChamada) {
+        console.log('[ELEVENLABS] Chamada mais nova venceu — abortando cache');
+        return;
+      }
       await this.tocarAudio(audioCache.get(cacheKey));
       return;
     }
@@ -136,6 +140,11 @@ const VozSistema = {
     }
     audioCache.set(cacheKey, url);
 
+    if (this._chamadaAtual !== minhaChamada) {
+      console.log('[ELEVENLABS] Chamada mais nova venceu — abortando antes de tocar');
+      URL.revokeObjectURL(url);
+      return;
+    }
     console.log('[ELEVENLABS] Tentando tocar áudio...');
     await this.tocarAudio(url);
     console.log('[ELEVENLABS] Áudio finalizado!');
@@ -168,45 +177,6 @@ const VozSistema = {
           reject(err);
         });
     });
-  },
-
-  async falarWebSpeech(texto) {
-    if (!('speechSynthesis' in window)) throw new Error('speechSynthesis não suportado');
-
-    window.speechSynthesis.cancel();
-    await new Promise(r => setTimeout(r, 150));
-
-    const utterance = new SpeechSynthesisUtterance(texto);
-    utterance.lang = 'pt-BR';
-    utterance.rate = 0.82;
-    utterance.pitch = 1.05;
-    utterance.volume = 1.0;
-
-    const vozes = window.speechSynthesis.getVoices();
-    const prioridade = ['Google português do Brasil', 'Microsoft Maria', 'pt-BR', 'pt_BR', 'pt'];
-    for (const pref of prioridade) {
-      const voz = vozes.find(v => v.name.includes(pref) || v.lang === pref);
-      if (voz) { utterance.voice = voz; break; }
-    }
-
-    const fixTimer = setInterval(() => {
-      if (window.speechSynthesis.paused) window.speechSynthesis.resume();
-    }, 2000);
-
-    return new Promise((resolve, reject) => {
-      const timeout = setTimeout(() => {
-        clearInterval(fixTimer);
-        reject(new Error('Timeout'));
-      }, 15000);
-
-      utterance.onend = () => { clearInterval(fixTimer); clearTimeout(timeout); resolve(); };
-      utterance.onerror = (e) => { clearInterval(fixTimer); clearTimeout(timeout); reject(e); };
-      window.speechSynthesis.speak(utterance);
-    });
-  },
-
-  mostrarTextoVisual(_texto) {
-    // desativado — texto já visível no balão branco
   },
 
   parar() {

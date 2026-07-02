@@ -4,6 +4,7 @@ import { base44 } from "@/api/base44Client";
 import { createPageUrl } from "@/utils";
 import { motion, AnimatePresence } from "framer-motion";
 import Confetti from "@/components/shared/Confetti";
+import { VozSistema } from "@/components/shared/AudioSystem";
 
 export default function Modulo8Celebracao() {
   const navigate = useNavigate();
@@ -38,21 +39,8 @@ export default function Modulo8Celebracao() {
 
   useEffect(() => {
     if (usuario && !audioFalou) {
-      const speakText = () => {
-        if ('speechSynthesis' in window) {
-          window.speechSynthesis.cancel();
-          const text = `Parabéns ${usuario.nome}! Você completou todos os módulos do Tô Ligado! Você é incrível e está pronto para o mundo digital! Muito orgulho de você!`;
-          const utterance = new SpeechSynthesisUtterance(text);
-          utterance.lang = 'pt-BR';
-          utterance.rate = 0.85;
-          utterance.pitch = 1.1;
-          const voices = window.speechSynthesis.getVoices();
-          const femaleVoice = voices.find(v => v.lang.includes('pt') && v.name.toLowerCase().includes('female'));
-          if (femaleVoice) utterance.voice = femaleVoice;
-          window.speechSynthesis.speak(utterance);
-        }
-      };
-      setTimeout(speakText, 1000);
+      const text = `Parabéns ${usuario.nome}! Você completou todos os módulos do Tô Ligado! Você é incrível e está pronto para o mundo digital! Muito orgulho de você!`;
+      setTimeout(() => { VozSistema.falar(text); }, 1000);
       setAudioFalou(true);
     }
   }, [usuario, audioFalou]);

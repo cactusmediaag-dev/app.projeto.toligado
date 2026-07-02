@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import ActionButton from "@/components/shared/ActionButton";
 import Confetti from "@/components/shared/Confetti";
+import { VozSistema } from "@/components/shared/AudioSystem";
 
 export default function CelebracaoModulo({ 
   moduloNumero, 
@@ -15,21 +16,10 @@ export default function CelebracaoModulo({
   const navigate = useNavigate();
   const [showConfetti, setShowConfetti] = useState(false);
 
-  const speakText = (text) => {
-    if ('speechSynthesis' in window) {
-      window.speechSynthesis.cancel();
-      const utterance = new SpeechSynthesisUtterance(text);
-      utterance.lang = 'pt-BR';
-      utterance.rate = 0.85;
-      utterance.pitch = 1.1;
-      window.speechSynthesis.speak(utterance);
-    }
-  };
-
   useEffect(() => {
     setShowConfetti(true);
     setTimeout(() => {
-      speakText(`Parabéns! Você concluiu o módulo ${moduloNumero}! Você é incrível!`);
+      VozSistema.falar(`Parabéns! Você concluiu o módulo ${moduloNumero}! Você é incrível!`);
     }, 800);
   }, []);
 

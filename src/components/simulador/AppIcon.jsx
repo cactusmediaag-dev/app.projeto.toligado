@@ -4,7 +4,8 @@ import {
   Search, Music, Play, Vote, Mail, MapPin, Chrome as ChromeIcon,
   Mic, Home, Aperture, Clock, Video, Calculator,
   Bluetooth, Lock, Shield, Bell, RefreshCw, KeyRound, Wifi, Cloud,
-  Fingerprint, ScanFace, Eye, AlertTriangle, Landmark
+  Fingerprint, ScanFace, Eye, AlertTriangle, Landmark,
+  Facebook, Instagram, Heart, ThumbsUp, Send, Plus
 } from 'lucide-react';
 
 const ICONES = {
@@ -40,6 +41,12 @@ const ICONES = {
   olho: Eye,
   alerta: AlertTriangle,
   banco: Landmark,
+  facebook: Facebook,
+  instagram: Instagram,
+  coracao: Heart,
+  curtir: ThumbsUp,
+  enviar: Send,
+  mais: Plus,
 };
 
 export default function AppIcon({

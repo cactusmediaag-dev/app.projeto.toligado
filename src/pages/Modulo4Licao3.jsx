@@ -7,6 +7,8 @@ import SimuladorImersivo from "@/components/simulador/SimuladorImersivo";
 import ElementoClicavel from "@/components/simulador/ElementoClicavel";
 import ValidacaoQuiz from "@/components/simulador/ValidacaoQuiz";
 import { Sons, MoedasAnimadas, FeedbackAcerto, FeedbackErro } from "@/components/shared/GameFeedback";
+import AndroidHomeScreen from "@/components/simulador/AndroidHomeScreen";
+import { Heart, Send, MessageCircle, Home, Search, Plus, ArrowLeft, X, Settings, Lock, Bell, User, CheckCircle, ChevronRight } from 'lucide-react';
 
 export default function Modulo4Licao3() {
   const navigate = useNavigate();
@@ -84,143 +86,157 @@ export default function Modulo4Licao3() {
       onVoltar={() => navigate(createPageUrl("Modulos"))}
     >
       {!instagramAberto && (
-        <div className="w-full h-full bg-gradient-to-b from-purple-50 to-pink-50 p-6 pt-12">
-          <div className="grid grid-cols-4 gap-6 mt-8">
-            {passo === 1 && (
-              <ElementoClicavel onClick={() => handleCliqueCerto(2, () => setInstagramAberto(true))} posicao="bottom">
-                <div className="flex flex-col items-center gap-2">
-                  <div className="w-14 h-14 bg-gradient-to-br from-purple-500 via-pink-500 to-orange-500 rounded-2xl flex items-center justify-center text-2xl shadow-md text-white">📷</div>
-                </div>
-              </ElementoClicavel>
-            )}
-            {["f", "💬", "📱", "📧", "🎵", "📍", "⚙️"].map((emoji, i) => (
-              <div key={i} className="flex flex-col items-center gap-2">
-                <div className="w-14 h-14 bg-white rounded-2xl flex items-center justify-center text-2xl shadow-md">{emoji}</div>
-              </div>
-            ))}
-          </div>
+        <div style={{ height: '100%', position: 'relative' }}>
+          <AndroidHomeScreen
+            appsCustom={[
+              { nome: 'instagram', label: 'Instagram', bg: 'linear-gradient(45deg,#F58529,#DD2A7B,#8134AF)', id: 'instagram' },
+              { nome: 'facebook', label: 'Facebook', bg: '#1877F2', id: 'facebook' },
+              { nome: 'mensagem', label: 'WhatsApp', bg: '#25D366', id: 'whatsapp' },
+              { nome: 'chrome', label: 'Chrome', bg: '#4285F4', id: 'chrome' },
+              { nome: 'email', label: 'Email', bg: '#EA4335', id: 'email' },
+              { nome: 'musica', label: 'Música', bg: '#E91E63', id: 'music' },
+              { nome: 'mapa', label: 'Mapas', bg: '#34A853', id: 'maps' },
+              { nome: 'config', label: 'Config.', bg: '#607D8B', id: 'settings' },
+            ]}
+            appDestacado={passo === 1 ? 'instagram' : null}
+            onAppClick={(id) => {
+              if (passo === 1 && id === 'instagram') handleCliqueCerto(2, () => setInstagramAberto(true));
+            }}
+          />
         </div>
       )}
 
       {instagramAberto && !storyAberto && !perfilAberto && !configAberta && (
-        <div className="w-full h-full bg-white pt-12 flex flex-col">
-          <div className="px-4 py-2 border-b">
-            <h2 className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">Instagram</h2>
+        <div style={{ height: '100%', background: '#fff', display: 'flex', flexDirection: 'column' }}>
+          <div style={{ padding: '8px 16px', borderBottom: '1px solid #e5e5e5', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexShrink: 0 }}>
+            <h2 style={{ fontSize: '24px', fontWeight: '800', margin: 0, fontFamily: 'cursive' }}>Instagram</h2>
+            <div style={{ display: 'flex', gap: '16px' }}>
+              <Heart size={24} color="#1a1a1a" />
+              <Send size={24} color="#1a1a1a" />
+            </div>
           </div>
 
-          <div className="flex gap-3 px-4 py-3 overflow-x-auto border-b">
+          <div style={{ display: 'flex', gap: '12px', padding: '12px 16px', overflowX: 'auto', borderBottom: '1px solid #e5e5e5', flexShrink: 0 }}>
             {passo === 2 && (
-              <ElementoClicavel onClick={() => handleCliqueCerto(3, () => setStoryAberto(true))} posicao="bottom">
-                <div className="flex flex-col items-center gap-1 cursor-pointer">
-                  <div className="w-16 h-16 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 p-0.5">
-                    <div className="w-full h-full bg-white rounded-full flex items-center justify-center text-2xl">🏖️</div>
+              <ElementoClicavel onClick={() => handleCliqueCerto(3, () => setStoryAberto(true))} mostrarSeta={false}>
+                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '4px', cursor: 'pointer' }}>
+                  <div style={{ width: '64px', height: '64px', borderRadius: '50%', background: 'linear-gradient(135deg, #8134AF, #DD2A7B)', padding: '2px', flexShrink: 0 }}>
+                    <div style={{ width: '100%', height: '100%', borderRadius: '50%', background: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '24px' }}>🏖️</div>
                   </div>
-                  <p className="text-xs font-semibold">Ana</p>
+                  <p style={{ fontSize: '12px', fontWeight: '600' }}>Ana</p>
                 </div>
               </ElementoClicavel>
             )}
             {["🌻", "🎂", "🐶"].map((emoji, i) => (
-              <div key={i} className="flex flex-col items-center gap-1">
-                <div className="w-16 h-16 rounded-full bg-gradient-to-br from-orange-400 to-red-500 p-0.5">
-                  <div className="w-full h-full bg-white rounded-full flex items-center justify-center text-2xl">{emoji}</div>
+              <div key={i} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '4px' }}>
+                <div style={{ width: '64px', height: '64px', borderRadius: '50%', background: 'linear-gradient(135deg, #F58529, #E1306C)', padding: '2px', flexShrink: 0 }}>
+                  <div style={{ width: '100%', height: '100%', borderRadius: '50%', background: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '24px' }}>{emoji}</div>
                 </div>
-                <p className="text-xs font-semibold">Story</p>
+                <p style={{ fontSize: '12px', fontWeight: '600' }}>Story</p>
               </div>
             ))}
           </div>
 
-          <div className="flex-1 overflow-y-auto">
-            <div className="mb-4">
-              <div className="flex items-center gap-3 px-4 py-3">
-                <div className="w-8 h-8 bg-purple-200 rounded-full flex items-center justify-center">👤</div>
-                <p className="font-bold text-sm">maria_silva</p>
+          <div style={{ flex: 1, overflowY: 'auto' }}>
+            <div style={{ marginBottom: '16px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '12px 16px' }}>
+                <div style={{ width: '32px', height: '32px', borderRadius: '50%', background: '#9C27B0', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontWeight: '700', fontSize: '14px', flexShrink: 0 }}>M</div>
+                <p style={{ fontWeight: '700', fontSize: '14px', margin: 0 }}>maria_silva</p>
               </div>
-              <div className="w-full aspect-square bg-gradient-to-br from-blue-200 to-purple-300 flex items-center justify-center text-8xl">🏔️</div>
-              <div className="px-4 py-3">
-                <div className="flex gap-4 mb-2">
-                  <span className="text-2xl">❤️</span>
-                  <span className="text-2xl">💬</span>
-                  <span className="text-2xl">📤</span>
+              <div style={{ width: '100%', aspectRatio: '1', background: 'linear-gradient(135deg, #90CAF9, #CE93D8)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '72px' }}>🏔️</div>
+              <div style={{ padding: '12px 16px' }}>
+                <div style={{ display: 'flex', gap: '16px', marginBottom: '8px' }}>
+                  <Heart size={26} color="#1a1a1a" />
+                  <MessageCircle size={26} color="#1a1a1a" />
+                  <Send size={26} color="#1a1a1a" />
                 </div>
-                <p className="font-semibold text-sm">152 curtidas</p>
+                <p style={{ fontWeight: '600', fontSize: '14px', margin: 0 }}>152 curtidas</p>
               </div>
             </div>
           </div>
 
-          <div className="border-t flex items-center justify-around py-2">
-            <button className="text-2xl">🏠</button>
-            <button className="text-2xl">🔍</button>
-            <button className="text-2xl">➕</button>
-            <button className="text-2xl">❤️</button>
+          <div style={{ borderTop: '1px solid #e5e5e5', display: 'flex', alignItems: 'center', justifyContent: 'space-around', padding: '8px 0', flexShrink: 0 }}>
+            <button style={{ background: 'none', border: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '44px', minWidth: '44px' }}><Home size={24} color="#1a1a1a" /></button>
+            <button style={{ background: 'none', border: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '44px', minWidth: '44px' }}><Search size={24} color="#1a1a1a" /></button>
+            <button style={{ background: 'none', border: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '44px', minWidth: '44px' }}><Plus size={24} color="#1a1a1a" /></button>
+            <button style={{ background: 'none', border: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '44px', minWidth: '44px' }}><Heart size={24} color="#1a1a1a" /></button>
             {passo === 4 && !perfilAberto && (
-              <ElementoClicavel onClick={() => handleCliqueCerto(5, () => setPerfilAberto(true))} posicao="top">
-                <button className="text-2xl">👤</button>
+              <ElementoClicavel onClick={() => handleCliqueCerto(5, () => setPerfilAberto(true))} mostrarSeta={false}>
+                <button style={{ background: 'none', border: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '44px', minWidth: '44px' }}>
+                  <User size={24} color="#1a1a1a" />
+                </button>
               </ElementoClicavel>
             )}
-            {passo !== 4 && <button className="text-2xl">👤</button>}
+            {passo !== 4 && <button style={{ background: 'none', border: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '44px', minWidth: '44px' }}><User size={24} color="#999" /></button>}
           </div>
         </div>
       )}
 
       {storyAberto && (
-        <div className="w-full h-full bg-black pt-12 relative">
-          <div className="absolute top-12 left-0 right-0 px-4 py-3 flex items-center gap-3">
-            <div className="flex-1 h-1 bg-white/50 rounded-full overflow-hidden">
-              <motion.div className="h-full bg-white" initial={{ width: 0 }} animate={{ width: "100%" }} transition={{ duration: 3 }} />
+        <div style={{ height: '100%', background: '#000', position: 'relative' }}>
+          <div style={{ position: 'absolute', top: '8px', left: 0, right: 0, padding: '12px 16px', display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <div style={{ flex: 1, height: '3px', background: 'rgba(255,255,255,0.3)', borderRadius: '2px', overflow: 'hidden' }}>
+              <motion.div style={{ height: '100%', background: '#fff' }} initial={{ width: 0 }} animate={{ width: "100%" }} transition={{ duration: 3 }} />
             </div>
           </div>
 
-          <div className="absolute top-20 left-4 flex items-center gap-2">
-            <div className="w-8 h-8 bg-purple-200 rounded-full flex items-center justify-center text-sm">👤</div>
-            <p className="text-white font-semibold text-sm">Ana Silva</p>
-            <p className="text-white/70 text-xs">2h</p>
+          <div style={{ position: 'absolute', top: '24px', left: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <div style={{ width: '32px', height: '32px', borderRadius: '50%', background: '#9C27B0', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontWeight: '700', fontSize: '14px' }}>A</div>
+            <p style={{ color: '#fff', fontWeight: '600', fontSize: '14px' }}>Ana Silva</p>
+            <p style={{ color: 'rgba(255,255,255,0.7)', fontSize: '12px' }}>2h</p>
           </div>
 
           {passo === 3 && (
-            <ElementoClicavel onClick={() => handleCliqueCerto(4, () => setStoryAberto(false))} posicao="top">
-              <button className="absolute top-16 right-4 text-white text-3xl">✕</button>
+            <ElementoClicavel onClick={() => handleCliqueCerto(4, () => setStoryAberto(false))} mostrarSeta={false}>
+              <button style={{ position: 'absolute', top: '20px', right: '16px', background: 'none', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', zIndex: 10 }}>
+                <X size={28} color="#fff" />
+              </button>
             </ElementoClicavel>
           )}
 
-          <div className="flex items-center justify-center h-full">
-            <div className="text-9xl">🏖️</div>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%' }}>
+            <div style={{ fontSize: '80px' }}>🏖️</div>
           </div>
         </div>
       )}
 
       {perfilAberto && !configAberta && (
-        <div className="w-full h-full bg-white pt-12">
-          <div className="px-4 py-3 flex items-center justify-between border-b">
-            <button onClick={() => setPerfilAberto(false)} className="text-xl">←</button>
-            <p className="font-bold">seu_perfil</p>
+        <div style={{ height: '100%', background: '#fff', display: 'flex', flexDirection: 'column' }}>
+          <div style={{ padding: '12px 16px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: '1px solid #e5e5e5', flexShrink: 0 }}>
+            <button onClick={() => setPerfilAberto(false)} style={{ background: 'none', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', padding: 0 }}>
+              <ArrowLeft size={24} color="#1a1a1a" />
+            </button>
+            <p style={{ fontWeight: '700', color: '#1a1a1a' }}>seu_perfil</p>
             <div />
           </div>
 
-          <div className="p-4">
-            <div className="flex items-center gap-4 mb-4">
-              <div className="w-20 h-20 bg-gradient-to-br from-purple-300 to-pink-300 rounded-full flex items-center justify-center text-4xl">👤</div>
-              <div className="flex-1">
-                <p className="text-2xl font-bold">Seu Nome</p>
-                <p className="text-sm text-gray-500">seu_perfil</p>
+          <div style={{ flex: 1, overflowY: 'auto', padding: '16px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '16px' }}>
+              <div style={{ width: '72px', height: '72px', borderRadius: '50%', background: 'linear-gradient(135deg, #CE93D8, #F48FB1)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontSize: '28px', fontWeight: '700', flexShrink: 0 }}>V</div>
+              <div style={{ flex: 1 }}>
+                <p style={{ fontSize: '20px', fontWeight: '800', margin: 0 }}>Seu Nome</p>
+                <p style={{ fontSize: '14px', color: '#999', margin: 0 }}>seu_perfil</p>
               </div>
               {passo === 5 && (
-                <ElementoClicavel onClick={() => handleCliqueCerto(6, () => setConfigAberta(true))} posicao="left">
-                  <button className="text-2xl">⚙️</button>
+                <ElementoClicavel onClick={() => handleCliqueCerto(6, () => setConfigAberta(true))} mostrarSeta={false}>
+                  <button style={{ width: '44px', height: '44px', background: 'none', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <Settings size={24} color="#1a1a1a" />
+                  </button>
                 </ElementoClicavel>
               )}
-              {passo !== 5 && <button className="text-2xl">⚙️</button>}
+              {passo !== 5 && <button style={{ width: '44px', height: '44px', background: 'none', border: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><Settings size={24} color="#ccc" /></button>}
             </div>
 
-            <div className="bg-orange-50 border-2 border-orange-300 rounded-2xl p-4 mb-4">
-              <p className="text-center font-bold text-orange-700">⚠️ Perfil Público 🌐</p>
-              <p className="text-center text-sm text-orange-600 mt-1">Qualquer pessoa pode ver suas fotos</p>
+            <div style={{ background: '#FFF3E0', border: '2px solid #FFB74D', borderRadius: '12px', padding: '16px', marginBottom: '16px' }}>
+              <p style={{ textAlign: 'center', fontWeight: '800', color: '#E65100', margin: 0 }}>Perfil Público</p>
+              <p style={{ textAlign: 'center', fontSize: '14px', color: '#EF6C00', marginTop: '4px', margin: '4px 0 0' }}>Qualquer pessoa pode ver suas fotos</p>
             </div>
 
-            <button className="w-full bg-gray-100 text-gray-800 py-2 rounded-xl font-semibold mb-4">Editar Perfil</button>
+            <button style={{ width: '100%', background: '#F0F2F5', color: '#1a1a1a', border: 'none', padding: '10px', borderRadius: '8px', fontWeight: '600', marginBottom: '16px', cursor: 'pointer' }}>Editar Perfil</button>
 
-            <div className="grid grid-cols-3 gap-1">
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '2px' }}>
               {["🌅", "🌻", "🏖️", "🐶", "🎂", "🏔️"].map((emoji, i) => (
-                <div key={i} className="aspect-square bg-gradient-to-br from-blue-200 to-purple-300 rounded-xl flex items-center justify-center text-5xl">{emoji}</div>
+                <div key={i} style={{ aspectRatio: '1', background: 'linear-gradient(135deg, #90CAF9, #CE93D8)', borderRadius: '4px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '36px' }}>{emoji}</div>
               ))}
             </div>
           </div>
@@ -228,72 +244,74 @@ export default function Modulo4Licao3() {
       )}
 
       {configAberta && !privacidadeAberta && (
-        <div className="w-full h-full bg-white pt-12">
-          <div className="px-4 py-3 flex items-center gap-3 border-b">
-            <button onClick={() => setConfigAberta(false)} className="text-xl">←</button>
-            <p className="font-bold">Configurações</p>
+        <div style={{ height: '100%', background: '#fff', display: 'flex', flexDirection: 'column' }}>
+          <div style={{ padding: '12px 16px', display: 'flex', alignItems: 'center', gap: '12px', borderBottom: '1px solid #e5e5e5', flexShrink: 0 }}>
+            <button onClick={() => setConfigAberta(false)} style={{ background: 'none', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', padding: 0 }}>
+              <ArrowLeft size={24} color="#1a1a1a" />
+            </button>
+            <p style={{ fontWeight: '700', color: '#1a1a1a' }}>Configurações</p>
           </div>
-          <div className="p-4 space-y-2">
+          <div style={{ flex: 1, padding: '12px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
             {passo === 6 && (
-              <ElementoClicavel onClick={() => handleCliqueCerto(7, () => setPrivacidadeAberta(true))} posicao="right">
-                <div className="flex items-center justify-between p-4 hover:bg-gray-50 rounded-xl cursor-pointer">
-                  <div className="flex items-center gap-3">
-                    <span className="text-2xl">🔒</span>
-                    <span className="font-semibold text-gray-800">Privacidade da Conta</span>
+              <ElementoClicavel onClick={() => handleCliqueCerto(7, () => setPrivacidadeAberta(true))} mostrarSeta={false}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '16px', borderRadius: '12px', cursor: 'pointer' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+                    <Lock size={22} color="#1a1a1a" />
+                    <span style={{ fontWeight: '600', color: '#1a1a1a', fontSize: '16px' }}>Privacidade da Conta</span>
                   </div>
-                  <span className="text-gray-400">›</span>
+                  <ChevronRight size={20} color="#ccc" />
                 </div>
               </ElementoClicavel>
             )}
-            <div className="flex items-center justify-between p-4 rounded-xl">
-              <div className="flex items-center gap-3">
-                <span className="text-2xl">🔔</span>
-                <span className="font-semibold text-gray-800">Notificações</span>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '16px', borderRadius: '12px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+                <Bell size={22} color="#1a1a1a" />
+                <span style={{ fontWeight: '600', color: '#1a1a1a', fontSize: '16px' }}>Notificações</span>
               </div>
-              <span className="text-gray-400">›</span>
+              <ChevronRight size={20} color="#ccc" />
             </div>
           </div>
         </div>
       )}
 
       {privacidadeAberta && (
-        <div className="w-full h-full bg-white pt-12">
-          <div className="px-4 py-3 flex items-center gap-3 border-b">
-            <button onClick={() => setPrivacidadeAberta(false)} className="text-xl">←</button>
-            <p className="font-bold">Privacidade</p>
+        <div style={{ height: '100%', background: '#fff', display: 'flex', flexDirection: 'column' }}>
+          <div style={{ padding: '12px 16px', display: 'flex', alignItems: 'center', gap: '12px', borderBottom: '1px solid #e5e5e5', flexShrink: 0 }}>
+            <button onClick={() => setPrivacidadeAberta(false)} style={{ background: 'none', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', padding: 0 }}>
+              <ArrowLeft size={24} color="#1a1a1a" />
+            </button>
+            <p style={{ fontWeight: '700', color: '#1a1a1a' }}>Privacidade</p>
           </div>
-          <div className="p-4">
-            <div className="bg-blue-50 border-2 border-blue-200 rounded-2xl p-4 mb-6">
-              <p className="text-sm font-bold text-blue-700 mb-2">ℹ️ Conta Privada</p>
-              <p className="text-sm text-blue-600">Quando sua conta é privada, somente pessoas que você aprovar podem ver suas fotos e vídeos.</p>
+          <div style={{ flex: 1, overflowY: 'auto', padding: '16px' }}>
+            <div style={{ background: '#E3F2FD', border: '2px solid #90CAF9', borderRadius: '12px', padding: '16px', marginBottom: '24px' }}>
+              <p style={{ fontSize: '15px', fontWeight: '700', color: '#1565C0', margin: '0 0 8px' }}>Conta Privada</p>
+              <p style={{ fontSize: '14px', color: '#1976D2', margin: 0 }}>Quando sua conta é privada, somente pessoas que você aprovar podem ver suas fotos e vídeos.</p>
             </div>
 
-            <div className="flex items-center justify-between p-4 bg-gray-50 rounded-2xl">
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '16px', background: '#F8F9FA', borderRadius: '12px' }}>
               <div>
-                <p className="font-bold text-gray-800">Conta Privada</p>
-                <p className="text-sm text-gray-500">Mais segurança para você</p>
+                <p style={{ fontWeight: '700', color: '#1a1a1a', margin: 0, fontSize: '16px' }}>Conta Privada</p>
+                <p style={{ fontSize: '14px', color: '#999', margin: 0 }}>Mais segurança para você</p>
               </div>
               {passo === 7 && !contaPrivada && (
-                <ElementoClicavel onClick={() => { setContaPrivada(true); setTimeout(() => setMostrarValidacao(true), 2000); }} posicao="left">
-                  <div className="w-14 h-8 bg-gray-300 rounded-full relative cursor-pointer">
-                    <div className="absolute top-1 left-1 w-6 h-6 bg-white rounded-full shadow" />
+                <ElementoClicavel onClick={() => { setContaPrivada(true); setTimeout(() => setMostrarValidacao(true), 2000); }} mostrarSeta={false}>
+                  <div style={{ width: '52px', height: '32px', background: '#D1D5DB', borderRadius: '16px', position: 'relative', cursor: 'pointer' }}>
+                    <div style={{ position: 'absolute', top: '4px', left: '4px', width: '24px', height: '24px', background: '#fff', borderRadius: '50%', boxShadow: '0 1px 3px rgba(0,0,0,0.2)' }} />
                   </div>
                 </ElementoClicavel>
               )}
               {contaPrivada && (
-                <motion.div initial={{ backgroundColor: "#D1D5DB" }} animate={{ backgroundColor: "#22C55E" }} className="w-14 h-8 rounded-full relative">
-                  <motion.div initial={{ left: 4 }} animate={{ left: 28 }} className="absolute top-1 w-6 h-6 bg-white rounded-full shadow" />
+                <motion.div initial={{ backgroundColor: "#D1D5DB" }} animate={{ backgroundColor: "#22C55E" }} style={{ width: '52px', height: '32px', borderRadius: '16px', position: 'relative' }}>
+                  <motion.div initial={{ left: 4 }} animate={{ left: 24 }} style={{ position: 'absolute', top: '4px', width: '24px', height: '24px', background: '#fff', borderRadius: '50%', boxShadow: '0 1px 3px rgba(0,0,0,0.2)' }} />
                 </motion.div>
               )}
             </div>
 
             {contaPrivada && (
-              <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="bg-green-100 border-2 border-green-400 rounded-2xl p-6 mt-6">
-                <div className="text-center">
-                  <div className="text-6xl mb-3">🔒</div>
-                  <p className="text-xl font-bold text-green-700 mb-2">✅ Conta privada ativada!</p>
-                  <p className="text-sm text-green-600">Só seus seguidores veem suas fotos</p>
-                </div>
+              <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} style={{ background: '#E8F5E9', border: '2px solid #66BB6A', borderRadius: '12px', padding: '24px', marginTop: '24px', textAlign: 'center' }}>
+                <Lock size={56} color="#27AE60" style={{ margin: '0 auto 12px' }} />
+                <p style={{ fontSize: '20px', fontWeight: '800', color: '#27AE60', margin: '0 0 8px' }}>Conta privada ativada!</p>
+                <p style={{ fontSize: '14px', color: '#2E7D32', margin: 0 }}>Só seus seguidores veem suas fotos</p>
               </motion.div>
             )}
           </div>

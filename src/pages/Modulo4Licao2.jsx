@@ -7,6 +7,8 @@ import SimuladorImersivo from "@/components/simulador/SimuladorImersivo";
 import ElementoClicavel from "@/components/simulador/ElementoClicavel";
 import ValidacaoQuiz from "@/components/simulador/ValidacaoQuiz";
 import { Sons, MoedasAnimadas, FeedbackAcerto, FeedbackErro } from "@/components/shared/GameFeedback";
+import AndroidHomeScreen from "@/components/simulador/AndroidHomeScreen";
+import { Facebook, ThumbsUp, MessageCircle, Share2, Search, ArrowLeft, MoreVertical, CheckCircle, Send } from 'lucide-react';
 
 export default function Modulo4Licao2() {
   const navigate = useNavigate();
@@ -78,89 +80,92 @@ export default function Modulo4Licao2() {
       onVoltar={() => navigate(createPageUrl("Modulos"))}
     >
       {!facebookAberto && (
-        <div className="w-full h-full bg-gradient-to-b from-blue-50 to-blue-100 p-6 pt-12">
-          <div className="grid grid-cols-4 gap-6 mt-8">
-            {passo === 1 && (
-              <ElementoClicavel onClick={() => handleCliqueCerto(2, () => setFacebookAberto(true))} posicao="bottom">
-                <div className="flex flex-col items-center gap-2">
-                  <div className="w-14 h-14 bg-blue-600 rounded-2xl flex items-center justify-center text-3xl shadow-md text-white font-bold">f</div>
-                </div>
-              </ElementoClicavel>
-            )}
-            {["G", "💬", "📱", "📧", "🎵", "📍", "⚙️"].map((emoji, i) => (
-              <div key={i} className="flex flex-col items-center gap-2">
-                <div className="w-14 h-14 bg-white rounded-2xl flex items-center justify-center text-2xl shadow-md">{emoji}</div>
-              </div>
-            ))}
-          </div>
+        <div style={{ height: '100%', position: 'relative' }}>
+          <AndroidHomeScreen
+            appsCustom={[
+              { nome: 'facebook', label: 'Facebook', bg: '#1877F2', id: 'facebook' },
+              { nome: 'busca', label: 'Google', bg: '#fff', corIcone: '#4285F4', id: 'google' },
+              { nome: 'mensagem', label: 'WhatsApp', bg: '#25D366', id: 'whatsapp' },
+              { nome: 'chrome', label: 'Chrome', bg: '#4285F4', id: 'chrome' },
+              { nome: 'email', label: 'Email', bg: '#EA4335', id: 'email' },
+              { nome: 'musica', label: 'Música', bg: '#E91E63', id: 'music' },
+              { nome: 'mapa', label: 'Mapas', bg: '#34A853', id: 'maps' },
+              { nome: 'config', label: 'Config.', bg: '#607D8B', id: 'settings' },
+            ]}
+            appDestacado={passo === 1 ? 'facebook' : null}
+            onAppClick={(id) => {
+              if (passo === 1 && id === 'facebook') handleCliqueCerto(2, () => setFacebookAberto(true));
+            }}
+          />
         </div>
       )}
 
       {facebookAberto && !postAberto && (
-        <div className="w-full h-full bg-gray-100 pt-12 overflow-y-auto">
-          <div className="bg-blue-600 px-4 py-3 flex items-center justify-between">
-            <h2 className="text-xl font-bold text-white">facebook</h2>
-            <div className="flex gap-3 text-white text-xl">
-              <span>🔍</span>
-              <span>💬</span>
+        <div style={{ height: '100%', background: '#F0F2F5', display: 'flex', flexDirection: 'column' }}>
+          <div style={{ background: '#1877F2', padding: '12px 16px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexShrink: 0 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <Facebook size={28} color="#fff" />
+              <h2 style={{ fontSize: '22px', fontWeight: '800', color: '#fff', margin: 0, letterSpacing: '-0.5px' }}>facebook</h2>
+            </div>
+            <div style={{ display: 'flex', gap: '16px' }}>
+              <Search size={22} color="#fff" />
+              <MessageCircle size={22} color="#fff" />
             </div>
           </div>
 
-          <div className="p-4 space-y-4">
+          <div style={{ flex: 1, overflowY: 'auto', padding: '12px', display: 'flex', flexDirection: 'column', gap: '12px' }}>
             {passo === 2 && (
-              <ElementoClicavel onClick={() => handleCliqueCerto(3, () => setPostAberto(true))} posicao="right">
-                <div className="bg-white rounded-2xl p-4 shadow cursor-pointer">
-                  <div className="flex items-center gap-3 mb-3">
-                    <div className="w-10 h-10 bg-purple-200 rounded-full flex items-center justify-center">👤</div>
+              <ElementoClicavel onClick={() => handleCliqueCerto(3, () => setPostAberto(true))} mostrarSeta={false}>
+                <div style={{ background: '#fff', borderRadius: '12px', padding: '16px', boxShadow: '0 1px 3px rgba(0,0,0,0.1)', cursor: 'pointer' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '12px' }}>
+                    <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: '#9C27B0', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontWeight: '700', flexShrink: 0 }}>A</div>
                     <div>
-                      <p className="font-bold text-gray-800">Ana Silva</p>
-                      <p className="text-xs text-gray-400">2 horas atrás</p>
+                      <p style={{ fontWeight: '700', color: '#1a1a1a', margin: 0, fontSize: '15px' }}>Ana Silva</p>
+                      <p style={{ fontSize: '12px', color: '#999', margin: 0 }}>2 horas atrás</p>
                     </div>
                   </div>
-                  <div className="w-full h-48 bg-gradient-to-br from-green-200 to-blue-300 rounded-xl flex items-center justify-center text-6xl mb-3">🏞️</div>
-                  <div className="flex items-center justify-between text-sm text-gray-500">
-                    <span>❤️ 12 curtidas</span>
+                  <div style={{ width: '100%', height: '180px', background: 'linear-gradient(135deg, #81C784, #64B5F6)', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '56px', marginBottom: '12px' }}>🏞️</div>
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', fontSize: '13px', color: '#65676B' }}>
+                    <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}><ThumbsUp size={14} color="#1877F2" fill="#1877F2" /> 12 curtidas</span>
                     <span>2 comentários</span>
                   </div>
                 </div>
               </ElementoClicavel>
             )}
 
-            <div className="bg-white rounded-2xl p-4 shadow">
-              <div className="flex items-center gap-3 mb-3">
-                <div className="w-10 h-10 bg-yellow-200 rounded-full flex items-center justify-center">🎂</div>
+            <div style={{ background: '#fff', borderRadius: '12px', padding: '16px', boxShadow: '0 1px 3px rgba(0,0,0,0.1)' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: '#FFB74D', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '20px', flexShrink: 0 }}>🎂</div>
                 <div>
-                  <p className="font-bold text-gray-800">Aniversário da sua amiga Ana hoje!</p>
-                  <p className="text-xs text-gray-400">Envie uma mensagem</p>
+                  <p style={{ fontWeight: '700', color: '#1a1a1a', margin: 0, fontSize: '14px' }}>Aniversário da sua amiga Ana hoje!</p>
+                  <p style={{ fontSize: '12px', color: '#999', margin: 0 }}>Envie uma mensagem</p>
                 </div>
               </div>
             </div>
 
             {passo === 6 && !pedidoRecusado && (
-              <ElementoClicavel onClick={() => { setPedidoRecusado(true); setTimeout(() => setMostrarValidacao(true), 2000); }} posicao="right">
-                <div className="bg-red-50 border-2 border-red-200 rounded-2xl p-4 shadow animate-pulse">
-                  <div className="flex items-center gap-3 mb-3">
-                    <div className="w-12 h-12 bg-gray-300 rounded-full flex items-center justify-center text-xl">👤</div>
-                    <div className="flex-1">
-                      <p className="font-bold text-gray-800">Marcos Souza</p>
-                      <p className="text-xs text-gray-500">0 amigos em comum</p>
+              <ElementoClicavel onClick={() => { setPedidoRecusado(true); setTimeout(() => setMostrarValidacao(true), 2000); }} mostrarSeta={false}>
+                <div style={{ background: '#FEF2F2', border: '2px solid #FECACA', borderRadius: '12px', padding: '16px', boxShadow: '0 1px 3px rgba(0,0,0,0.1)' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '12px' }}>
+                    <div style={{ width: '48px', height: '48px', borderRadius: '50%', background: '#BDBDBD', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontWeight: '700', fontSize: '20px', flexShrink: 0 }}>M</div>
+                    <div style={{ flex: 1 }}>
+                      <p style={{ fontWeight: '700', color: '#1a1a1a', margin: 0, fontSize: '15px' }}>Marcos Souza</p>
+                      <p style={{ fontSize: '12px', color: '#999', margin: 0 }}>0 amigos em comum</p>
                     </div>
                   </div>
-                  <div className="flex gap-2">
-                    <button className="flex-1 bg-red-500 text-white py-2 rounded-xl font-bold">Recusar</button>
-                    <button className="flex-1 bg-gray-300 text-gray-700 py-2 rounded-xl font-bold">Aceitar</button>
+                  <div style={{ display: 'flex', gap: '8px' }}>
+                    <button style={{ flex: 1, background: '#EF4444', color: '#fff', border: 'none', padding: '10px', borderRadius: '8px', fontWeight: '700', cursor: 'pointer' }}>Recusar</button>
+                    <button style={{ flex: 1, background: '#E5E7EB', color: '#666', border: 'none', padding: '10px', borderRadius: '8px', fontWeight: '700' }}>Aceitar</button>
                   </div>
                 </div>
               </ElementoClicavel>
             )}
 
             {pedidoRecusado && (
-              <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} className="bg-green-100 border-2 border-green-400 rounded-2xl p-4 shadow">
-                <div className="text-center">
-                  <div className="text-5xl mb-2">✅</div>
-                  <p className="text-lg font-bold text-green-700">Certo!</p>
-                  <p className="text-sm text-green-600">Só aceite amizade de quem você conhece!</p>
-                </div>
+              <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} style={{ background: '#E8F5E9', border: '2px solid #66BB6A', borderRadius: '12px', padding: '16px', textAlign: 'center' }}>
+                <CheckCircle size={48} color="#27AE60" style={{ margin: '0 auto 8px' }} />
+                <p style={{ fontSize: '18px', fontWeight: '800', color: '#27AE60', margin: '0 0 4px' }}>Certo!</p>
+                <p style={{ fontSize: '14px', color: '#2E7D32', margin: 0 }}>Só aceite amizade de quem você conhece!</p>
               </motion.div>
             )}
           </div>
@@ -168,80 +173,84 @@ export default function Modulo4Licao2() {
       )}
 
       {postAberto && (
-        <div className="w-full h-full bg-white pt-12 flex flex-col">
-          <div className="px-4 py-3 flex items-center gap-3 border-b">
-            <button onClick={() => setPostAberto(false)} className="text-xl">←</button>
-            <p className="font-bold text-gray-800">Publicação</p>
+        <div style={{ height: '100%', background: '#fff', display: 'flex', flexDirection: 'column' }}>
+          <div style={{ padding: '12px 16px', display: 'flex', alignItems: 'center', gap: '12px', borderBottom: '1px solid #e5e5e5', flexShrink: 0 }}>
+            <button onClick={() => setPostAberto(false)} style={{ background: 'none', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', padding: 0 }}>
+              <ArrowLeft size={24} color="#1877F2" />
+            </button>
+            <p style={{ fontWeight: '700', color: '#1a1a1a', margin: 0, fontSize: '16px' }}>Publicação</p>
           </div>
 
-          <div className="flex-1 overflow-y-auto p-4">
-            <div className="flex items-center gap-3 mb-3">
-              <div className="w-10 h-10 bg-purple-200 rounded-full flex items-center justify-center">👤</div>
+          <div style={{ flex: 1, overflowY: 'auto', padding: '16px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '12px' }}>
+              <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: '#9C27B0', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontWeight: '700', flexShrink: 0 }}>A</div>
               <div>
-                <p className="font-bold text-gray-800">Ana Silva</p>
-                <p className="text-xs text-gray-400">2 horas atrás</p>
+                <p style={{ fontWeight: '700', color: '#1a1a1a', margin: 0, fontSize: '15px' }}>Ana Silva</p>
+                <p style={{ fontSize: '12px', color: '#999', margin: 0 }}>2 horas atrás</p>
               </div>
             </div>
 
-            <div className="w-full h-64 bg-gradient-to-br from-green-200 to-blue-300 rounded-xl flex items-center justify-center text-8xl mb-4">🏞️</div>
+            <div style={{ width: '100%', height: '240px', background: 'linear-gradient(135deg, #81C784, #64B5F6)', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '72px', marginBottom: '16px' }}>🏞️</div>
 
-            <div className="flex items-center justify-between text-sm text-gray-500 mb-4 pb-4 border-b">
-              <span>❤️ {curtido ? "13" : "12"} curtidas</span>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', fontSize: '14px', color: '#65676B', marginBottom: '16px', paddingBottom: '16px', borderBottom: '1px solid #e5e5e5' }}>
+              <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}><ThumbsUp size={16} color={curtido ? "#1877F2" : "#65676B"} fill={curtido ? "#1877F2" : "none"} /> {curtido ? "13" : "12"} curtidas</span>
               <span>{comentarioEnviado ? "3" : "2"} comentários</span>
             </div>
 
-            <div className="flex items-center justify-around py-3 border-b mb-4">
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-around', padding: '12px 0', borderBottom: '1px solid #e5e5e5', marginBottom: '16px' }}>
               {passo === 3 && !curtido && (
-                <ElementoClicavel onClick={() => { setCurtido(true); handleCliqueCerto(4, null); }} posicao="top">
-                  <button className="flex items-center gap-2 px-4 py-2 rounded-xl hover:bg-gray-100">
-                    <span className="text-2xl">👍</span>
-                    <span className="font-semibold text-gray-600">Curtir</span>
+                <ElementoClicavel onClick={() => { setCurtido(true); handleCliqueCerto(4, null); }} mostrarSeta={false}>
+                  <button style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 16px', borderRadius: '8px', background: 'none', border: 'none', cursor: 'pointer', minHeight: '44px' }}>
+                    <ThumbsUp size={22} color="#65676B" />
+                    <span style={{ fontWeight: '600', color: '#65676B', fontSize: '14px' }}>Curtir</span>
                   </button>
                 </ElementoClicavel>
               )}
               {curtido && (
-                <motion.button initial={{ scale: 1.2 }} animate={{ scale: 1 }} className="flex items-center gap-2 px-4 py-2 rounded-xl bg-blue-100">
-                  <motion.span initial={{ y: -20 }} animate={{ y: 0 }} className="text-2xl">❤️</motion.span>
-                  <span className="font-bold text-blue-600">Curtido</span>
+                <motion.button initial={{ scale: 1.2 }} animate={{ scale: 1 }} style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 16px', borderRadius: '8px', background: '#E7F0FD', border: 'none', cursor: 'pointer', minHeight: '44px' }}>
+                  <motion.span initial={{ y: -20 }} animate={{ y: 0 }}>
+                    <ThumbsUp size={22} color="#1877F2" fill="#1877F2" />
+                  </motion.span>
+                  <span style={{ fontWeight: '700', color: '#1877F2', fontSize: '14px' }}>Curtido</span>
                 </motion.button>
               )}
 
               {passo === 4 && curtido && !comentando && (
-                <ElementoClicavel onClick={() => { setComentando(true); handleCliqueCerto(5, null); }} posicao="top">
-                  <button className="flex items-center gap-2 px-4 py-2 rounded-xl hover:bg-gray-100">
-                    <span className="text-2xl">💬</span>
-                    <span className="font-semibold text-gray-600">Comentar</span>
+                <ElementoClicavel onClick={() => { setComentando(true); handleCliqueCerto(5, null); }} mostrarSeta={false}>
+                  <button style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 16px', borderRadius: '8px', background: 'none', border: 'none', cursor: 'pointer', minHeight: '44px' }}>
+                    <MessageCircle size={22} color="#65676B" />
+                    <span style={{ fontWeight: '600', color: '#65676B', fontSize: '14px' }}>Comentar</span>
                   </button>
                 </ElementoClicavel>
               )}
               {(passo < 4 || comentando || comentarioEnviado) && (
-                <button className="flex items-center gap-2 px-4 py-2 rounded-xl">
-                  <span className="text-2xl">💬</span>
-                  <span className="font-semibold text-gray-600">Comentar</span>
+                <button style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 16px', borderRadius: '8px', background: 'none', border: 'none', minHeight: '44px' }}>
+                  <MessageCircle size={22} color="#65676B" />
+                  <span style={{ fontWeight: '600', color: '#65676B', fontSize: '14px' }}>Comentar</span>
                 </button>
               )}
 
-              <button className="flex items-center gap-2 px-4 py-2 rounded-xl">
-                <span className="text-2xl">📤</span>
-                <span className="font-semibold text-gray-600">Compartilhar</span>
+              <button style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 16px', borderRadius: '8px', background: 'none', border: 'none', minHeight: '44px' }}>
+                <Share2 size={22} color="#65676B" />
+                <span style={{ fontWeight: '600', color: '#65676B', fontSize: '14px' }}>Compartilhar</span>
               </button>
             </div>
 
-            <div className="space-y-3">
-              <div className="flex gap-3">
-                <div className="w-8 h-8 bg-blue-200 rounded-full flex items-center justify-center text-sm">👤</div>
-                <div className="flex-1 bg-gray-100 rounded-2xl p-3">
-                  <p className="font-bold text-sm">João Costa</p>
-                  <p className="text-sm text-gray-700">Linda paisagem!</p>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+              <div style={{ display: 'flex', gap: '12px' }}>
+                <div style={{ width: '32px', height: '32px', borderRadius: '50%', background: '#2196F3', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontSize: '13px', fontWeight: '700', flexShrink: 0 }}>J</div>
+                <div style={{ flex: 1, background: '#F0F2F5', borderRadius: '16px', padding: '12px' }}>
+                  <p style={{ fontWeight: '700', fontSize: '13px', color: '#1a1a1a', margin: '0 0 4px' }}>João Costa</p>
+                  <p style={{ fontSize: '14px', color: '#1a1a1a', margin: 0 }}>Linda paisagem!</p>
                 </div>
               </div>
 
               {comentarioEnviado && (
-                <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} className="flex gap-3">
-                  <div className="w-8 h-8 bg-pink-200 rounded-full flex items-center justify-center text-sm">👤</div>
-                  <div className="flex-1 bg-blue-50 rounded-2xl p-3">
-                    <p className="font-bold text-sm">Você</p>
-                    <p className="text-sm text-gray-700">Que foto linda! 😍</p>
+                <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} style={{ display: 'flex', gap: '12px' }}>
+                  <div style={{ width: '32px', height: '32px', borderRadius: '50%', background: '#E91E63', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontSize: '13px', fontWeight: '700', flexShrink: 0 }}>V</div>
+                  <div style={{ flex: 1, background: '#E7F0FD', borderRadius: '16px', padding: '12px' }}>
+                    <p style={{ fontWeight: '700', fontSize: '13px', color: '#1a1a1a', margin: '0 0 4px' }}>Você</p>
+                    <p style={{ fontSize: '14px', color: '#1a1a1a', margin: 0 }}>Que foto linda! 😍</p>
                   </div>
                 </motion.div>
               )}
@@ -249,13 +258,15 @@ export default function Modulo4Licao2() {
           </div>
 
           {comentando && !comentarioEnviado && (
-            <div className="p-4 border-t flex items-center gap-3">
-              <div className="flex-1 bg-gray-100 rounded-full px-4 py-2">
-                <p className="text-gray-800">Que foto linda! 😍</p>
+            <div style={{ padding: '12px 16px', borderTop: '1px solid #e5e5e5', display: 'flex', alignItems: 'center', gap: '12px', flexShrink: 0 }}>
+              <div style={{ flex: 1, background: '#F0F2F5', borderRadius: '24px', padding: '10px 16px' }}>
+                <p style={{ color: '#1a1a1a', margin: 0, fontSize: '15px' }}>Que foto linda! 😍</p>
               </div>
               {passo === 5 && (
-                <ElementoClicavel onClick={() => { setComentarioEnviado(true); setComentando(false); handleCliqueCerto(6, null); }} posicao="top">
-                  <button className="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center text-white">➤</button>
+                <ElementoClicavel onClick={() => { setComentarioEnviado(true); setComentando(false); handleCliqueCerto(6, null); }} mostrarSeta={false}>
+                  <button style={{ width: '44px', height: '44px', background: '#1877F2', borderRadius: '50%', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <Send size={20} color="#fff" />
+                  </button>
                 </ElementoClicavel>
               )}
             </div>

@@ -7,6 +7,8 @@ import SimuladorImersivo from "@/components/simulador/SimuladorImersivo";
 import ElementoClicavel from "@/components/simulador/ElementoClicavel";
 import ValidacaoQuiz from "@/components/simulador/ValidacaoQuiz";
 import { Sons, MoedasAnimadas, FeedbackAcerto, FeedbackErro } from "@/components/shared/GameFeedback";
+import AndroidHomeScreen from "@/components/simulador/AndroidHomeScreen";
+import { MessageCircle, Mic, Send, ArrowLeft, MoreVertical, X, Camera } from 'lucide-react';
 
 export default function Modulo4Licao1() {
   const navigate = useNavigate();
@@ -83,73 +85,78 @@ export default function Modulo4Licao1() {
       onVoltar={() => navigate(createPageUrl("Modulos"))}
     >
       {!whatsappAberto && (
-        <div className="w-full h-full bg-gradient-to-b from-green-50 to-green-100 p-6 pt-12">
-          <div className="grid grid-cols-4 gap-6 mt-8">
-            {passo === 1 && (
-              <ElementoClicavel onClick={() => handleCliqueCerto(2, () => setWhatsappAberto(true))} posicao="bottom">
-                <div className="flex flex-col items-center gap-2">
-                  <div className="w-14 h-14 bg-green-500 rounded-2xl flex items-center justify-center text-2xl shadow-md text-white">
-                    💬
-                  </div>
-                </div>
-              </ElementoClicavel>
-            )}
-            {["🔍", "📷", "📱", "📧", "🎵", "📍", "⚙️"].map((emoji, i) => (
-              <div key={i} className="flex flex-col items-center gap-2">
-                <div className="w-14 h-14 bg-white rounded-2xl flex items-center justify-center text-2xl shadow-md">{emoji}</div>
-              </div>
-            ))}
-          </div>
+        <div style={{ height: '100%', position: 'relative' }}>
+          <AndroidHomeScreen
+            appsCustom={[
+              { nome: 'mensagem', label: 'WhatsApp', bg: '#25D366', id: 'whatsapp' },
+              { nome: 'busca', label: 'Google', bg: '#fff', corIcone: '#4285F4', id: 'google' },
+              { nome: 'camera', label: 'Câmera', bg: '#37474F', id: 'camera' },
+              { nome: 'chrome', label: 'Chrome', bg: '#4285F4', id: 'chrome' },
+              { nome: 'email', label: 'Email', bg: '#EA4335', id: 'email' },
+              { nome: 'musica', label: 'Música', bg: '#E91E63', id: 'music' },
+              { nome: 'mapa', label: 'Mapas', bg: '#34A853', id: 'maps' },
+              { nome: 'config', label: 'Config.', bg: '#607D8B', id: 'settings' },
+            ]}
+            appDestacado={passo === 1 ? 'whatsapp' : null}
+            onAppClick={(id) => {
+              if (passo === 1 && id === 'whatsapp') handleCliqueCerto(2, () => setWhatsappAberto(true));
+            }}
+          />
         </div>
       )}
 
       {whatsappAberto && !conversaAberta && !galeriaAberta && (
-        <div className="w-full h-full bg-white pt-12">
-          <div className="bg-green-600 px-4 py-3 flex items-center justify-between">
-            <h2 className="text-xl font-bold text-white">WhatsApp</h2>
-            <div className="text-white text-2xl">⋮</div>
+        <div style={{ height: '100%', background: '#fff', display: 'flex', flexDirection: 'column' }}>
+          <div style={{ background: '#25D366', padding: '12px 16px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexShrink: 0 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <MessageCircle size={22} color="#fff" />
+              <h2 style={{ fontSize: '20px', fontWeight: '700', color: '#fff', margin: 0 }}>WhatsApp</h2>
+            </div>
+            <MoreVertical size={22} color="#fff" />
           </div>
-          <div className="p-4 space-y-3">
+          <div style={{ flex: 1, overflowY: 'auto', padding: '8px' }}>
             {passo === 2 && (
-              <ElementoClicavel onClick={() => handleCliqueCerto(3, () => setConversaAberta(true))} posicao="right">
-                <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-2xl cursor-pointer hover:bg-gray-100">
-                  <div className="w-12 h-12 bg-pink-200 rounded-full flex items-center justify-center text-2xl">👩</div>
-                  <div className="flex-1">
-                    <p className="font-bold text-gray-800">Maria (filha)</p>
-                    <p className="text-sm text-gray-500">Bom dia mãe! ☀️</p>
+              <ElementoClicavel onClick={() => handleCliqueCerto(3, () => setConversaAberta(true))} mostrarSeta={false}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '12px', background: '#f5f5f5', borderRadius: '12px', cursor: 'pointer' }}>
+                  <div style={{ width: '48px', height: '48px', borderRadius: '50%', background: '#E91E63', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontSize: '20px', fontWeight: '700', flexShrink: 0 }}>M</div>
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <p style={{ fontSize: '16px', fontWeight: '700', color: '#1a1a1a', margin: 0 }}>Maria (filha)</p>
+                    <p style={{ fontSize: '14px', color: '#666', margin: 0 }}>Bom dia mãe! ☀️</p>
                   </div>
-                  <span className="text-xs text-gray-400">09:30</span>
+                  <span style={{ fontSize: '12px', color: '#999' }}>09:30</span>
                 </div>
               </ElementoClicavel>
             )}
-            <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-2xl">
-              <div className="w-12 h-12 bg-blue-200 rounded-full flex items-center justify-center text-2xl">👨</div>
-              <div className="flex-1">
-                <p className="font-bold text-gray-800">José (filho)</p>
-                <p className="text-sm text-gray-500">Como você está?</p>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '12px' }}>
+              <div style={{ width: '48px', height: '48px', borderRadius: '50%', background: '#2196F3', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontSize: '20px', fontWeight: '700', flexShrink: 0 }}>J</div>
+              <div style={{ flex: 1, minWidth: 0 }}>
+                <p style={{ fontSize: '16px', fontWeight: '700', color: '#1a1a1a', margin: 0 }}>José (filho)</p>
+                <p style={{ fontSize: '14px', color: '#666', margin: 0 }}>Como você está?</p>
               </div>
-              <span className="text-xs text-gray-400">Ontem</span>
+              <span style={{ fontSize: '12px', color: '#999' }}>Ontem</span>
             </div>
-            <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-2xl">
-              <div className="w-12 h-12 bg-purple-200 rounded-full flex items-center justify-center text-2xl">👥</div>
-              <div className="flex-1">
-                <p className="font-bold text-gray-800">Família Silva</p>
-                <p className="text-sm text-gray-500">3 mensagens</p>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '12px' }}>
+              <div style={{ width: '48px', height: '48px', borderRadius: '50%', background: '#9C27B0', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontSize: '20px', fontWeight: '700', flexShrink: 0 }}>F</div>
+              <div style={{ flex: 1, minWidth: 0 }}>
+                <p style={{ fontSize: '16px', fontWeight: '700', color: '#1a1a1a', margin: 0 }}>Família Silva</p>
+                <p style={{ fontSize: '14px', color: '#666', margin: 0 }}>3 mensagens</p>
               </div>
-              <div className="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center text-white text-xs font-bold">3</div>
+              <div style={{ width: '24px', height: '24px', borderRadius: '50%', background: '#25D366', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontSize: '12px', fontWeight: '700' }}>3</div>
             </div>
           </div>
         </div>
       )}
 
       {conversaAberta && !galeriaAberta && !fotoSelecionada && (
-        <div className="w-full h-full bg-[#ECE5DD] pt-12 flex flex-col">
-          <div className="bg-green-600 px-4 py-3 flex items-center gap-3">
-            <button onClick={() => setConversaAberta(false)} className="text-white text-xl">←</button>
-            <div className="w-10 h-10 bg-pink-200 rounded-full flex items-center justify-center text-xl">👩</div>
-            <div className="flex-1">
-              <p className="font-bold text-white">Maria</p>
-              <p className="text-xs text-white/80">online</p>
+        <div style={{ height: '100%', background: '#ECE5DD', display: 'flex', flexDirection: 'column' }}>
+          <div style={{ background: '#25D366', padding: '10px 16px', display: 'flex', alignItems: 'center', gap: '12px', flexShrink: 0 }}>
+            <button onClick={() => setConversaAberta(false)} style={{ background: 'none', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', padding: 0 }}>
+              <ArrowLeft size={24} color="#fff" />
+            </button>
+            <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: '#E91E63', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontSize: '18px', fontWeight: '700', flexShrink: 0 }}>M</div>
+            <div style={{ flex: 1 }}>
+              <p style={{ fontWeight: '700', color: '#fff', margin: 0, fontSize: '16px' }}>Maria</p>
+              <p style={{ fontSize: '12px', color: 'rgba(255,255,255,0.8)', margin: 0 }}>online</p>
             </div>
           </div>
 
@@ -171,7 +178,7 @@ export default function Modulo4Licao1() {
             {audioEnviado && (
               <motion.div initial={{ opacity: 0, x: 100 }} animate={{ opacity: 1, x: 0 }} className="flex justify-end">
                 <div className="bg-green-100 rounded-2xl rounded-tr-none p-3 max-w-xs shadow flex items-center gap-2">
-                  <div className="text-2xl">🎤</div>
+                  <Mic size={24} color="#25D366" />
                   <div className="flex-1 h-2 bg-green-300 rounded-full" />
                   <span className="text-xs text-gray-600">0:03</span>
                   <p className="text-xs text-gray-400 flex items-center gap-1">09:32 <span className="text-blue-500">✓✓</span></p>
@@ -190,7 +197,9 @@ export default function Modulo4Licao1() {
 
           {gravandoAudio && (
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="bg-red-500 px-4 py-3 flex items-center gap-3">
-              <motion.div animate={{ scale: [1, 1.2, 1] }} transition={{ duration: 1, repeat: Infinity }} className="text-white text-2xl">🎤</motion.div>
+              <motion.div animate={{ scale: [1, 1.2, 1] }} transition={{ duration: 1, repeat: Infinity }}>
+              <Mic size={24} color="#fff" />
+            </motion.div>
               <div className="flex-1 flex items-center gap-2">
                 <div className="flex gap-1">{[1, 2, 3, 4, 5].map((i) => (<motion.div key={i} className="w-1 h-8 bg-white rounded-full" animate={{ scaleY: [1, 2, 1] }} transition={{ duration: 0.5, repeat: Infinity, delay: i * 0.1 }} />))}</div>
                 <span className="text-white font-bold">0:03</span>
@@ -199,53 +208,61 @@ export default function Modulo4Licao1() {
           )}
 
           {!gravandoAudio && (
-            <div className="bg-white px-4 py-3 flex items-center gap-3">
+            <div style={{ background: '#fff', padding: '8px 12px', display: 'flex', alignItems: 'center', gap: '8px', flexShrink: 0 }}>
               {passo >= 6 && (
-                <ElementoClicavel onClick={() => handleCliqueCerto(7, () => setGaleriaAberta(true))} posicao="top">
-                  <button className="text-2xl">📷</button>
+                <ElementoClicavel onClick={() => handleCliqueCerto(7, () => setGaleriaAberta(true))} mostrarSeta={false}>
+                  <button style={{ width: '44px', height: '44px', background: 'none', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <Camera size={24} color="#666" />
+                  </button>
                 </ElementoClicavel>
               )}
-              {passo < 6 && <button className="text-2xl text-gray-400">📷</button>}
+              {passo < 6 && <button style={{ width: '44px', height: '44px', background: 'none', border: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><Camera size={24} color="#ccc" /></button>}
               
               {passo === 3 && !textoDigitado && (
-                <ElementoClicavel onClick={() => { setTextoDigitado("Bom dia filha! 😊"); handleCliqueCerto(4, null); }} posicao="top">
-                  <div className="flex-1 bg-gray-100 rounded-full px-4 py-2 cursor-pointer">
-                    <p className="text-gray-400">Digite uma mensagem</p>
+                <ElementoClicavel onClick={() => { setTextoDigitado("Bom dia filha! 😊"); handleCliqueCerto(4, null); }} mostrarSeta={false}>
+                  <div style={{ flex: 1, background: '#f0f0f0', borderRadius: '24px', padding: '10px 16px', cursor: 'pointer' }}>
+                    <p style={{ color: '#999', margin: 0, fontSize: '15px' }}>Digite uma mensagem</p>
                   </div>
                 </ElementoClicavel>
               )}
               {(passo > 3 || textoDigitado) && passo < 5 && (
-                <div className="flex-1 bg-gray-100 rounded-full px-4 py-2">
-                  <p className="text-gray-800">{textoDigitado || "Digite uma mensagem"}</p>
+                <div style={{ flex: 1, background: '#f0f0f0', borderRadius: '24px', padding: '10px 16px' }}>
+                  <p style={{ color: '#333', margin: 0, fontSize: '15px' }}>{textoDigitado || "Digite uma mensagem"}</p>
                 </div>
               )}
               {passo >= 5 && (
-                <div className="flex-1 bg-gray-100 rounded-full px-4 py-2">
-                  <p className="text-gray-400">Digite uma mensagem</p>
+                <div style={{ flex: 1, background: '#f0f0f0', borderRadius: '24px', padding: '10px 16px' }}>
+                  <p style={{ color: '#999', margin: 0, fontSize: '15px' }}>Digite uma mensagem</p>
                 </div>
               )}
 
               {passo === 4 && textoDigitado && (
-                <ElementoClicavel onClick={() => { setMensagemEnviada(true); setTextoDigitado(""); handleCliqueCerto(5, null); }} posicao="top">
-                  <button className="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center text-white text-xl">➤</button>
+                <ElementoClicavel onClick={() => { setMensagemEnviada(true); setTextoDigitado(""); handleCliqueCerto(5, null); }} mostrarSeta={false}>
+                  <button style={{ width: '44px', height: '44px', background: '#25D366', borderRadius: '50%', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <Send size={20} color="#fff" />
+                  </button>
                 </ElementoClicavel>
               )}
               {passo === 5 && !audioEnviado && (
-                <ElementoClicavel onClick={() => { setGravandoAudio(true); setTimeout(() => { setGravandoAudio(false); setAudioEnviado(true); setPasso(6); }, 3000); }} posicao="top">
-                  <button className="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center text-xl">🎤</button>
+                <ElementoClicavel onClick={() => { setGravandoAudio(true); setTimeout(() => { setGravandoAudio(false); setAudioEnviado(true); setPasso(6); }, 3000); }} mostrarSeta={false}>
+                  <button style={{ width: '44px', height: '44px', background: '#25D366', borderRadius: '50%', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <Mic size={22} color="#fff" />
+                  </button>
                 </ElementoClicavel>
               )}
-              {(passo < 4 || (passo > 5)) && <button className="text-2xl text-gray-400">🎤</button>}
+              {(passo < 4 || (passo > 5)) && <button style={{ width: '44px', height: '44px', background: 'none', border: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><Mic size={24} color="#ccc" /></button>}
             </div>
           )}
         </div>
       )}
 
       {galeriaAberta && !fotoSelecionada && (
-        <div className="w-full h-full bg-black pt-12">
-          <div className="px-4 py-3 flex items-center justify-between bg-black/80">
-            <button onClick={() => setGaleriaAberta(false)} className="text-white text-xl">✕</button>
-            <p className="text-white font-bold">Galeria</p>
+        <div style={{ height: '100%', background: '#000', display: 'flex', flexDirection: 'column' }}>
+          <div style={{ padding: '12px 16px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: 'rgba(0,0,0,0.8)', flexShrink: 0 }}>
+            <button onClick={() => setGaleriaAberta(false)} style={{ background: 'none', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center' }}>
+              <X size={24} color="#fff" />
+            </button>
+            <p style={{ color: '#fff', fontWeight: '700' }}>Galeria</p>
             <div />
           </div>
           <div className="grid grid-cols-2 gap-2 p-4">
@@ -262,10 +279,12 @@ export default function Modulo4Licao1() {
       )}
 
       {fotoSelecionada && (
-        <div className="w-full h-full bg-black pt-12 flex flex-col">
-          <div className="px-4 py-3 flex items-center justify-between bg-black/80">
-            <button onClick={() => { setFotoSelecionada(null); setGaleriaAberta(true); }} className="text-white text-xl">←</button>
-            <p className="text-white font-bold">Enviar foto</p>
+        <div style={{ height: '100%', background: '#000', display: 'flex', flexDirection: 'column' }}>
+          <div style={{ padding: '12px 16px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: 'rgba(0,0,0,0.8)', flexShrink: 0 }}>
+            <button onClick={() => { setFotoSelecionada(null); setGaleriaAberta(true); }} style={{ background: 'none', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center' }}>
+              <ArrowLeft size={24} color="#fff" />
+            </button>
+            <p style={{ color: '#fff', fontWeight: '700' }}>Enviar foto</p>
             <div />
           </div>
           <div className="flex-1 flex items-center justify-center p-4">
@@ -273,8 +292,10 @@ export default function Modulo4Licao1() {
           </div>
           <div className="p-4">
             {passo === 8 && (
-              <ElementoClicavel onClick={() => { setFotoEnviada(true); setFotoSelecionada(null); setGaleriaAberta(false); setTimeout(() => setMostrarValidacao(true), 1500); }} posicao="top">
-                <button className="w-full bg-green-500 text-white py-4 rounded-full font-bold text-lg">Enviar 📤</button>
+              <ElementoClicavel onClick={() => { setFotoEnviada(true); setFotoSelecionada(null); setGaleriaAberta(false); setTimeout(() => setMostrarValidacao(true), 1500); }} mostrarSeta={false}>
+                <button style={{ width: '100%', background: '#25D366', color: '#fff', border: 'none', padding: '16px', borderRadius: '24px', fontWeight: '700', fontSize: '17px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
+                  <Send size={20} color="#fff" /> Enviar
+                </button>
               </ElementoClicavel>
             )}
           </div>

@@ -26,61 +26,171 @@ export default function AndroidHomeScreen({ onAppClick, appsCustom = null, appDe
   ];
 
   return (
-    <div className="w-full h-full relative overflow-hidden" style={{
-      background: 'linear-gradient(180deg, #1a3a6b 0%, #2d5aa0 50%, #1a3a6b 100%)'
+    <div style={{
+      height: '100%',
+      display: 'flex',
+      flexDirection: 'column',
+      background: 'linear-gradient(180deg, #1a3a6b 0%, #2d5aa0 50%, #1a3a6b 100%)',
+      position: 'relative',
+      overflow: 'hidden'
     }}>
       {/* Wallpaper gradients */}
-      <div className="absolute inset-0" style={{
+      <div style={{
+        position: 'absolute',
+        inset: 0,
         background: `radial-gradient(ellipse at 30% 40%, rgba(100,150,255,0.3) 0%, transparent 60%),
-                     radial-gradient(ellipse at 70% 60%, rgba(200,100,255,0.2) 0%, transparent 50%)`
-      }}></div>
+                     radial-gradient(ellipse at 70% 60%, rgba(200,100,255,0.2) 0%, transparent 50%)`,
+        pointerEvents: 'none'
+      }} />
 
-      {/* Clock widget */}
-      <div className="text-center text-white pt-10 relative z-10">
+      {/* STATUS BAR compacta */}
+      <div style={{
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        padding: '6px 16px 2px',
+        fontSize: '11px',
+        fontWeight: '600',
+        color: '#fff',
+        position: 'relative',
+        zIndex: 10,
+        flexShrink: 0
+      }}>
+        <span>{time}</span>
+        <div style={{ display: 'flex', gap: '5px', alignItems: 'center', fontSize: '12px' }}>
+          <span>📶</span>
+          <span>🛜</span>
+          <span>🔋</span>
+        </div>
+      </div>
+
+      {/* RELÓGIO central */}
+      <div style={{
+        textAlign: 'center',
+        color: '#fff',
+        paddingTop: '8px',
+        paddingBottom: '12px',
+        position: 'relative',
+        zIndex: 10,
+        flexShrink: 0
+      }}>
         <motion.div
           initial={{ scale: 0.9, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
-          style={{ fontSize: '52px', fontWeight: '200', letterSpacing: '-2px', lineHeight: 1 }}
+          style={{ fontSize: '40px', fontWeight: '200', letterSpacing: '-2px', lineHeight: 1 }}
         >
           {time}
         </motion.div>
-        <div className="text-xs opacity-80 mt-1" style={{ fontSize: '13px' }}>
+        <div style={{ fontSize: '12px', opacity: 0.85, marginTop: '2px' }}>
           {date}
         </div>
       </div>
 
-      {/* Apps Grid */}
-      <div className="absolute left-0 right-0" style={{ bottom: '80px' }}>
-        <div className="grid grid-cols-4 gap-4 px-4">
-          {apps.map((app, i) => (
+      {/* GRADE DE APPS */}
+      <div style={{
+        flex: 1,
+        display: 'grid',
+        gridTemplateColumns: 'repeat(4, 1fr)',
+        gap: '16px',
+        padding: '0 16px',
+        alignContent: 'start',
+        position: 'relative',
+        zIndex: 10
+      }}>
+        {apps.map((app, i) => {
+          const isDestacado = appDestacado && appDestacado === app.id;
+          return (
             <motion.div
               key={i}
               initial={{ scale: 0, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               transition={{ delay: i * 0.05 }}
               onClick={() => onAppClick?.(app.id)}
-              className="text-center cursor-pointer"
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                gap: '4px',
+                cursor: 'pointer',
+                minHeight: '44px'
+              }}
             >
-              <div
-                className="w-13 h-13 rounded-xl flex items-center justify-center text-[26px] mx-auto"
-                style={{
-                  background: app.bg,
-                  boxShadow: appDestacado && appDestacado === app.id
-                    ? '0 0 0 0 rgba(243,152,75,0.7)'
-                    : '0 2px 6px rgba(0,0,0,0.2)',
-                  animation: appDestacado && appDestacado === app.id
-                    ? 'pulse-border-ahs 2s infinite'
-                    : 'none'
-                }}
-              >
+              <div style={{
+                width: '56px',
+                height: '56px',
+                borderRadius: '14px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontSize: '26px',
+                background: app.bg,
+                boxShadow: isDestacado
+                  ? '0 0 0 0 rgba(243,152,75,0.7)'
+                  : '0 2px 6px rgba(0,0,0,0.2)',
+                animation: isDestacado ? 'pulse-border-ahs 2s infinite' : 'none'
+              }}>
                 {app.icon}
               </div>
-              <div className="text-[10px] text-white mt-1" style={{ textShadow: '0 1px 2px rgba(0,0,0,0.5)' }}>
+              <span style={{
+                fontSize: '12px',
+                color: '#fff',
+                textAlign: 'center',
+                textShadow: '0 1px 2px rgba(0,0,0,0.5)',
+                lineHeight: 1.2
+              }}>
                 {app.label}
-              </div>
+              </span>
             </motion.div>
-          ))}
-        </div>
+          );
+        })}
+      </div>
+
+      {/* DOCK — em fluxo, sem absolute */}
+      <div style={{
+        marginTop: 'auto',
+        margin: '0 16px 16px',
+        display: 'flex',
+        justifyContent: 'space-around',
+        alignItems: 'center',
+        padding: '10px 12px',
+        borderRadius: '16px',
+        background: 'rgba(255,255,255,0.15)',
+        backdropFilter: 'blur(10px)',
+        WebkitBackdropFilter: 'blur(10px)',
+        position: 'relative',
+        zIndex: 10,
+        flexShrink: 0
+      }}>
+        {dockApps.map((app, i) => (
+          <div key={i} style={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            gap: '3px',
+            minHeight: '44px',
+            justifyContent: 'center'
+          }}>
+            <div style={{
+              width: '48px',
+              height: '48px',
+              borderRadius: '12px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              fontSize: '22px',
+              background: 'rgba(255,255,255,0.2)'
+            }}>
+              {app.icon}
+            </div>
+            <span style={{
+              fontSize: '10px',
+              color: '#fff',
+              textShadow: '0 1px 2px rgba(0,0,0,0.5)'
+            }}>
+              {app.label}
+            </span>
+          </div>
+        ))}
       </div>
 
       <style>{`
@@ -90,25 +200,6 @@ export default function AndroidHomeScreen({ onAppClick, appsCustom = null, appDe
           100% { box-shadow: 0 0 0 0 rgba(243, 152, 75, 0); }
         }
       `}</style>
-
-      {/* Dock */}
-      <div
-        className="absolute left-4 right-4 flex justify-around items-center px-2.5 py-2.5 rounded-2xl"
-        style={{
-          bottom: '36px',
-          background: 'rgba(255,255,255,0.15)',
-          backdropFilter: 'blur(10px)'
-        }}
-      >
-        {dockApps.map((app, i) => (
-          <div key={i} className="text-center">
-            <div className="w-11 h-11 rounded-xl flex items-center justify-center text-[22px]" style={{ background: 'rgba(255,255,255,0.2)' }}>
-              {app.icon}
-            </div>
-            <div className="text-[9px] text-white mt-0.5">{app.label}</div>
-          </div>
-        ))}
-      </div>
     </div>
   );
 }

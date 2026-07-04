@@ -190,7 +190,10 @@ export default function SimuladorImersivo({
             }}
             className="hide-scrollbar"
           >
-            {children}
+            <div className="sim-screen-fill"
+                 style={{ minHeight: '100%', display: 'flex', flexDirection: 'column' }}>
+              {children}
+            </div>
           </div>
         </motion.div>
       </div>
@@ -224,6 +227,9 @@ export default function SimuladorImersivo({
         .hide-scrollbar {
           -ms-overflow-style: none;
           scrollbar-width: none;
+        }
+        .sim-screen-fill > * {
+          flex: 1 0 auto;
         }
       `}</style>
     </div>

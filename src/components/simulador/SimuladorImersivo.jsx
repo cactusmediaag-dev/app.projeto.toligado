@@ -42,9 +42,8 @@ export default function SimuladorImersivo({
 
   return (
     <div
-      className="flex flex-col"
+      className="flex flex-col sim-root"
       style={{
-        minHeight: '100dvh',
         background: 'linear-gradient(180deg, #F1E9F7 0%, #E8DDF0 100%)',
         userSelect: 'none',
         WebkitUserSelect: 'none',
@@ -221,6 +220,10 @@ export default function SimuladorImersivo({
 
       {/* CSS global para esconder scrollbar */}
       <style>{`
+        .sim-root {
+          height: 100vh;
+          height: 100dvh;
+        }
         .hide-scrollbar::-webkit-scrollbar {
           display: none;
           width: 0;

@@ -1,5 +1,6 @@
 import React from "react";
 import { motion } from "framer-motion";
+import AppIcon from "./AppIcon";
 
 export default function AndroidHomeScreen({ onAppClick, appsCustom = null, appDestacado = null }) {
   const now = new Date();
@@ -7,23 +8,25 @@ export default function AndroidHomeScreen({ onAppClick, appsCustom = null, appDe
   const date = now.toLocaleDateString('pt-BR', { weekday: 'long', day: 'numeric', month: 'long' });
 
   const defaultApps = [
-    { icon: '📷', label: 'Câmera', bg: '#1a1a2e', id: 'camera' },
-    { icon: '📱', label: 'Telefone', bg: '#4CAF50', id: 'phone' },
-    { icon: '💬', label: 'WhatsApp', bg: '#25D366', id: 'whatsapp' },
-    { icon: '🌐', label: 'Chrome', bg: '#4285F4', id: 'chrome' },
-    { icon: '⚙️', label: 'Config.', bg: '#607D8B', id: 'settings' },
-    { icon: '📸', label: 'Fotos', bg: '#FF5722', id: 'photos' },
-    { icon: '🔍', label: 'Google', bg: '#4285F4', id: 'google' },
-    { icon: '🎵', label: 'Música', bg: '#E91E63', id: 'music' },
+    { nome: 'camera', label: 'Câmera', bg: '#37474F', id: 'camera' },
+    { nome: 'telefone', label: 'Telefone', bg: '#4CAF50', id: 'phone' },
+    { nome: 'mensagem', label: 'WhatsApp', bg: '#25D366', id: 'whatsapp' },
+    { nome: 'chrome', label: 'Chrome', bg: '#4285F4', id: 'chrome' },
+    { nome: 'config', label: 'Config.', bg: '#607D8B', id: 'settings' },
+    { nome: 'fotos', label: 'Fotos', bg: '#FF7043', id: 'photos' },
+    { nome: 'busca', label: 'Google', bg: '#fff', corIcone: '#4285F4', id: 'google' },
+    { nome: 'musica', label: 'Música', bg: '#E91E63', id: 'music' },
   ];
   const apps = appsCustom || defaultApps;
 
   const dockApps = [
-    { icon: '📱', label: 'Tel.' },
-    { icon: '💬', label: 'Mens.' },
-    { icon: '🌐', label: 'Web' },
-    { icon: '📸', label: 'Fotos' },
+    { nome: 'telefone', label: 'Tel.' },
+    { nome: 'mensagem', label: 'Mens.' },
+    { nome: 'chrome', label: 'Web' },
+    { nome: 'fotos', label: 'Fotos' },
   ];
+
+  const isLegacy = (app) => !!app.icon;
 
   return (
     <div style={{
@@ -69,7 +72,7 @@ export default function AndroidHomeScreen({ onAppClick, appsCustom = null, appDe
         textAlign: 'center',
         color: '#fff',
         paddingTop: '8px',
-        paddingBottom: '12px',
+        marginBottom: '24px',
         position: 'relative',
         zIndex: 10,
         flexShrink: 0
@@ -92,54 +95,77 @@ export default function AndroidHomeScreen({ onAppClick, appsCustom = null, appDe
         display: 'grid',
         gridTemplateColumns: 'repeat(4, 1fr)',
         gap: '16px',
-        padding: '0 16px',
+        padding: '8px 16px 0',
         alignContent: 'start',
         position: 'relative',
         zIndex: 10
       }}>
         {apps.map((app, i) => {
           const isDestacado = appDestacado && appDestacado === app.id;
+
+          if (isLegacy(app)) {
+            return (
+              <motion.div
+                key={i}
+                initial={{ scale: 0, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                transition={{ delay: i * 0.05 }}
+                onClick={() => onAppClick?.(app.id)}
+                style={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  gap: '4px',
+                  cursor: 'pointer',
+                  minHeight: '44px'
+                }}
+              >
+                <div style={{
+                  width: '56px',
+                  height: '56px',
+                  borderRadius: '14px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontSize: '26px',
+                  background: app.bg,
+                  boxShadow: isDestacado
+                    ? '0 0 0 0 rgba(243,152,75,0.7)'
+                    : '0 2px 6px rgba(0,0,0,0.2)',
+                  animation: isDestacado ? 'pulse-border-ahs 2s infinite' : 'none'
+                }}>
+                  {app.icon}
+                </div>
+                <span style={{
+                  fontSize: '12px',
+                  color: '#fff',
+                  textAlign: 'center',
+                  textShadow: '0 1px 2px rgba(0,0,0,0.5)',
+                  lineHeight: 1.2
+                }}>
+                  {app.label}
+                </span>
+              </motion.div>
+            );
+          }
+
           return (
             <motion.div
               key={i}
               initial={{ scale: 0, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               transition={{ delay: i * 0.05 }}
-              onClick={() => onAppClick?.(app.id)}
-              style={{
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                gap: '4px',
-                cursor: 'pointer',
-                minHeight: '44px'
-              }}
             >
-              <div style={{
-                width: '56px',
-                height: '56px',
-                borderRadius: '14px',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                fontSize: '26px',
-                background: app.bg,
-                boxShadow: isDestacado
-                  ? '0 0 0 0 rgba(243,152,75,0.7)'
-                  : '0 2px 6px rgba(0,0,0,0.2)',
-                animation: isDestacado ? 'pulse-border-ahs 2s infinite' : 'none'
-              }}>
-                {app.icon}
-              </div>
-              <span style={{
-                fontSize: '12px',
-                color: '#fff',
-                textAlign: 'center',
-                textShadow: '0 1px 2px rgba(0,0,0,0.5)',
-                lineHeight: 1.2
-              }}>
-                {app.label}
-              </span>
+              <AppIcon
+                nome={app.nome}
+                cor={app.bg}
+                corIcone={app.corIcone}
+                tamanho={56}
+                rotulo={app.label}
+                rotuloCor="#fff"
+                destacado={isDestacado}
+                onClick={() => onAppClick?.(app.id)}
+              />
             </motion.div>
           );
         })}
@@ -162,34 +188,15 @@ export default function AndroidHomeScreen({ onAppClick, appsCustom = null, appDe
         flexShrink: 0
       }}>
         {dockApps.map((app, i) => (
-          <div key={i} style={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            gap: '3px',
-            minHeight: '44px',
-            justifyContent: 'center'
-          }}>
-            <div style={{
-              width: '48px',
-              height: '48px',
-              borderRadius: '12px',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              fontSize: '22px',
-              background: 'rgba(255,255,255,0.2)'
-            }}>
-              {app.icon}
-            </div>
-            <span style={{
-              fontSize: '10px',
-              color: '#fff',
-              textShadow: '0 1px 2px rgba(0,0,0,0.5)'
-            }}>
-              {app.label}
-            </span>
-          </div>
+          <AppIcon
+            key={i}
+            nome={app.nome}
+            cor="rgba(255,255,255,0.2)"
+            corIcone="#fff"
+            tamanho={48}
+            rotulo={app.label}
+            rotuloCor="#fff"
+          />
         ))}
       </div>
 

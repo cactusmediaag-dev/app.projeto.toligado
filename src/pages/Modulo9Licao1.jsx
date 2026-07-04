@@ -75,18 +75,18 @@ export default function Modulo9Licao1() {
     >
       {/* Passo 1: Home Android com Play Store */}
       {!playStoreAberta && (
-        <div style={{ height: '100%', minHeight: '480px', position: 'relative' }}>
+        <div style={{ height: '100%', position: 'relative' }}>
           <div style={{ position: 'absolute', inset: 0 }}>
             <AndroidHomeScreen
               appsCustom={[
-                { icon: '📷', label: 'Câmera', bg: '#1a1a2e', id: 'camera' },
-                { icon: '▶️', label: 'Play Store', bg: '#fff', id: 'playstore' },
-                { icon: '💬', label: 'WhatsApp', bg: '#25D366', id: 'whatsapp' },
-                { icon: '🌐', label: 'Chrome', bg: '#4285F4', id: 'chrome' },
-                { icon: '⚙️', label: 'Config.', bg: '#607D8B', id: 'settings' },
-                { icon: '📸', label: 'Fotos', bg: '#FF5722', id: 'photos' },
-                { icon: '🔍', label: 'Google', bg: '#4285F4', id: 'google' },
-                { icon: '🎵', label: 'Música', bg: '#E91E63', id: 'music' },
+                { nome: 'camera', label: 'Câmera', bg: '#37474F', id: 'camera' },
+                { nome: 'playstore', label: 'Play Store', bg: '#fff', corIcone: '#34A853', id: 'playstore' },
+                { nome: 'mensagem', label: 'WhatsApp', bg: '#25D366', id: 'whatsapp' },
+                { nome: 'chrome', label: 'Chrome', bg: '#4285F4', id: 'chrome' },
+                { nome: 'config', label: 'Config.', bg: '#607D8B', id: 'settings' },
+                { nome: 'fotos', label: 'Fotos', bg: '#FF7043', id: 'photos' },
+                { nome: 'busca', label: 'Google', bg: '#fff', corIcone: '#4285F4', id: 'google' },
+                { nome: 'musica', label: 'Música', bg: '#E91E63', id: 'music' },
               ]}
               appDestacado="playstore"
               onAppClick={(id) => { if (id === 'playstore') handleCliqueCerto(2, () => setPlayStoreAberta(true)); }}

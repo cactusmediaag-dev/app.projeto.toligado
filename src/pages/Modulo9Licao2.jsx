@@ -104,18 +104,18 @@ export default function Modulo9Licao2() {
     >
       {/* Passo 1: Tela inicial do celular com ícone e-Título */}
       {!appAberto && (
-        <div style={{ height: '100%', minHeight: '480px', position: 'relative' }}>
+        <div style={{ height: '100%', position: 'relative' }}>
           <div style={{ position: 'absolute', inset: 0 }}>
             <AndroidHomeScreen
               appsCustom={[
-                { icon: '📷', label: 'Câmera', bg: '#1a1a2e', id: 'camera' },
-                { icon: '🗳️', label: 'e-Título', bg: '#1E5A9C', id: 'etitulo' },
-                { icon: '💬', label: 'WhatsApp', bg: '#25D366', id: 'whatsapp' },
-                { icon: '🌐', label: 'Chrome', bg: '#4285F4', id: 'chrome' },
-                { icon: '⚙️', label: 'Config.', bg: '#607D8B', id: 'settings' },
-                { icon: '📸', label: 'Fotos', bg: '#FF5722', id: 'photos' },
-                { icon: '🔍', label: 'Google', bg: '#4285F4', id: 'google' },
-                { icon: '🎵', label: 'Música', bg: '#E91E63', id: 'music' },
+                { nome: 'camera', label: 'Câmera', bg: '#37474F', id: 'camera' },
+                { nome: 'etitulo', label: 'e-Título', bg: '#1E5A9C', id: 'etitulo' },
+                { nome: 'mensagem', label: 'WhatsApp', bg: '#25D366', id: 'whatsapp' },
+                { nome: 'chrome', label: 'Chrome', bg: '#4285F4', id: 'chrome' },
+                { nome: 'config', label: 'Config.', bg: '#607D8B', id: 'settings' },
+                { nome: 'fotos', label: 'Fotos', bg: '#FF7043', id: 'photos' },
+                { nome: 'busca', label: 'Google', bg: '#fff', corIcone: '#4285F4', id: 'google' },
+                { nome: 'musica', label: 'Música', bg: '#E91E63', id: 'music' },
               ]}
               appDestacado="etitulo"
               onAppClick={(id) => { if (id === 'etitulo') handleCliqueCerto(2, () => setAppAberto(true)); }}

@@ -124,10 +124,10 @@ export default function Modulo1Licao5() {
               <p style={{ fontSize: '13px', color: '#999', margin: 0, fontWeight: '600' }}>6 fotos</p>
             </div>
           </div>
-          <div style={{ flex: 1, overflowY: 'auto', padding: '8px', display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '8px' }}>
+          <div style={{ padding: '8px', display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '8px', alignContent: 'flex-start' }}>
             {fotos.map((emoji, i) => (
               <div key={i}>
-                {passo === 2 ? (
+                {passo === 2 && i === 0 ? (
                   <ElementoClicavel
                     onClick={() => handleCliqueCerto(3, () => setFotoSelecionada(emoji))}
                     mostrarSeta={false}
@@ -137,7 +137,10 @@ export default function Modulo1Licao5() {
                     </div>
                   </ElementoClicavel>
                 ) : (
-                  <div style={{ width: '100%', aspectRatio: '1', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '40px', background: '#f5f5f5' }}>
+                  <div
+                    onClick={passo === 2 ? () => handleCliqueCerto(3, () => setFotoSelecionada(emoji)) : undefined}
+                    style={{ width: '100%', aspectRatio: '1', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '40px', background: '#f5f5f5', cursor: passo === 2 ? 'pointer' : 'default', minHeight: '44px' }}
+                  >
                     {emoji}
                   </div>
                 )}

@@ -4,6 +4,8 @@ import PullToRefresh from '@/components/shared/PullToRefresh';
 import { createPageUrl } from '@/utils';
 import { base44 } from '@/api/base44Client';
 import BottomNav from '@/components/shared/BottomNav';
+import AvatarUsuario from '@/components/shared/AvatarUsuario';
+import { Coins } from 'lucide-react';
 
 const MODULOS = [
   { id: 'mod1', nome: 'Ferramentas Google', icone: '📱', rota: 'Modulo1Licao1' },
@@ -52,6 +54,8 @@ export default function Home() {
   const moedas = usuario.moedas || 0;
   const modulosFeitos = (usuario.modulos_completos || []).length;
   const progresso = Math.round((modulosFeitos / 9) * 100);
+  const proximoMarco = Math.ceil((moedas + 1) / 500) * 500;
+  const progressoMoedas = Math.min(100, Math.round((moedas / proximoMarco) * 100));
   const moduloAtivo = MODULOS.find(m => !(usuario.modulos_completos || []).includes(m.id));
 
   return (
@@ -66,9 +70,8 @@ export default function Home() {
               {primeiroNome(usuario.nome)} {avatar}
             </h1>
           </div>
-          <div style={{ background: 'rgba(255,255,255,0.2)', borderRadius: '20px', padding: '8px 14px', display: 'flex', alignItems: 'center', gap: '6px', border: '1px solid rgba(255,255,255,0.2)' }}>
-            <span style={{ fontSize: '18px' }}>🪙</span>
-            <span style={{ color: '#FFD700', fontWeight: '800', fontSize: '16px' }}>{moedas}</span>
+          <div onClick={() => navigate(createPageUrl('Perfil'))} style={{ cursor: 'pointer', flexShrink: 0 }}>
+            <AvatarUsuario usuario={usuario} tamanho={48} style={{ border: '2px solid rgba(255,255,255,0.5)' }} />
           </div>
         </div>
       </div>
@@ -100,6 +103,20 @@ export default function Home() {
             </div>
             <div style={{ height: '10px', background: 'rgba(255,255,255,0.2)', borderRadius: '5px', overflow: 'hidden' }}>
               <div style={{ height: '100%', width: `${progresso}%`, background: 'linear-gradient(90deg, #F3984B, #FFD700)', borderRadius: '5px', boxShadow: '0 0 8px rgba(243,152,75,0.6)' }} />
+            </div>
+          </div>
+          {/* Linha de moedas */}
+          <div style={{ marginTop: '12px', paddingTop: '12px', borderTop: '1px solid rgba(255,255,255,0.15)' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px' }}>
+              <Coins size={20} color="#FFD700" />
+              <span style={{ color: '#FFD700', fontSize: '16px', fontWeight: '800' }}>{moedas} moedas</span>
+            </div>
+            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '6px' }}>
+              <span style={{ color: 'rgba(255,255,255,0.6)', fontSize: '11px', fontWeight: '600' }}>próximo marco: {proximoMarco}</span>
+              <span style={{ color: '#FFD700', fontSize: '11px', fontWeight: '700' }}>{progressoMoedas}%</span>
+            </div>
+            <div style={{ height: '8px', background: 'rgba(255,255,255,0.15)', borderRadius: '4px', overflow: 'hidden' }}>
+              <div style={{ height: '100%', width: `${progressoMoedas}%`, background: 'linear-gradient(90deg, #F3984B, #FFD700)', borderRadius: '4px' }} />
             </div>
           </div>
         </div>

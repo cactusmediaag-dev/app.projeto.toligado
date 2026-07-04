@@ -202,14 +202,15 @@ export default function Turma() {
     const reagido = (tipo) => minhasReacoes[`${alvo}:${tipo}`];
     const count = (tipo) => reacoes[alvo]?.[tipo] || 0;
     const botoes = [
-      { tipo: 'aplauso', icon: Hand, label: 'Aplaudir', cor: '#F3984B' },
-      { tipo: 'coracao', icon: Heart, label: 'Curtir', cor: '#E74C3C' },
-      { tipo: 'forca', icon: Zap, label: 'Força', cor: '#27AE60' },
+      { tipo: 'aplauso', icon: Hand, cor: '#F3984B', bgTint: '#FFF6EC' },
+      { tipo: 'coracao', icon: Heart, cor: '#E74C3C', bgTint: '#FFF0F0' },
+      { tipo: 'forca', icon: Zap, cor: '#27AE60', bgTint: '#EFFAF3' },
     ];
     return (
       <div style={{ display: 'flex', gap: '6px' }}>
         {botoes.map(b => {
           const ativo = reagido(b.tipo);
+          const temCount = count(b.tipo) > 0;
           const Icon = b.icon;
           return (
             <button
@@ -218,17 +219,17 @@ export default function Turma() {
               disabled={ativo}
               style={{
                 display: 'flex', alignItems: 'center', gap: '4px',
-                padding: '8px 12px', borderRadius: '999px',
-                border: `2px solid ${ativo ? b.cor : '#f0e8ff'}`,
-                background: ativo ? b.cor : '#f9f5ff',
-                color: ativo ? '#fff' : b.cor,
-                fontSize: '13px', fontWeight: '700',
+                padding: '8px 14px', borderRadius: '20px',
+                border: `1px solid ${ativo ? b.cor : '#EEE'}`,
+                background: ativo ? b.bgTint : temCount ? b.bgTint : 'transparent',
+                color: (ativo || temCount) ? b.cor : '#777',
+                fontSize: '14px', fontWeight: '700',
                 cursor: ativo ? 'default' : 'pointer',
-                minHeight: '40px', minWidth: '44px',
+                minHeight: '40px',
                 touchAction: 'manipulation',
               }}
             >
-              <Icon size={16} color={ativo ? '#fff' : b.cor} />
+              <Icon size={18} color={(ativo || temCount) ? b.cor : '#777'} />
               <span>{count(b.tipo)}</span>
             </button>
           );
@@ -238,17 +239,17 @@ export default function Turma() {
   };
 
   if (loading) return (
-    <div style={{ minHeight: '100dvh', background: 'linear-gradient(160deg, #5C2E7F, #A67EC8)', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '16px' }}>
-      <div style={{ width: '40px', height: '40px', border: '4px solid rgba(255,255,255,0.3)', borderTopColor: '#fff', borderRadius: '50%', animation: 'spin 0.8s linear infinite' }} />
-      <p style={{ color: '#fff', fontSize: '15px', opacity: 0.8 }}>Carregando a turma...</p>
+    <div style={{ minHeight: '100dvh', background: '#F6F3FA', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '16px' }}>
+      <div style={{ width: '40px', height: '40px', border: '4px solid #EFE9F5', borderTopColor: '#5C2E7F', borderRadius: '50%', animation: 'spin 0.8s linear infinite' }} />
+      <p style={{ color: '#5C2E7F', fontSize: '15px', opacity: 0.7 }}>Carregando a turma...</p>
     </div>
   );
 
   if (erro) return (
-    <div style={{ minHeight: '100dvh', background: 'linear-gradient(160deg, #5C2E7F, #A67EC8)', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '16px', padding: '24px' }}>
-      <AlertCircle size={48} color="#fff" />
-      <p style={{ color: '#fff', fontSize: '16px', fontWeight: '700', textAlign: 'center' }}>Não foi possível carregar o feed.</p>
-      <button onClick={carregarTudo} style={{ padding: '14px 28px', borderRadius: '16px', border: 'none', background: '#F3984B', color: '#fff', fontSize: '16px', fontWeight: '800', cursor: 'pointer', minHeight: '48px' }}>
+    <div style={{ minHeight: '100dvh', background: '#F6F3FA', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '16px', padding: '24px' }}>
+      <AlertCircle size={48} color="#5C2E7F" />
+      <p style={{ color: '#5C2E7F', fontSize: '16px', fontWeight: '700', textAlign: 'center' }}>Não foi possível carregar o feed.</p>
+      <button onClick={carregarTudo} style={{ padding: '14px 28px', borderRadius: '16px', border: 'none', background: '#5C2E7F', color: '#fff', fontSize: '16px', fontWeight: '800', cursor: 'pointer', minHeight: '48px' }}>
         Tentar de novo
       </button>
       <BottomNav />
@@ -258,16 +259,16 @@ export default function Turma() {
   if (!usuario) return null;
 
   return (
-    <div style={{ minHeight: '100dvh', background: 'linear-gradient(160deg, #5C2E7F 0%, #A67EC8 100%)', overflowX: 'hidden' }}>
+    <div style={{ minHeight: '100dvh', background: '#F6F3FA', overflowX: 'hidden' }}>
 
       {/* HEADER */}
-      <div style={{ padding: 'calc(env(safe-area-inset-top, 44px) + 12px) 20px 16px', flexShrink: 0 }}>
-        <h1 style={{ color: '#fff', fontSize: '24px', fontWeight: '900', margin: 0, letterSpacing: '-0.5px' }}>
-          👥 Turma
+      <div style={{ padding: 'calc(env(safe-area-inset-top, 44px) + 12px) 20px 12px', flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+        <h1 style={{ color: '#5C2E7F', fontSize: '20px', fontWeight: '800', margin: 0, letterSpacing: '-0.3px' }}>
+          Turma
         </h1>
-        <p style={{ color: 'rgba(255,255,255,0.8)', fontSize: '14px', margin: '4px 0 0', fontWeight: '600' }}>
-          O progresso da nossa comunidade
-        </p>
+        <div onClick={() => navigate(createPageUrl('Perfil'))} style={{ cursor: 'pointer', flexShrink: 0 }}>
+          <AvatarUsuario usuario={usuario} tamanho={40} />
+        </div>
       </div>
 
       <div style={{ flex: 1, overflow: 'hidden' }}>
@@ -275,9 +276,9 @@ export default function Turma() {
           <div style={{ padding: '0 16px', paddingBottom: 'calc(env(safe-area-inset-bottom, 20px) + 100px)', display: 'flex', flexDirection: 'column', gap: '12px' }}>
 
             {/* COMPOSER */}
-            <div style={{ background: '#fff', borderRadius: '20px', padding: '16px', boxShadow: '0 4px 16px rgba(0,0,0,0.08)' }}>
+            <div style={{ background: '#fff', borderRadius: '18px', padding: '16px', border: '1px solid #EFE9F5', boxShadow: '0 1px 4px rgba(92,46,127,0.06)' }}>
               <div style={{ display: 'flex', gap: '12px', alignItems: 'flex-start' }}>
-                <AvatarUsuario usuario={usuario} tamanho={44} style={{ flexShrink: 0 }} />
+                <AvatarUsuario usuario={usuario} tamanho={40} style={{ flexShrink: 0 }} />
                 <div style={{ flex: 1 }}>
                   <textarea
                     ref={composerRef}
@@ -287,7 +288,7 @@ export default function Turma() {
                     placeholder="Escreva um pensamento ou uma dica..."
                     style={{
                       width: '100%', minHeight: composerExpandido ? '80px' : '48px',
-                      padding: '12px', borderRadius: '14px', border: '2px solid #f0e8ff',
+                      padding: '12px', borderRadius: '14px', border: '1px solid #EFE9F5',
                       fontSize: '18px', fontFamily: 'inherit', resize: 'none',
                       outline: 'none', boxSizing: 'border-box', color: '#333',
                       transition: 'min-height 0.2s ease',
@@ -355,10 +356,10 @@ export default function Turma() {
 
             {/* FEED VAZIO */}
             {feed.length === 0 && (
-              <div style={{ textAlign: 'center', padding: '40px 24px', color: '#fff' }}>
-                <Trophy size={48} color="#fff" style={{ opacity: 0.5, margin: '0 auto 12px' }} />
+              <div style={{ textAlign: 'center', padding: '40px 24px', color: '#5C2E7F' }}>
+                <Trophy size={48} color="#B39DDB" style={{ opacity: 0.6, margin: '0 auto 12px' }} />
                 <p style={{ fontSize: '16px', fontWeight: '700', marginBottom: '4px' }}>A turma está começando!</p>
-                <p style={{ fontSize: '14px', opacity: 0.7 }}>Seja o primeiro a compartilhar um pensamento ou dica.</p>
+                <p style={{ fontSize: '14px', opacity: 0.6 }}>Seja o primeiro a compartilhar um pensamento ou dica.</p>
               </div>
             )}
 
@@ -369,45 +370,47 @@ export default function Turma() {
 
               return (
                 <div key={item.id} style={{
-                  background: isConquista ? 'linear-gradient(135deg, #F3E5F5, #E8F5E9)' : '#fff',
-                  borderRadius: '20px', padding: '16px',
-                  border: isDica ? '2px solid #FFB74D' : '1px solid #f0e8ff',
-                  boxShadow: '0 2px 10px rgba(0,0,0,0.06)',
+                  background: '#fff',
+                  borderRadius: '18px', padding: '16px',
+                  border: '1px solid #EFE9F5',
+                  boxShadow: '0 1px 4px rgba(92,46,127,0.06)',
+                  borderLeft: isConquista ? '3px solid #B39DDB' : '1px solid #EFE9F5',
+                  position: 'relative',
                 }}>
                   {/* Header do card */}
                   <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '12px' }}>
-                    <AvatarUsuario usuario={item.autor_usuario} tamanho={40} style={{ flexShrink: 0 }} />
+                    <AvatarUsuario usuario={item.autor_usuario} tamanho={44} style={{ flexShrink: 0 }} />
                     <div style={{ flex: 1, minWidth: 0 }}>
                       <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap' }}>
-                        <p style={{ fontWeight: '800', fontSize: '15px', color: '#333', margin: 0 }}>
+                        <p style={{ fontWeight: '700', fontSize: '16px', color: '#222', margin: 0 }}>
                           {item.tipo_card === 'conquista' ? nomeExibicao(item.autor_nome) : item.autor_nome_exibicao}
                         </p>
                         {isConquista && (
-                          <span style={{ background: '#5C2E7F', color: '#fff', fontSize: '11px', fontWeight: '700', padding: '2px 8px', borderRadius: '10px' }}>
+                          <span style={{ background: '#F3EEFA', color: '#5C2E7F', fontSize: '12px', fontWeight: '700', padding: '2px 8px', borderRadius: '8px' }}>
                             Nível {item.nivel}
                           </span>
                         )}
                         {isDica && (
-                          <span style={{ background: '#FFF3E0', color: '#E65100', fontSize: '11px', fontWeight: '800', padding: '2px 8px', borderRadius: '10px', display: 'flex', alignItems: 'center', gap: '3px' }}>
+                          <span style={{ background: '#FFF3E0', color: '#E65100', fontSize: '11px', fontWeight: '800', padding: '2px 8px', borderRadius: '8px', display: 'flex', alignItems: 'center', gap: '3px' }}>
                             <Lightbulb size={12} color="#E65100" /> DICA
                           </span>
                         )}
                       </div>
-                      <p style={{ fontSize: '12px', color: '#999', margin: 0 }}>
+                      <p style={{ fontSize: '13px', color: '#999', margin: 0 }}>
                         {tempoRelativo(item.created_date || item.data)}
                       </p>
                     </div>
                     {isConquista && (
-                      <div style={{ width: '36px', height: '36px', borderRadius: '50%', background: 'linear-gradient(135deg, #F3984B, #e67e22)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                        <Trophy size={20} color="#fff" />
-                      </div>
+                      <span style={{ background: '#F3EEFA', color: '#5C2E7F', fontSize: '12px', fontWeight: '700', padding: '4px 8px', borderRadius: '8px', display: 'flex', alignItems: 'center', gap: '4px', flexShrink: 0 }}>
+                        <Trophy size={14} color="#5C2E7F" /> Conquista
+                      </span>
                     )}
                   </div>
 
                   {/* Conteúdo */}
                   {isConquista ? (
-                    <p style={{ fontSize: '16px', color: '#5C2E7F', fontWeight: '700', margin: '0 0 12px', lineHeight: 1.4 }}>
-                      🎉 Concluiu o Módulo {item.modulo}!
+                    <p style={{ fontSize: '17px', color: '#333', fontWeight: '700', margin: '0 0 12px', lineHeight: 1.4 }}>
+                      Concluiu o Módulo {item.modulo}!
                     </p>
                   ) : (
                     <p style={{ fontSize: '18px', color: '#333', margin: '0 0 12px', lineHeight: 1.5, wordBreak: 'break-word' }}>
@@ -420,16 +423,16 @@ export default function Turma() {
                     <BotoesReacao alvo={item.alvo_reacao} />
                     {!isConquista && (
                       <button
-                        onClick={() => handleReagir(item.alvo_reacao, 'denuncia')}
+                        onClick={() => { if (confirm('Deseja denunciar este post?')) handleReagir(item.alvo_reacao, 'denuncia'); }}
                         disabled={minhasReacoes[`${item.alvo_reacao}:denuncia`]}
                         style={{
-                          background: 'none', border: 'none', color: '#bbb',
-                          fontSize: '12px', fontWeight: '600', cursor: 'pointer',
-                          display: 'flex', alignItems: 'center', gap: '4px',
-                          minHeight: '36px', padding: '4px 8px',
+                          background: 'none', border: 'none', color: '#CCC',
+                          cursor: 'pointer',
+                          display: 'flex', alignItems: 'center', justifyContent: 'center',
+                          minHeight: '36px', width: '36px', padding: '4px',
                         }}
                       >
-                        <Flag size={14} color="#bbb" /> {minhasReacoes[`${item.alvo_reacao}:denuncia`] ? 'Denunciado' : 'Denunciar'}
+                        <Flag size={14} color={minhasReacoes[`${item.alvo_reacao}:denuncia`] ? '#999' : '#CCC'} />
                       </button>
                     )}
                   </div>
@@ -441,8 +444,8 @@ export default function Turma() {
             {feed.length > limite && (
               <button onClick={() => setLimite(prev => prev + 30)} style={{
                 width: '100%', padding: '14px', borderRadius: '16px',
-                border: '2px solid rgba(255,255,255,0.3)', background: 'rgba(255,255,255,0.15)',
-                color: '#fff', fontSize: '15px', fontWeight: '700', cursor: 'pointer',
+                border: '1px solid #EFE9F5', background: '#fff',
+                color: '#5C2E7F', fontSize: '15px', fontWeight: '700', cursor: 'pointer',
                 minHeight: '48px',
               }}>
                 Ver mais

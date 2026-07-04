@@ -5,6 +5,7 @@ import PullToRefresh from '@/components/shared/PullToRefresh';
 import { base44 } from '@/api/base44Client';
 import BottomNav from '@/components/shared/BottomNav';
 import AvatarUsuario from '@/components/shared/AvatarUsuario';
+import { nomeExibicao } from '@/components/shared/nomeExibicao';
 
 export default function Ranking() {
   const navigate = useNavigate();
@@ -30,7 +31,7 @@ export default function Ranking() {
         .map((u, i) => ({
           posicao: i + 1,
           id: u.id,
-          nome: u.nome || 'Participante',
+          nome: nomeExibicao(u.nome),
           sexo: u.sexo || 'Homem',
           foto_url: u.foto_url || null,
           avatar: u.avatar || null,

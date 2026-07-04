@@ -6,6 +6,7 @@ import BottomNav from '@/components/shared/BottomNav';
 import AvatarUsuario from '@/components/shared/AvatarUsuario';
 import PullToRefresh from '@/components/shared/PullToRefresh';
 import { Trophy, Flag, Heart, Zap, Hand, AlertCircle, Send, Lightbulb, MessageSquare } from 'lucide-react';
+import { nomeExibicao } from '@/components/shared/nomeExibicao';
 
 const NOMES_MODULOS = {
   mod1: '1', mod2: '2', mod3: '3', mod4: '4', mod5: '5',
@@ -101,7 +102,7 @@ export default function Turma() {
           id: `conquista_${u.id}_${ultimoMod}`,
           tipo: 'conquista',
           autor_id: u.id,
-          autor_nome: u.nome || 'Aluno',
+          autor_nome: nomeExibicao(u.nome),
           autor_usuario: u,
           modulo: numMod,
           nivel: u.nivel_atual || 1,
@@ -118,7 +119,8 @@ export default function Turma() {
     ...p,
     tipo_card: 'post',
     alvo_reacao: p.id,
-    autor_usuario: usuarios[p.autor_id] || { nome: p.autor_nome, sexo: 'Homem' },
+    autor_usuario: usuarios[p.autor_id] || { nome: nomeExibicao(p.autor_nome), sexo: 'Homem' },
+    autor_nome_exibicao: nomeExibicao(p.autor_nome),
   })), ...gerarCardsConquista().map(c => ({ ...c, tipo_card: c.tipo }))]
     .filter(item => {
       // Filtrar posts com 3+ denúncias
@@ -151,7 +153,7 @@ export default function Turma() {
     try {
       const novo = await base44.entities.Post.create({
         autor_id: usuario.id,
-        autor_nome: usuario.nome,
+        autor_nome: nomeExibicao(usuario.nome),
         tipo: tipoPost,
         conteudo,
       });
@@ -378,7 +380,7 @@ export default function Turma() {
                     <div style={{ flex: 1, minWidth: 0 }}>
                       <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap' }}>
                         <p style={{ fontWeight: '800', fontSize: '15px', color: '#333', margin: 0 }}>
-                          {item.autor_nome}
+                          {item.tipo_card === 'conquista' ? nomeExibicao(item.autor_nome) : item.autor_nome_exibicao}
                         </p>
                         {isConquista && (
                           <span style={{ background: '#5C2E7F', color: '#fff', fontSize: '11px', fontWeight: '700', padding: '2px 8px', borderRadius: '10px' }}>

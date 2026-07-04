@@ -6,6 +6,8 @@ import { base44 } from "@/api/base44Client";
 import SimuladorImersivo from "@/components/simulador/SimuladorImersivo";
 import ElementoClicavel from "@/components/simulador/ElementoClicavel";
 import ValidacaoQuiz from "@/components/simulador/ValidacaoQuiz";
+import AndroidHomeScreen from "@/components/simulador/AndroidHomeScreen";
+import { MessageCircle, Video, Mic, MicOff, PhoneOff, ArrowLeft, MoreVertical, CheckCircle } from 'lucide-react';
 
 export default function Modulo5Licao4() {
   const navigate = useNavigate();
@@ -71,28 +73,38 @@ export default function Modulo5Licao4() {
       onVoltar={() => navigate(createPageUrl("Modulos"))}
     >
       {!whatsappAberto && !conversaAberta && (
-        <div className="w-full h-full bg-gradient-to-b from-green-50 to-green-100 p-6 pt-12">
-          <div className="grid grid-cols-4 gap-6 mt-8">
-            {["💬", "🔍", "📷", "📱", "📧", "🎵", "📍", "⚙️"].map((emoji, i) => (
-              <div key={i} className="flex flex-col items-center gap-2">
-                <div className="w-14 h-14 bg-white rounded-2xl flex items-center justify-center text-2xl shadow-md">{emoji}</div>
-              </div>
-            ))}
-          </div>
+        <div style={{ height: '100%', position: 'relative' }}>
+          <AndroidHomeScreen
+            appsCustom={[
+              { nome: 'mensagem', label: 'WhatsApp', bg: '#25D366', id: 'whatsapp' },
+              { nome: 'busca', label: 'Google', bg: '#fff', corIcone: '#4285F4', id: 'google' },
+              { nome: 'camera', label: 'Câmera', bg: '#37474F', id: 'camera' },
+              { nome: 'chrome', label: 'Chrome', bg: '#4285F4', id: 'chrome' },
+              { nome: 'email', label: 'Email', bg: '#EA4335', id: 'email' },
+              { nome: 'musica', label: 'Música', bg: '#E91E63', id: 'music' },
+              { nome: 'mapa', label: 'Mapas', bg: '#34A853', id: 'maps' },
+              { nome: 'config', label: 'Config.', bg: '#607D8B', id: 'settings' },
+            ]}
+            appDestacado={passo === 1 ? 'whatsapp' : null}
+            onAppClick={() => {
+              if (passo === 1) { setWhatsappAberto(true); setConversaAberta(true); setPasso(1); }
+            }}
+          />
         </div>
       )}
 
-      {!conversaAberta && !conectado && !encerrado && (
-        <div className="w-full h-full bg-white pt-12">
-          <div className="bg-green-600 px-4 py-3">
-            <h2 className="text-xl font-bold text-white">WhatsApp</h2>
+      {!conversaAberta && !conectado && !encerrado && whatsappAberto && (
+        <div style={{ height: '100%', background: '#fff', display: 'flex', flexDirection: 'column' }}>
+          <div style={{ background: '#25D366', padding: '12px 16px', display: 'flex', alignItems: 'center', gap: '8px', flexShrink: 0 }}>
+            <MessageCircle size={22} color="#fff" />
+            <h2 style={{ fontSize: '20px', fontWeight: '700', color: '#fff', margin: 0 }}>WhatsApp</h2>
           </div>
-          <div className="p-4">
-            <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-2xl cursor-pointer" onClick={() => { setWhatsappAberto(true); setConversaAberta(true); setPasso(1); }}>
-              <div className="w-12 h-12 bg-pink-200 rounded-full flex items-center justify-center text-2xl">👩</div>
-              <div className="flex-1">
-                <p className="font-bold text-gray-800">Maria (filha)</p>
-                <p className="text-sm text-gray-500">Toque para abrir</p>
+          <div style={{ flex: 1, padding: '8px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '12px', background: '#f5f5f5', borderRadius: '12px', cursor: 'pointer' }} onClick={() => { setConversaAberta(true); }}>
+              <div style={{ width: '48px', height: '48px', borderRadius: '50%', background: '#E91E63', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontSize: '20px', fontWeight: '700', flexShrink: 0 }}>M</div>
+              <div style={{ flex: 1 }}>
+                <p style={{ fontSize: '16px', fontWeight: '700', color: '#1a1a1a', margin: 0 }}>Maria (filha)</p>
+                <p style={{ fontSize: '14px', color: '#666', margin: 0 }}>Toque para abrir</p>
               </div>
             </div>
           </div>
@@ -100,82 +112,97 @@ export default function Modulo5Licao4() {
       )}
 
       {conversaAberta && !conectado && !encerrado && (
-        <div className="w-full h-full bg-[#ECE5DD] pt-12 flex flex-col">
-          <div className="bg-green-600 px-4 py-3 flex items-center gap-3">
-            <button onClick={() => setConversaAberta(false)} className="text-white text-xl">←</button>
-            <div className="w-10 h-10 bg-pink-200 rounded-full flex items-center justify-center text-xl">👩</div>
-            <div className="flex-1">
-              <p className="font-bold text-white">Maria</p>
+        <div style={{ height: '100%', background: '#ECE5DD', display: 'flex', flexDirection: 'column' }}>
+          <div style={{ background: '#25D366', padding: '10px 16px', display: 'flex', alignItems: 'center', gap: '12px', flexShrink: 0 }}>
+            <button onClick={() => setConversaAberta(false)} style={{ background: 'none', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', padding: 0 }}>
+              <ArrowLeft size={24} color="#fff" />
+            </button>
+            <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: '#E91E63', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontSize: '18px', fontWeight: '700', flexShrink: 0 }}>M</div>
+            <div style={{ flex: 1 }}>
+              <p style={{ fontWeight: '700', color: '#fff', margin: 0, fontSize: '16px' }}>Maria</p>
             </div>
             {passo === 1 && (
-              <ElementoClicavel onClick={() => { setChamando(true); setTimeout(() => { setChamando(false); setConectado(true); setPasso(2); }, 2000); }} posicao="left">
-                <button className="text-white text-2xl">📹</button>
+              <ElementoClicavel onClick={() => { setChamando(true); setTimeout(() => { setChamando(false); setConectado(true); setPasso(2); }, 2000); }} mostrarSeta={false}>
+                <button style={{ background: 'none', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', padding: 0 }}>
+                  <Video size={24} color="#fff" />
+                </button>
               </ElementoClicavel>
             )}
+            {passo !== 1 && <Video size={24} color="rgba(255,255,255,0.5)" />}
           </div>
         </div>
       )}
 
       {chamando && !conectado && (
-        <div className="w-full h-full bg-gradient-to-b from-green-600 to-green-700 pt-12 flex items-center justify-center">
-          <div className="text-center">
-            <motion.div animate={{ scale: [1, 1.1, 1] }} transition={{ duration: 1, repeat: Infinity }} className="w-32 h-32 bg-pink-200 rounded-full flex items-center justify-center text-6xl mb-6 mx-auto">👩</motion.div>
-            <p className="text-white font-bold text-2xl mb-2">Maria</p>
-            <p className="text-white/80 text-lg">Chamando...</p>
+        <div style={{ height: '100%', background: 'linear-gradient(180deg, #25D366, #128C7E)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <div style={{ textAlign: 'center' }}>
+            <motion.div animate={{ scale: [1, 1.1, 1] }} transition={{ duration: 1, repeat: Infinity }} style={{ width: '120px', height: '120px', borderRadius: '50%', background: '#E91E63', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontSize: '48px', fontWeight: '700', marginBottom: '24px', margin: '0 auto 24px' }}>M</motion.div>
+            <p style={{ color: '#fff', fontWeight: '700', fontSize: '22px', marginBottom: '8px', margin: '0 0 8px' }}>Maria</p>
+            <p style={{ color: 'rgba(255,255,255,0.8)', fontSize: '17px' }}>Chamando...</p>
           </div>
         </div>
       )}
 
       {conectado && !encerrado && (
-        <div className="w-full h-full bg-black pt-12 relative">
-          <div className="w-full h-full bg-gradient-to-b from-pink-200 to-purple-300 flex items-center justify-center">
-            <div className="text-9xl">👩</div>
+        <div style={{ height: '100%', background: '#000', position: 'relative' }}>
+          <div style={{ width: '100%', height: '100%', background: 'linear-gradient(180deg, #F8BBD0, #CE93D8)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <div style={{ width: '120px', height: '120px', borderRadius: '50%', background: '#E91E63', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontSize: '48px', fontWeight: '700' }}>M</div>
           </div>
 
-          <div className="absolute top-16 right-4 w-24 h-32 bg-gradient-to-b from-blue-200 to-blue-400 rounded-2xl shadow-2xl flex items-center justify-center border-2 border-white">
-            <div className="text-4xl">😊</div>
+          <div style={{ position: 'absolute', top: '60px', right: '16px', width: '90px', height: '120px', background: 'linear-gradient(180deg, #90CAF9, #42A5F5)', borderRadius: '16px', boxShadow: '0 8px 32px rgba(0,0,0,0.4)', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '2px solid #fff' }}>
+            <div style={{ color: '#fff', fontSize: '32px', fontWeight: '700' }}>V</div>
           </div>
 
           {mudo && (
-            <div className="absolute top-16 left-4 bg-gray-800/80 text-white px-3 py-2 rounded-full text-sm font-bold">
-              🔇 Microfone desligado
+            <div style={{ position: 'absolute', top: '60px', left: '16px', background: 'rgba(30,30,30,0.8)', color: '#fff', padding: '8px 14px', borderRadius: '20px', fontSize: '14px', fontWeight: '700', display: 'flex', alignItems: 'center', gap: '6px' }}>
+              <MicOff size={16} color="#fff" /> Microfone desligado
             </div>
           )}
 
-          <div className="absolute bottom-8 left-0 right-0 flex items-center justify-center gap-6">
+          <div style={{ position: 'absolute', bottom: '40px', left: 0, right: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '24px' }}>
             {passo === 2 && !mudo && (
-              <ElementoClicavel onClick={() => { setMudo(true); handleCliqueCerto(3, null); }} posicao="top">
-                <button className="w-16 h-16 bg-gray-800/70 rounded-full flex items-center justify-center text-2xl">🔇</button>
+              <ElementoClicavel onClick={() => { setMudo(true); handleCliqueCerto(3, null); }} mostrarSeta={false}>
+                <button style={{ width: '60px', height: '60px', background: 'rgba(30,30,30,0.7)', borderRadius: '50%', border: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
+                  <MicOff size={26} color="#fff" />
+                </button>
               </ElementoClicavel>
             )}
             {passo === 3 && mudo && (
-              <ElementoClicavel onClick={() => { setMudo(false); handleCliqueCerto(4, null); }} posicao="top">
-                <button className="w-16 h-16 bg-gray-800/70 rounded-full flex items-center justify-center text-2xl">🎤</button>
+              <ElementoClicavel onClick={() => { setMudo(false); handleCliqueCerto(4, null); }} mostrarSeta={false}>
+                <button style={{ width: '60px', height: '60px', background: 'rgba(30,30,30,0.7)', borderRadius: '50%', border: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
+                  <Mic size={26} color="#fff" />
+                </button>
               </ElementoClicavel>
             )}
             {passo !== 2 && passo !== 3 && (
-              <button className="w-16 h-16 bg-gray-800/70 rounded-full flex items-center justify-center text-2xl">🎤</button>
+              <button style={{ width: '60px', height: '60px', background: 'rgba(30,30,30,0.7)', borderRadius: '50%', border: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <Mic size={26} color="#fff" />
+              </button>
             )}
 
-            <button className="w-16 h-16 bg-gray-800/70 rounded-full flex items-center justify-center text-2xl">📷</button>
+            <button style={{ width: '60px', height: '60px', background: 'rgba(30,30,30,0.7)', borderRadius: '50%', border: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <Video size={26} color="#fff" />
+            </button>
 
             {passo === 4 && (
-              <ElementoClicavel onClick={() => { setEncerrado(true); setTimeout(() => setMostrarValidacao(true), 2000); }} posicao="top">
-                <button className="w-16 h-16 bg-red-500 rounded-full flex items-center justify-center text-2xl">📞</button>
+              <ElementoClicavel onClick={() => { setEncerrado(true); setTimeout(() => setMostrarValidacao(true), 2000); }} mostrarSeta={false}>
+                <button style={{ width: '60px', height: '60px', background: '#EF4444', borderRadius: '50%', border: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
+                  <PhoneOff size={26} color="#fff" />
+                </button>
               </ElementoClicavel>
             )}
-            {passo !== 4 && <button className="w-16 h-16 bg-red-500 rounded-full flex items-center justify-center text-2xl">📞</button>}
+            {passo !== 4 && <button style={{ width: '60px', height: '60px', background: '#EF4444', borderRadius: '50%', border: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><PhoneOff size={26} color="#fff" /></button>}
           </div>
         </div>
       )}
 
       {encerrado && (
-        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="w-full h-full bg-gradient-to-b from-gray-800 to-gray-900 pt-12 flex items-center justify-center">
-          <div className="text-center">
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} style={{ height: '100%', background: 'linear-gradient(180deg, #1a1a1a, #333)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <div style={{ textAlign: 'center' }}>
             <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }}>
-              <div className="text-8xl mb-6">✅</div>
-              <p className="text-white font-bold text-2xl mb-3">Chamada encerrada</p>
-              <p className="text-white/70 text-lg">Duração: 0:45</p>
+              <CheckCircle size={64} color="#27AE60" style={{ margin: '0 auto 24px' }} />
+              <p style={{ color: '#fff', fontWeight: '700', fontSize: '22px', marginBottom: '12px', margin: '0 0 12px' }}>Chamada encerrada</p>
+              <p style={{ color: 'rgba(255,255,255,0.7)', fontSize: '17px' }}>Duração: 0:45</p>
             </motion.div>
           </div>
         </motion.div>

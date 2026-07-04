@@ -6,6 +6,8 @@ import { base44 } from "@/api/base44Client";
 import SimuladorImersivo from "@/components/simulador/SimuladorImersivo";
 import ElementoClicavel from "@/components/simulador/ElementoClicavel";
 import ValidacaoQuiz from "@/components/simulador/ValidacaoQuiz";
+import AndroidHomeScreen from "@/components/simulador/AndroidHomeScreen";
+import { Heart, Send, Plus, Camera, X, ArrowLeft, CheckCircle, Film, Trash2, ArrowRight } from 'lucide-react';
 
 export default function Modulo5Licao3() {
   const navigate = useNavigate();
@@ -75,89 +77,98 @@ export default function Modulo5Licao3() {
       onVoltar={() => navigate(createPageUrl("Modulos"))}
     >
       {!instagramAberto && !menuAberto && (
-        <div className="w-full h-full bg-gradient-to-b from-purple-50 to-pink-50 p-6 pt-12">
-          <div className="grid grid-cols-4 gap-6 mt-8">
-            {passo === 1 && (
-              <ElementoClicavel onClick={() => handleCliqueCerto(2, () => setInstagramAberto(true))} posicao="bottom">
-                <div className="flex flex-col items-center gap-2">
-                  <div className="w-14 h-14 bg-gradient-to-br from-purple-500 via-pink-500 to-orange-500 rounded-2xl flex items-center justify-center text-2xl shadow-md text-white">📷</div>
-                </div>
-              </ElementoClicavel>
-            )}
-            {["📘", "💬", "📱", "📧", "🎵", "📍", "⚙️"].map((emoji, i) => (
-              <div key={i} className="flex flex-col items-center gap-2">
-                <div className="w-14 h-14 bg-white rounded-2xl flex items-center justify-center text-2xl shadow-md">{emoji}</div>
-              </div>
-            ))}
-          </div>
+        <div style={{ height: '100%', position: 'relative' }}>
+          <AndroidHomeScreen
+            appsCustom={[
+              { nome: 'instagram', label: 'Instagram', bg: 'linear-gradient(45deg,#F58529,#DD2A7B,#8134AF)', id: 'instagram' },
+              { nome: 'facebook', label: 'Facebook', bg: '#1877F2', id: 'facebook' },
+              { nome: 'mensagem', label: 'WhatsApp', bg: '#25D366', id: 'whatsapp' },
+              { nome: 'camera', label: 'Câmera', bg: '#37474F', id: 'camera' },
+              { nome: 'chrome', label: 'Chrome', bg: '#4285F4', id: 'chrome' },
+              { nome: 'email', label: 'Email', bg: '#EA4335', id: 'email' },
+              { nome: 'musica', label: 'Música', bg: '#E91E63', id: 'music' },
+              { nome: 'config', label: 'Config.', bg: '#607D8B', id: 'settings' },
+            ]}
+            appDestacado={passo === 1 ? 'instagram' : null}
+            onAppClick={(id) => {
+              if (passo === 1 && id === 'instagram') handleCliqueCerto(2, () => setInstagramAberto(true));
+            }}
+          />
         </div>
       )}
 
       {instagramAberto && !menuAberto && !cameraAberta && (
-        <div className="w-full h-full bg-white pt-12">
-          <div className="px-4 py-3 border-b flex items-center justify-between">
-            <h2 className="text-xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">Instagram</h2>
-            {passo === 2 && (
-              <ElementoClicavel onClick={() => handleCliqueCerto(3, () => setMenuAberto(true))} posicao="left">
-                <button className="text-2xl">➕</button>
-              </ElementoClicavel>
-            )}
-            {passo !== 2 && <button className="text-2xl">➕</button>}
+        <div style={{ height: '100%', background: '#fff', display: 'flex', flexDirection: 'column' }}>
+          <div style={{ padding: '8px 16px', borderBottom: '1px solid #e5e5e5', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexShrink: 0 }}>
+            <h2 style={{ fontSize: '24px', fontWeight: '800', margin: 0, fontFamily: 'cursive' }}>Instagram</h2>
+            <div style={{ display: 'flex', gap: '16px' }}>
+              <Heart size={24} color="#1a1a1a" />
+              {passo === 2 && (
+                <ElementoClicavel onClick={() => handleCliqueCerto(3, () => setMenuAberto(true))} mostrarSeta={false}>
+                  <button style={{ background: 'none', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', padding: 0 }}>
+                    <Plus size={26} color="#1a1a1a" />
+                  </button>
+                </ElementoClicavel>
+              )}
+              {passo !== 2 && <button style={{ background: 'none', border: 'none', display: 'flex', alignItems: 'center' }}><Plus size={26} color="#ccc" /></button>}
+            </div>
           </div>
         </div>
       )}
 
       {menuAberto && !cameraAberta && (
-        <motion.div initial={{ y: "100%" }} animate={{ y: 0 }} className="absolute inset-0 bg-white pt-12 z-50">
-          <div className="px-4 py-3 border-b flex items-center justify-between">
-            <button onClick={() => setMenuAberto(false)} className="text-xl">✕</button>
-            <p className="font-bold text-gray-800">Criar</p>
+        <motion.div initial={{ y: "100%" }} animate={{ y: 0 }} style={{ position: 'absolute', inset: 0, background: '#fff', zIndex: 50, display: 'flex', flexDirection: 'column' }}>
+          <div style={{ padding: '12px 16px', borderBottom: '1px solid #e5e5e5', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexShrink: 0 }}>
+            <button onClick={() => setMenuAberto(false)} style={{ background: 'none', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', padding: 0 }}>
+              <X size={24} color="#1a1a1a" />
+            </button>
+            <p style={{ fontWeight: '700', color: '#1a1a1a' }}>Criar</p>
             <div />
           </div>
-          <div className="p-4 space-y-3">
-            <div className="p-4 bg-gray-50 rounded-2xl flex items-center gap-3">
-              <span className="text-3xl">📷</span>
-              <span className="text-lg font-bold text-gray-700">Foto</span>
+          <div style={{ flex: 1, padding: '12px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
+            <div style={{ padding: '16px', background: '#F8F9FA', borderRadius: '12px', display: 'flex', alignItems: 'center', gap: '14px' }}>
+              <Camera size={24} color="#1a1a1a" />
+              <span style={{ fontSize: '16px', fontWeight: '700', color: '#1a1a1a' }}>Foto</span>
             </div>
             {passo === 3 && (
-              <ElementoClicavel onClick={() => handleCliqueCerto(4, () => { setMenuAberto(false); setCameraAberta(true); })} posicao="right">
-                <div className="p-4 bg-red-50 border-2 border-red-300 rounded-2xl flex items-center gap-3 cursor-pointer">
-                  <span className="text-3xl">🎬</span>
-                  <span className="text-lg font-bold text-gray-700">Reels</span>
+              <ElementoClicavel onClick={() => handleCliqueCerto(4, () => { setMenuAberto(false); setCameraAberta(true); })} mostrarSeta={false}>
+                <div style={{ padding: '16px', background: '#FEF2F2', border: '2px solid #FCA5A5', borderRadius: '12px', display: 'flex', alignItems: 'center', gap: '14px', cursor: 'pointer' }}>
+                  <Film size={24} color="#EF4444" />
+                  <span style={{ fontSize: '16px', fontWeight: '700', color: '#1a1a1a' }}>Reels</span>
                 </div>
               </ElementoClicavel>
             )}
-            <div className="p-4 bg-gray-50 rounded-2xl flex items-center gap-3">
-              <span className="text-3xl">📺</span>
-              <span className="text-lg font-bold text-gray-700">Vídeo</span>
+            <div style={{ padding: '16px', background: '#F8F9FA', borderRadius: '12px', display: 'flex', alignItems: 'center', gap: '14px' }}>
+              <Film size={24} color="#1a1a1a" />
+              <span style={{ fontSize: '16px', fontWeight: '700', color: '#1a1a1a' }}>Vídeo</span>
             </div>
-            <div className="p-4 bg-gray-50 rounded-2xl flex items-center gap-3">
-              <span className="text-3xl">📖</span>
-              <span className="text-lg font-bold text-gray-700">Story</span>
+            <div style={{ padding: '16px', background: '#F8F9FA', borderRadius: '12px', display: 'flex', alignItems: 'center', gap: '14px' }}>
+              <Plus size={24} color="#1a1a1a" />
+              <span style={{ fontSize: '16px', fontWeight: '700', color: '#1a1a1a' }}>Story</span>
             </div>
           </div>
         </motion.div>
       )}
 
       {cameraAberta && !gravacaoParada && !legendaAberta && (
-        <div className="w-full h-full bg-gradient-to-b from-blue-200 to-purple-300 pt-12 relative flex items-center justify-center">
-          <div className="absolute top-16 left-0 right-0 text-center">
-            <p className="text-white font-bold text-lg">🎬 Reels</p>
+        <div style={{ height: '100%', background: '#111', position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <div style={{ position: 'absolute', top: '60px', left: 0, right: 0, textAlign: 'center', zIndex: 10 }}>
+            <p style={{ color: '#fff', fontWeight: '700', fontSize: '18px' }}>Reels</p>
             {gravando && (
               <motion.p
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                className="text-white font-black text-3xl mt-2"
+                style={{ color: '#fff', fontWeight: '900', fontSize: '28px', marginTop: '8px' }}
               >
                 0:0{tempo}
               </motion.p>
             )}
-            {!gravando && <p className="text-white/70 font-semibold mt-2">0:00</p>}
+            {!gravando && <p style={{ color: 'rgba(255,255,255,0.7)', fontWeight: '600', marginTop: '8px' }}>0:00</p>}
           </div>
 
-          <div className="text-9xl">🎥</div>
+          <div style={{ fontSize: '72px' }}>🎥</div>
 
-          <div className="absolute bottom-8 left-0 right-0 flex items-center justify-center">
+          <div style={{ position: 'absolute', bottom: '40px', left: 0, right: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             {passo === 4 && !gravando && (
               <ElementoClicavel onClick={() => {
                 setGravando(true);
@@ -170,18 +181,18 @@ export default function Modulo5Licao3() {
                     setPasso(5);
                   }
                 }, 1000);
-              }} posicao="top">
-                <div className="w-20 h-20 bg-white rounded-full border-4 border-gray-300 flex items-center justify-center cursor-pointer">
-                  <div className="w-14 h-14 bg-red-500 rounded-full" />
+              }} mostrarSeta={false}>
+                <div style={{ width: '72px', height: '72px', background: '#fff', borderRadius: '50%', border: '4px solid #555', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
+                  <div style={{ width: '52px', height: '52px', background: '#EF4444', borderRadius: '50%' }} />
                 </div>
               </ElementoClicavel>
             )}
             {gravando && passo === 5 && (
-              <ElementoClicavel onClick={() => { setGravando(false); setGravacaoParada(true); handleCliqueCerto(6, null); }} posicao="top">
+              <ElementoClicavel onClick={() => { setGravando(false); setGravacaoParada(true); handleCliqueCerto(6, null); }} mostrarSeta={false}>
                 <motion.div
                   animate={{ scale: [1, 1.1, 1] }}
                   transition={{ duration: 0.5, repeat: Infinity }}
-                  className="w-20 h-20 bg-red-500 rounded-2xl cursor-pointer"
+                  style={{ width: '72px', height: '72px', background: '#EF4444', borderRadius: '16px', cursor: 'pointer' }}
                 />
               </ElementoClicavel>
             )}
@@ -190,23 +201,27 @@ export default function Modulo5Licao3() {
       )}
 
       {gravacaoParada && !legendaAberta && !publicado && (
-        <div className="w-full h-full bg-black pt-12 flex flex-col">
-          <div className="px-4 py-3 flex items-center justify-between bg-black/80">
-            <p className="text-white font-bold">Prévia do Reel</p>
+        <div style={{ height: '100%', background: '#000', display: 'flex', flexDirection: 'column' }}>
+          <div style={{ padding: '12px 16px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: 'rgba(0,0,0,0.8)', flexShrink: 0 }}>
+            <p style={{ color: '#fff', fontWeight: '700' }}>Prévia do Reel</p>
           </div>
 
-          <div className="flex-1 flex items-center justify-center bg-gradient-to-b from-blue-200 to-purple-300">
-            <div className="text-center">
-              <div className="text-8xl mb-4">🎥</div>
-              <p className="text-white font-bold text-xl">Gravação: 0:05</p>
+          <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'linear-gradient(180deg, #90CAF9, #CE93D8)' }}>
+            <div style={{ textAlign: 'center' }}>
+              <div style={{ fontSize: '64px', marginBottom: '16px' }}>🎥</div>
+              <p style={{ color: '#fff', fontWeight: '700', fontSize: '20px' }}>Gravação: 0:05</p>
             </div>
           </div>
 
-          <div className="p-4 flex items-center justify-between bg-black/90">
-            <button className="text-white font-bold">⬅️ Descartar</button>
+          <div style={{ padding: '16px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: 'rgba(0,0,0,0.9)', flexShrink: 0 }}>
+            <button style={{ color: '#fff', fontWeight: '700', background: 'none', border: 'none', display: 'flex', alignItems: 'center', gap: '6px', cursor: 'pointer', fontSize: '15px' }}>
+              <Trash2 size={20} color="#fff" /> Descartar
+            </button>
             {passo === 6 && (
-              <ElementoClicavel onClick={() => handleCliqueCerto(7, () => setLegendaAberta(true))} posicao="top">
-                <button className="bg-blue-500 text-white px-6 py-3 rounded-full font-bold">➡️ Avançar</button>
+              <ElementoClicavel onClick={() => handleCliqueCerto(7, () => setLegendaAberta(true))} mostrarSeta={false}>
+                <button style={{ background: '#0095F6', color: '#fff', border: 'none', padding: '12px 28px', borderRadius: '24px', fontWeight: '700', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px', fontSize: '15px' }}>
+                  Avançar <ArrowRight size={18} color="#fff" />
+                </button>
               </ElementoClicavel>
             )}
           </div>
@@ -214,25 +229,28 @@ export default function Modulo5Licao3() {
       )}
 
       {legendaAberta && !publicado && (
-        <div className="w-full h-full bg-white pt-12 flex flex-col">
-          <div className="px-4 py-3 border-b flex items-center justify-between">
-            <button onClick={() => setLegendaAberta(false)} className="text-gray-600">← Voltar</button>
-            <p className="font-bold text-gray-800">Novo Reel</p>
+        <div style={{ height: '100%', background: '#fff', display: 'flex', flexDirection: 'column' }}>
+          <div style={{ padding: '12px 16px', borderBottom: '1px solid #e5e5e5', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexShrink: 0 }}>
+            <button onClick={() => setLegendaAberta(false)} style={{ background: 'none', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px', color: '#1a1a1a', fontWeight: '600', fontSize: '15px', padding: 0 }}>
+              <ArrowLeft size={20} color="#1a1a1a" /> Voltar
+            </button>
+            <p style={{ fontWeight: '700', color: '#1a1a1a' }}>Novo Reel</p>
             {passo === 7 && (
-              <ElementoClicavel onClick={() => { setPublicado(true); setTimeout(() => setMostrarValidacao(true), 2000); }} posicao="left">
-                <button className="text-blue-600 font-bold">Compartilhar</button>
+              <ElementoClicavel onClick={() => { setPublicado(true); setTimeout(() => setMostrarValidacao(true), 2000); }} mostrarSeta={false}>
+                <button style={{ color: '#0095F6', fontWeight: '700', background: 'none', border: 'none', cursor: 'pointer', fontSize: '15px' }}>Compartilhar</button>
               </ElementoClicavel>
             )}
+            {passo !== 7 && <button style={{ color: '#BDBDBD', fontWeight: '700', background: 'none', border: 'none', fontSize: '15px' }}>Compartilhar</button>}
           </div>
 
-          <div className="p-4">
-            <div className="flex gap-4 mb-6">
-              <div className="w-24 h-32 bg-gradient-to-b from-blue-200 to-purple-300 rounded-xl flex items-center justify-center text-4xl">
+          <div style={{ flex: 1, padding: '16px' }}>
+            <div style={{ display: 'flex', gap: '16px', marginBottom: '24px' }}>
+              <div style={{ width: '88px', height: '120px', background: 'linear-gradient(180deg, #90CAF9, #CE93D8)', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '36px', flexShrink: 0 }}>
                 🎥
               </div>
-              <div className="flex-1">
-                <p className="text-gray-400 mb-2">Escreva uma legenda...</p>
-                <p className="text-gray-700">Meu primeiro Reel! 🎬✨</p>
+              <div style={{ flex: 1 }}>
+                <p style={{ color: '#999', marginBottom: '8px', margin: '0 0 8px' }}>Escreva uma legenda...</p>
+                <p style={{ color: '#1a1a1a' }}>Meu primeiro Reel! 🎬✨</p>
               </div>
             </div>
           </div>
@@ -240,12 +258,12 @@ export default function Modulo5Licao3() {
       )}
 
       {publicado && (
-        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="w-full h-full bg-white pt-12 flex items-center justify-center p-6">
-          <div className="text-center">
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} style={{ height: '100%', background: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '24px' }}>
+          <div style={{ textAlign: 'center' }}>
             <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ type: "spring" }}>
-              <div className="text-8xl mb-6">🎬</div>
-              <h3 className="text-2xl font-black text-gray-800 mb-3">✅ Seu Reel foi publicado!</h3>
-              <p className="text-gray-600 font-semibold">Agora todos podem ver seu vídeo</p>
+              <CheckCircle size={72} color="#27AE60" style={{ margin: '0 auto 16px' }} />
+              <h3 style={{ fontSize: '22px', fontWeight: '800', color: '#1a1a1a', marginBottom: '12px', margin: '0 0 12px' }}>Seu Reel foi publicado!</h3>
+              <p style={{ color: '#666', fontWeight: '600', fontSize: '16px' }}>Agora todos podem ver seu vídeo</p>
             </motion.div>
           </div>
         </motion.div>

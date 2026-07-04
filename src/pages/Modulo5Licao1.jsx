@@ -6,6 +6,7 @@ import { base44 } from "@/api/base44Client";
 import SimuladorImersivo from "@/components/simulador/SimuladorImersivo";
 import ElementoClicavel from "@/components/simulador/ElementoClicavel";
 import ValidacaoQuiz from "@/components/simulador/ValidacaoQuiz";
+import { Facebook, ThumbsUp, X, Camera, Smile, ArrowLeft, CheckCircle, MoreVertical, Image as ImageIcon } from 'lucide-react';
 
 export default function Modulo5Licao1() {
   const navigate = useNavigate();
@@ -70,34 +71,35 @@ export default function Modulo5Licao1() {
       onVoltar={() => navigate(createPageUrl("Modulos"))}
     >
       {!postAberto && !publicado && (
-        <div className="w-full h-full bg-gray-100 pt-12 overflow-y-auto">
-          <div className="bg-blue-600 px-4 py-3">
-            <h2 className="text-xl font-bold text-white">facebook</h2>
+        <div style={{ height: '100%', background: '#F0F2F5', display: 'flex', flexDirection: 'column' }}>
+          <div style={{ background: '#1877F2', padding: '12px 16px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexShrink: 0 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <Facebook size={28} color="#fff" />
+              <h2 style={{ fontSize: '22px', fontWeight: '800', color: '#fff', margin: 0, letterSpacing: '-0.5px' }}>facebook</h2>
+            </div>
+            <MoreVertical size={22} color="#fff" />
           </div>
-
-          <div className="p-4 space-y-4">
+          <div style={{ flex: 1, overflowY: 'auto', padding: '12px' }}>
             {passo === 1 && (
-              <ElementoClicavel onClick={() => handleCliqueCerto(2, () => setPostAberto(true))} posicao="bottom">
-                <div className="bg-white rounded-2xl p-4 shadow cursor-pointer">
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 bg-pink-200 rounded-full flex items-center justify-center">👤</div>
-                    <p className="text-gray-400">O que você está pensando?</p>
-                  </div>
+              <ElementoClicavel onClick={() => handleCliqueCerto(2, () => setPostAberto(true))} mostrarSeta={false}>
+                <div style={{ background: '#fff', borderRadius: '12px', padding: '12px 16px', boxShadow: '0 1px 3px rgba(0,0,0,0.1)', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '12px' }}>
+                  <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: '#E91E63', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontWeight: '700', flexShrink: 0 }}>V</div>
+                  <p style={{ color: '#999', margin: 0, fontSize: '16px' }}>O que você está pensando?</p>
                 </div>
               </ElementoClicavel>
             )}
 
-            <div className="bg-white rounded-2xl p-4 shadow">
-              <div className="flex items-center gap-3 mb-3">
-                <div className="w-10 h-10 bg-purple-200 rounded-full flex items-center justify-center">👤</div>
+            <div style={{ background: '#fff', borderRadius: '12px', padding: '16px', boxShadow: '0 1px 3px rgba(0,0,0,0.1)' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '12px' }}>
+                <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: '#9C27B0', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontWeight: '700', flexShrink: 0 }}>A</div>
                 <div>
-                  <p className="font-bold text-gray-800">Ana Silva</p>
-                  <p className="text-xs text-gray-400">2 horas atrás</p>
+                  <p style={{ fontWeight: '700', color: '#1a1a1a', margin: 0, fontSize: '15px' }}>Ana Silva</p>
+                  <p style={{ fontSize: '12px', color: '#999', margin: 0 }}>2 horas atrás</p>
                 </div>
               </div>
-              <p className="text-gray-700 mb-3">Que dia maravilhoso! ☀️</p>
-              <div className="flex items-center text-sm text-gray-500">
-                <span>❤️ 15 curtidas</span>
+              <p style={{ color: '#1a1a1a', marginBottom: '12px', margin: '0 0 12px', fontSize: '15px' }}>Que dia maravilhoso! ☀️</p>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '4px', fontSize: '14px', color: '#65676B' }}>
+                <ThumbsUp size={14} color="#1877F2" fill="#1877F2" /> 15 curtidas
               </div>
             </div>
           </div>
@@ -105,61 +107,63 @@ export default function Modulo5Licao1() {
       )}
 
       {postAberto && !emojiAberto && !publicado && (
-        <div className="w-full h-full bg-white pt-12 flex flex-col">
-          <div className="px-4 py-3 border-b flex items-center justify-between">
-            <button onClick={() => setPostAberto(false)} className="text-gray-600 font-semibold">✕ Cancelar</button>
-            <p className="font-bold text-gray-800">Criar publicação</p>
+        <div style={{ height: '100%', background: '#fff', display: 'flex', flexDirection: 'column' }}>
+          <div style={{ padding: '12px 16px', borderBottom: '1px solid #e5e5e5', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexShrink: 0 }}>
+            <button onClick={() => setPostAberto(false)} style={{ background: 'none', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px', color: '#65676B', fontWeight: '600', fontSize: '15px', padding: 0 }}>
+              <X size={20} color="#65676B" /> Cancelar
+            </button>
+            <p style={{ fontWeight: '700', color: '#1a1a1a', margin: 0 }}>Criar publicação</p>
             {passo === 5 && texto && (
-              <ElementoClicavel onClick={() => { setPublicado(true); setTimeout(() => setMostrarValidacao(true), 2000); }} posicao="left">
-                <button className="text-blue-600 font-bold">Publicar</button>
+              <ElementoClicavel onClick={() => { setPublicado(true); setTimeout(() => setMostrarValidacao(true), 2000); }} mostrarSeta={false}>
+                <button style={{ background: '#1877F2', color: '#fff', border: 'none', padding: '8px 20px', borderRadius: '8px', fontWeight: '700', fontSize: '15px', cursor: 'pointer' }}>Publicar</button>
               </ElementoClicavel>
             )}
-            {passo !== 5 && <button className="text-gray-300 font-bold">Publicar</button>}
+            {passo !== 5 && <button style={{ background: '#E5E7EB', color: '#BDBDBD', border: 'none', padding: '8px 20px', borderRadius: '8px', fontWeight: '700', fontSize: '15px' }}>Publicar</button>}
           </div>
 
-          <div className="p-4">
-            <div className="flex items-start gap-3 mb-4">
-              <div className="w-10 h-10 bg-pink-200 rounded-full flex items-center justify-center">👤</div>
+          <div style={{ flex: 1, overflowY: 'auto', padding: '16px' }}>
+            <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px', marginBottom: '16px' }}>
+              <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: '#E91E63', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontWeight: '700', flexShrink: 0 }}>V</div>
               <div>
-                <p className="font-bold text-gray-800">Você</p>
-                <p className="text-xs text-gray-500">Público · Agora</p>
+                <p style={{ fontWeight: '700', color: '#1a1a1a', margin: 0, fontSize: '15px' }}>Você</p>
+                <p style={{ fontSize: '12px', color: '#999', margin: 0 }}>Público · Agora</p>
               </div>
             </div>
 
             {passo === 2 && !texto && (
-              <ElementoClicavel onClick={() => { setTexto("Que dia lindo hoje! Gratidão pela vida! 🌅"); handleCliqueCerto(3, null); }} posicao="top">
-                <div className="min-h-32 border-2 border-gray-200 rounded-xl p-4 cursor-pointer">
-                  <p className="text-gray-400">O que você está pensando?</p>
+              <ElementoClicavel onClick={() => { setTexto("Que dia lindo hoje! Gratidão pela vida! 🌅"); handleCliqueCerto(3, null); }} mostrarSeta={false}>
+                <div style={{ minHeight: '120px', border: '2px solid #e5e5e5', borderRadius: '12px', padding: '16px', cursor: 'pointer' }}>
+                  <p style={{ color: '#999', margin: 0, fontSize: '16px' }}>O que você está pensando?</p>
                 </div>
               </ElementoClicavel>
             )}
 
             {texto && (
-              <div className="min-h-32 p-4">
-                <p className="text-gray-800 text-lg leading-relaxed">{texto}</p>
+              <div style={{ minHeight: '120px', padding: '16px 0' }}>
+                <p style={{ color: '#1a1a1a', fontSize: '18px', lineHeight: 1.6, margin: 0 }}>{texto}</p>
               </div>
             )}
           </div>
 
-          <div className="mt-auto border-t p-4">
-            <p className="text-sm font-semibold text-gray-600 mb-3">Adicionar à publicação:</p>
-            <div className="flex gap-3">
-              <button className="flex-1 flex items-center justify-center gap-2 p-3 rounded-xl bg-gray-100">
-                <span className="text-xl">📷</span>
-                <span className="text-sm font-semibold">Foto</span>
+          <div style={{ borderTop: '1px solid #e5e5e5', padding: '12px 16px', flexShrink: 0 }}>
+            <p style={{ fontSize: '14px', fontWeight: '600', color: '#65676B', marginBottom: '12px', margin: '0 0 12px' }}>Adicionar à publicação:</p>
+            <div style={{ display: 'flex', gap: '12px' }}>
+              <button style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', padding: '12px', borderRadius: '12px', background: '#F0F2F5', border: 'none', minHeight: '44px' }}>
+                <ImageIcon size={20} color="#00806D" />
+                <span style={{ fontSize: '14px', fontWeight: '600', color: '#65676B' }}>Foto</span>
               </button>
               {passo === 3 && texto && (
-                <ElementoClicavel onClick={() => handleCliqueCerto(4, () => setEmojiAberto(true))} posicao="top">
-                  <button className="flex-1 flex items-center justify-center gap-2 p-3 rounded-xl bg-gray-100 cursor-pointer">
-                    <span className="text-xl">😊</span>
-                    <span className="text-sm font-semibold">Emoji</span>
+                <ElementoClicavel onClick={() => handleCliqueCerto(4, () => setEmojiAberto(true))} mostrarSeta={false}>
+                  <button style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', padding: '12px', borderRadius: '12px', background: '#F0F2F5', border: 'none', cursor: 'pointer', minHeight: '44px' }}>
+                    <Smile size={20} color="#F3984B" />
+                    <span style={{ fontSize: '14px', fontWeight: '600', color: '#65676B' }}>Emoji</span>
                   </button>
                 </ElementoClicavel>
               )}
               {passo !== 3 && (
-                <button className="flex-1 flex items-center justify-center gap-2 p-3 rounded-xl bg-gray-100">
-                  <span className="text-xl">😊</span>
-                  <span className="text-sm font-semibold">Emoji</span>
+                <button style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', padding: '12px', borderRadius: '12px', background: '#F0F2F5', border: 'none', minHeight: '44px' }}>
+                  <Smile size={20} color="#F3984B" />
+                  <span style={{ fontSize: '14px', fontWeight: '600', color: '#65676B' }}>Emoji</span>
                 </button>
               )}
             </div>
@@ -168,16 +172,18 @@ export default function Modulo5Licao1() {
       )}
 
       {emojiAberto && (
-        <motion.div initial={{ y: "100%" }} animate={{ y: 0 }} className="absolute inset-0 bg-white pt-12 z-50">
-          <div className="px-4 py-3 border-b flex items-center justify-between">
-            <button onClick={() => setEmojiAberto(false)} className="text-gray-600 text-xl">←</button>
-            <p className="font-bold text-gray-800">Escolha um emoji</p>
+        <motion.div initial={{ y: "100%" }} animate={{ y: 0 }} style={{ position: 'absolute', inset: 0, background: '#fff', zIndex: 50, display: 'flex', flexDirection: 'column' }}>
+          <div style={{ padding: '12px 16px', borderBottom: '1px solid #e5e5e5', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexShrink: 0 }}>
+            <button onClick={() => setEmojiAberto(false)} style={{ background: 'none', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', padding: 0 }}>
+              <ArrowLeft size={24} color="#1a1a1a" />
+            </button>
+            <p style={{ fontWeight: '700', color: '#1a1a1a' }}>Escolha um emoji</p>
             <div />
           </div>
-          <div className="p-6 grid grid-cols-6 gap-4">
+          <div style={{ flex: 1, overflowY: 'auto', padding: '24px', display: 'grid', gridTemplateColumns: 'repeat(6, 1fr)', gap: '16px' }}>
             {passo === 4 && ["☀️", "🌅", "🌸", "🌻", "💐", "🌺", "❤️", "💖", "💝", "🎉", "✨", "⭐"].map((emoji, i) => (
-              <ElementoClicavel key={i} onClick={() => { setTexto(texto + " " + emoji); setEmojiAberto(false); handleCliqueCerto(5, null); }} posicao="bottom">
-                <div className="aspect-square flex items-center justify-center text-4xl cursor-pointer hover:bg-gray-100 rounded-xl transition-all active:scale-95">
+              <ElementoClicavel key={i} onClick={() => { setTexto(texto + " " + emoji); setEmojiAberto(false); handleCliqueCerto(5, null); }} mostrarSeta={false}>
+                <div style={{ aspectRatio: '1', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '36px', cursor: 'pointer', borderRadius: '12px' }}>
                   {emoji}
                 </div>
               </ElementoClicavel>
@@ -187,30 +193,28 @@ export default function Modulo5Licao1() {
       )}
 
       {publicado && (
-        <div className="w-full h-full bg-gray-100 pt-12 overflow-y-auto">
-          <div className="bg-blue-600 px-4 py-3">
-            <h2 className="text-xl font-bold text-white">facebook</h2>
+        <div style={{ height: '100%', background: '#F0F2F5', display: 'flex', flexDirection: 'column' }}>
+          <div style={{ background: '#1877F2', padding: '12px 16px', display: 'flex', alignItems: 'center', gap: '8px', flexShrink: 0 }}>
+            <Facebook size={28} color="#fff" />
+            <h2 style={{ fontSize: '22px', fontWeight: '800', color: '#fff', margin: 0, letterSpacing: '-0.5px' }}>facebook</h2>
           </div>
-
-          <div className="p-4 space-y-4">
-            <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="bg-green-100 border-2 border-green-400 rounded-2xl p-4">
-              <div className="text-center">
-                <div className="text-5xl mb-2">✅</div>
-                <p className="font-bold text-green-700">Publicação feita com sucesso!</p>
-              </div>
+          <div style={{ flex: 1, overflowY: 'auto', padding: '12px' }}>
+            <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} style={{ background: '#E8F5E9', border: '2px solid #66BB6A', borderRadius: '12px', padding: '16px', textAlign: 'center', marginBottom: '12px' }}>
+              <CheckCircle size={48} color="#27AE60" style={{ margin: '0 auto 8px' }} />
+              <p style={{ fontWeight: '700', color: '#27AE60', margin: 0 }}>Publicação feita com sucesso!</p>
             </motion.div>
 
-            <motion.div initial={{ scale: 0.9 }} animate={{ scale: 1 }} className="bg-white rounded-2xl p-4 shadow">
-              <div className="flex items-center gap-3 mb-3">
-                <div className="w-10 h-10 bg-pink-200 rounded-full flex items-center justify-center">👤</div>
+            <motion.div initial={{ scale: 0.9 }} animate={{ scale: 1 }} style={{ background: '#fff', borderRadius: '12px', padding: '16px', boxShadow: '0 1px 3px rgba(0,0,0,0.1)' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '12px' }}>
+                <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: '#E91E63', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontWeight: '700', flexShrink: 0 }}>V</div>
                 <div>
-                  <p className="font-bold text-gray-800">Você</p>
-                  <p className="text-xs text-gray-400">Agora</p>
+                  <p style={{ fontWeight: '700', color: '#1a1a1a', margin: 0, fontSize: '15px' }}>Você</p>
+                  <p style={{ fontSize: '12px', color: '#999', margin: 0 }}>Agora</p>
                 </div>
               </div>
-              <p className="text-gray-700 mb-3 leading-relaxed">{texto}</p>
-              <div className="flex items-center text-sm text-gray-500">
-                <span>0 curtidas</span>
+              <p style={{ color: '#1a1a1a', marginBottom: '12px', margin: '0 0 12px', fontSize: '15px', lineHeight: 1.5 }}>{texto}</p>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '4px', fontSize: '14px', color: '#65676B' }}>
+                <ThumbsUp size={14} color="#65676B" /> 0 curtidas
               </div>
             </motion.div>
           </div>

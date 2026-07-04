@@ -6,6 +6,8 @@ import { base44 } from "@/api/base44Client";
 import SimuladorImersivo from "@/components/simulador/SimuladorImersivo";
 import ElementoClicavel from "@/components/simulador/ElementoClicavel";
 import ValidacaoQuiz from "@/components/simulador/ValidacaoQuiz";
+import AndroidHomeScreen from "@/components/simulador/AndroidHomeScreen";
+import { MessageCircle, ArrowLeft, X, Image as ImageIcon, CheckCircle, MoreVertical } from 'lucide-react';
 
 export default function Modulo5Licao2() {
   const navigate = useNavigate();
@@ -69,27 +71,26 @@ export default function Modulo5Licao2() {
       onVoltar={() => navigate(createPageUrl("Modulos"))}
     >
       {!instrucaoAberta && !printTirado && !fotosAberto && (
-        <div className="w-full h-full bg-gradient-to-b from-green-50 to-white pt-12">
-          <div className="bg-green-600 px-4 py-3 flex items-center gap-3">
-            <div className="w-10 h-10 bg-gray-300 rounded-full" />
-            <span className="text-white font-bold">Dr. Silva</span>
+        <div style={{ height: '100%', background: '#ECE5DD', display: 'flex', flexDirection: 'column' }}>
+          <div style={{ background: '#25D366', padding: '10px 16px', display: 'flex', alignItems: 'center', gap: '12px', flexShrink: 0 }}>
+            <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: '#607D8B', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontWeight: '700', flexShrink: 0 }}>D</div>
+            <span style={{ color: '#fff', fontWeight: '700', fontSize: '16px' }}>Dr. Silva</span>
           </div>
-
-          <div className="p-4">
-            <div className="bg-white rounded-2xl p-4 shadow-md mb-4">
-              <p className="text-gray-800 font-semibold leading-relaxed mb-2">
+          <div style={{ flex: 1, overflowY: 'auto', padding: '16px' }}>
+            <div style={{ background: '#fff', borderRadius: '12px', padding: '16px', boxShadow: '0 1px 3px rgba(0,0,0,0.1)', marginBottom: '16px' }}>
+              <p style={{ color: '#1a1a1a', fontWeight: '600', lineHeight: 1.5, margin: '0 0 8px' }}>
                 Olá! Sua consulta está marcada para:
               </p>
-              <div className="bg-blue-50 border-2 border-blue-300 rounded-xl p-4 mt-3">
-                <p className="text-2xl font-black text-blue-700 text-center mb-2">15/08/2026</p>
-                <p className="text-xl font-bold text-blue-600 text-center">10:00 🏥</p>
+              <div style={{ background: '#E3F2FD', border: '2px solid #90CAF9', borderRadius: '12px', padding: '16px', marginTop: '12px' }}>
+                <p style={{ fontSize: '22px', fontWeight: '900', color: '#1565C0', textAlign: 'center', margin: '0 0 8px' }}>15/08/2026</p>
+                <p style={{ fontSize: '20px', fontWeight: '700', color: '#1976D2', textAlign: 'center', margin: 0 }}>10:00 🏥</p>
               </div>
             </div>
 
             {passo === 1 && (
-              <ElementoClicavel onClick={() => handleCliqueCerto(2, () => setInstrucaoAberta(true))} posicao="top">
-                <button className="w-full bg-blue-500 text-white py-4 rounded-2xl font-bold text-lg">
-                  Como fazer print? 📖
+              <ElementoClicavel onClick={() => handleCliqueCerto(2, () => setInstrucaoAberta(true))} mostrarSeta={false}>
+                <button style={{ width: '100%', background: '#2196F3', color: '#fff', border: 'none', padding: '16px', borderRadius: '16px', fontWeight: '700', fontSize: '17px', cursor: 'pointer' }}>
+                  Como fazer print?
                 </button>
               </ElementoClicavel>
             )}
@@ -98,34 +99,30 @@ export default function Modulo5Licao2() {
       )}
 
       {instrucaoAberta && !printTirado && (
-        <div className="w-full h-full bg-white pt-12 p-6 flex flex-col items-center justify-center">
-          <h2 className="text-2xl font-black text-gray-800 mb-8 text-center">Como tirar print da tela</h2>
+        <div style={{ height: '100%', background: '#fff', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '24px' }}>
+          <h2 style={{ fontSize: '22px', fontWeight: '800', color: '#1a1a1a', marginBottom: '32px', textAlign: 'center' }}>Como tirar print da tela</h2>
           
-          <div className="mb-8">
-            <div className="relative w-48 h-96 bg-gray-800 rounded-3xl mx-auto shadow-2xl p-4 flex items-center justify-center">
-              <div className="text-6xl">📱</div>
+          <div style={{ marginBottom: '32px', position: 'relative' }}>
+            <div style={{ position: 'relative', width: '160px', height: '300px', background: '#1a1a1a', borderRadius: '24px', margin: '0 auto', boxShadow: '0 10px 40px rgba(0,0,0,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <div style={{ fontSize: '48px' }}>📱</div>
               
               <motion.div
-                animate={{ scale: [1, 1.2, 1] }}
+                animate={{ scale: [1, 1.15, 1] }}
                 transition={{ duration: 1, repeat: Infinity }}
-                className="absolute top-8 right-2 w-12 h-3 bg-gray-600 rounded-full flex items-center justify-center"
-              >
-                <span className="text-xs text-white font-bold">⚡</span>
-              </motion.div>
+                style={{ position: 'absolute', top: '60px', right: '-6px', width: '8px', height: '40px', background: '#555', borderRadius: '4px' }}
+              />
 
               <motion.div
-                animate={{ scale: [1, 1.2, 1] }}
-                transition={{ duration: 1, repeat: Infinity, delay: 0.5 }}
-                className="absolute top-16 left-2 w-3 h-12 bg-gray-600 rounded-full flex items-center justify-center"
-              >
-                <span className="text-xs text-white font-bold rotate-90 inline-block">🔊</span>
-              </motion.div>
+                animate={{ scale: [1, 1.15, 1] }}
+                transition={{ duration: 1, repeat: Infinity, delay: 0.3 }}
+                style={{ position: 'absolute', top: '80px', left: '-6px', width: '8px', height: '60px', background: '#555', borderRadius: '4px' }}
+              />
             </div>
           </div>
 
-          <div className="bg-blue-50 border-2 border-blue-200 rounded-2xl p-6 mb-6 max-w-sm">
-            <p className="text-center font-bold text-blue-700 mb-2">Pressione os dois juntos:</p>
-            <p className="text-center text-lg text-blue-600">⚡ Botão Ligar + 🔊 Volume Baixo</p>
+          <div style={{ background: '#E3F2FD', border: '2px solid #90CAF9', borderRadius: '16px', padding: '20px', marginBottom: '24px', maxWidth: '320px' }}>
+            <p style={{ textAlign: 'center', fontWeight: '700', color: '#1565C0', margin: '0 0 8px' }}>Pressione os dois juntos:</p>
+            <p style={{ textAlign: 'center', fontSize: '16px', color: '#1976D2', margin: 0 }}>Botão Ligar + Volume Baixo</p>
           </div>
 
           {passo === 2 && (
@@ -133,9 +130,9 @@ export default function Modulo5Licao2() {
               setPrintTirado(true);
               setInstrucaoAberta(false);
               handleCliqueCerto(3, null);
-            }} posicao="top">
-              <button className="w-full bg-green-500 text-white py-4 rounded-2xl font-bold text-lg max-w-sm">
-                Tirar Print Agora 📸
+            }} mostrarSeta={false}>
+              <button style={{ width: '100%', background: '#25D366', color: '#fff', border: 'none', padding: '16px 40px', borderRadius: '16px', fontWeight: '700', fontSize: '17px', cursor: 'pointer', maxWidth: '320px' }}>
+                Tirar Print Agora
               </button>
             </ElementoClicavel>
           )}
@@ -143,27 +140,27 @@ export default function Modulo5Licao2() {
       )}
 
       {printTirado && !fotosAberto && (
-        <motion.div initial={{ opacity: 1 }} animate={{ opacity: [1, 0.5, 1] }} transition={{ duration: 0.3 }} className="w-full h-full bg-gradient-to-b from-green-50 to-white pt-12 relative">
+        <motion.div initial={{ opacity: 1 }} animate={{ opacity: [1, 0.5, 1] }} transition={{ duration: 0.3 }} style={{ height: '100%', background: '#ECE5DD', position: 'relative', display: 'flex', flexDirection: 'column' }}>
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            className="absolute inset-0 bg-white"
+            style={{ position: 'absolute', inset: 0, background: '#fff' }}
             transition={{ duration: 0.1 }}
           />
 
-          <div className="relative bg-green-600 px-4 py-3 flex items-center gap-3">
-            <div className="w-10 h-10 bg-gray-300 rounded-full" />
-            <span className="text-white font-bold">Dr. Silva</span>
+          <div style={{ position: 'relative', background: '#25D366', padding: '10px 16px', display: 'flex', alignItems: 'center', gap: '12px', flexShrink: 0 }}>
+            <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: '#607D8B', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontWeight: '700', flexShrink: 0 }}>D</div>
+            <span style={{ color: '#fff', fontWeight: '700', fontSize: '16px' }}>Dr. Silva</span>
           </div>
 
-          <div className="relative p-4">
-            <div className="bg-white rounded-2xl p-4 shadow-md">
-              <p className="text-gray-800 font-semibold leading-relaxed mb-2">
+          <div style={{ position: 'relative', padding: '16px', flex: 1 }}>
+            <div style={{ background: '#fff', borderRadius: '12px', padding: '16px', boxShadow: '0 1px 3px rgba(0,0,0,0.1)' }}>
+              <p style={{ color: '#1a1a1a', fontWeight: '600', lineHeight: 1.5, margin: '0 0 8px' }}>
                 Olá! Sua consulta está marcada para:
               </p>
-              <div className="bg-blue-50 border-2 border-blue-300 rounded-xl p-4 mt-3">
-                <p className="text-2xl font-black text-blue-700 text-center mb-2">15/08/2026</p>
-                <p className="text-xl font-bold text-blue-600 text-center">10:00 🏥</p>
+              <div style={{ background: '#E3F2FD', border: '2px solid #90CAF9', borderRadius: '12px', padding: '16px', marginTop: '12px' }}>
+                <p style={{ fontSize: '22px', fontWeight: '900', color: '#1565C0', textAlign: 'center', margin: '0 0 8px' }}>15/08/2026</p>
+                <p style={{ fontSize: '20px', fontWeight: '700', color: '#1976D2', textAlign: 'center', margin: 0 }}>10:00 🏥</p>
               </div>
             </div>
           </div>
@@ -173,16 +170,16 @@ export default function Modulo5Licao2() {
               initial={{ y: -100, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ delay: 0.5 }}
-              className="absolute top-12 left-4 right-4 z-50"
+              style={{ position: 'absolute', top: '60px', left: '16px', right: '16px', zIndex: 50 }}
             >
-              <ElementoClicavel onClick={() => handleCliqueCerto(4, () => setFotosAberto(true))} posicao="bottom">
-                <div className="bg-white rounded-2xl p-4 shadow-2xl cursor-pointer border-2 border-green-400 flex items-center gap-3">
-                  <div className="w-12 h-16 bg-gradient-to-br from-blue-100 to-green-100 rounded-lg flex items-center justify-center text-2xl">
-                    📸
+              <ElementoClicavel onClick={() => handleCliqueCerto(4, () => setFotosAberto(true))} mostrarSeta={false}>
+                <div style={{ background: '#fff', borderRadius: '16px', padding: '12px', boxShadow: '0 8px 32px rgba(0,0,0,0.2)', cursor: 'pointer', border: '2px solid #25D366', display: 'flex', alignItems: 'center', gap: '12px' }}>
+                  <div style={{ width: '48px', height: '64px', background: 'linear-gradient(135deg, #E3F2FD, #E8F5E9)', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                    <ImageIcon size={24} color="#1565C0" />
                   </div>
-                  <div className="flex-1">
-                    <p className="font-bold text-gray-800">Captura de tela salva</p>
-                    <p className="text-sm text-gray-500">Toque para ver</p>
+                  <div style={{ flex: 1 }}>
+                    <p style={{ fontWeight: '700', color: '#1a1a1a', margin: 0, fontSize: '15px' }}>Captura de tela salva</p>
+                    <p style={{ fontSize: '13px', color: '#999', margin: 0 }}>Toque para ver</p>
                   </div>
                 </div>
               </ElementoClicavel>
@@ -192,25 +189,24 @@ export default function Modulo5Licao2() {
       )}
 
       {fotosAberto && !printAberto && (
-        <div className="w-full h-full bg-white pt-12">
-          <div className="px-4 py-3 border-b">
-            <h2 className="text-xl font-bold text-gray-800">Google Fotos</h2>
+        <div style={{ height: '100%', background: '#fff', display: 'flex', flexDirection: 'column' }}>
+          <div style={{ padding: '12px 16px', borderBottom: '1px solid #e5e5e5', flexShrink: 0 }}>
+            <h2 style={{ fontSize: '20px', fontWeight: '700', color: '#1a1a1a', margin: 0 }}>Google Fotos</h2>
           </div>
-
-          <div className="p-4">
-            <p className="text-lg font-bold text-gray-800 mb-4">📁 Capturas de Tela</p>
-            <div className="grid grid-cols-3 gap-2">
+          <div style={{ flex: 1, overflowY: 'auto', padding: '16px' }}>
+            <p style={{ fontSize: '16px', fontWeight: '700', color: '#1a1a1a', marginBottom: '16px', margin: '0 0 16px' }}>Capturas de Tela</p>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '8px' }}>
               {passo === 4 && (
-                <ElementoClicavel onClick={() => { setPrintAberto(true); setTimeout(() => setMostrarValidacao(true), 1500); }} posicao="bottom">
-                  <div className="aspect-square bg-gradient-to-br from-green-100 to-blue-100 rounded-xl flex flex-col items-center justify-center p-2 cursor-pointer border-2 border-green-400">
-                    <p className="text-xs font-bold text-gray-600 mb-1">15/08</p>
-                    <p className="text-2xl">🏥</p>
-                    <p className="text-xs text-gray-500">Agora</p>
+                <ElementoClicavel onClick={() => { setPrintAberto(true); setTimeout(() => setMostrarValidacao(true), 1500); }} mostrarSeta={false}>
+                  <div style={{ aspectRatio: '1', background: 'linear-gradient(135deg, #E8F5E9, #E3F2FD)', borderRadius: '12px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '8px', cursor: 'pointer', border: '2px solid #25D366' }}>
+                    <p style={{ fontSize: '12px', fontWeight: '700', color: '#666', marginBottom: '4px', margin: '0 0 4px' }}>15/08</p>
+                    <p style={{ fontSize: '24px' }}>🏥</p>
+                    <p style={{ fontSize: '12px', color: '#999' }}>Agora</p>
                   </div>
                 </ElementoClicavel>
               )}
               {["📱", "🌅", "🎂"].map((emoji, i) => (
-                <div key={i} className="aspect-square bg-gray-100 rounded-xl flex items-center justify-center text-3xl">{emoji}</div>
+                <div key={i} style={{ aspectRatio: '1', background: '#f5f5f5', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '28px' }}>{emoji}</div>
               ))}
             </div>
           </div>
@@ -218,26 +214,28 @@ export default function Modulo5Licao2() {
       )}
 
       {printAberto && (
-        <div className="w-full h-full bg-black pt-12 flex flex-col">
-          <div className="px-4 py-3 flex items-center justify-between bg-black/80">
-            <button onClick={() => setPrintAberto(false)} className="text-white text-xl">←</button>
-            <p className="text-white font-bold">Captura de tela</p>
-            <button className="text-white text-xl">⋮</button>
+        <div style={{ height: '100%', background: '#000', display: 'flex', flexDirection: 'column' }}>
+          <div style={{ padding: '12px 16px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: 'rgba(0,0,0,0.8)', flexShrink: 0 }}>
+            <button onClick={() => setPrintAberto(false)} style={{ background: 'none', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', padding: 0 }}>
+              <ArrowLeft size={24} color="#fff" />
+            </button>
+            <p style={{ color: '#fff', fontWeight: '700' }}>Captura de tela</p>
+            <MoreVertical size={22} color="#fff" />
           </div>
 
-          <div className="flex-1 flex items-center justify-center p-4">
+          <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '16px' }}>
             <motion.div
               initial={{ scale: 0.9 }}
               animate={{ scale: 1 }}
-              className="w-full max-w-sm bg-gradient-to-b from-green-50 to-white rounded-2xl p-6 shadow-2xl"
+              style={{ width: '100%', maxWidth: '320px', background: '#ECE5DD', borderRadius: '16px', padding: '24px', boxShadow: '0 10px 40px rgba(0,0,0,0.5)' }}
             >
-              <div className="bg-green-600 px-4 py-2 rounded-t-xl -mx-6 -mt-6 mb-4">
-                <p className="text-white font-bold text-sm">Dr. Silva</p>
+              <div style={{ background: '#25D366', padding: '8px 16px', borderRadius: '12px 12px 0 0', margin: '-24px -24px 16px' }}>
+                <p style={{ color: '#fff', fontWeight: '700', fontSize: '14px' }}>Dr. Silva</p>
               </div>
-              <p className="text-gray-700 font-semibold mb-3">Olá! Sua consulta está marcada para:</p>
-              <div className="bg-blue-50 border-2 border-blue-300 rounded-xl p-4">
-                <p className="text-xl font-black text-blue-700 text-center mb-1">15/08/2026</p>
-                <p className="text-lg font-bold text-blue-600 text-center">10:00 🏥</p>
+              <p style={{ color: '#1a1a1a', fontWeight: '600', marginBottom: '12px', margin: '0 0 12px' }}>Olá! Sua consulta está marcada para:</p>
+              <div style={{ background: '#E3F2FD', border: '2px solid #90CAF9', borderRadius: '12px', padding: '16px' }}>
+                <p style={{ fontSize: '20px', fontWeight: '900', color: '#1565C0', textAlign: 'center', marginBottom: '4px', margin: '0 0 4px' }}>15/08/2026</p>
+                <p style={{ fontSize: '18px', fontWeight: '700', color: '#1976D2', textAlign: 'center', margin: 0 }}>10:00 🏥</p>
               </div>
             </motion.div>
           </div>

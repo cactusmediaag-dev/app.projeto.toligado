@@ -7,6 +7,8 @@ import SimuladorImersivo from "@/components/simulador/SimuladorImersivo";
 import ElementoClicavel from "@/components/simulador/ElementoClicavel";
 import ValidacaoQuiz from "@/components/simulador/ValidacaoQuiz";
 import { Sons } from "@/components/shared/GameFeedback";
+import AndroidHomeScreen from "@/components/simulador/AndroidHomeScreen";
+import { Camera, X, RefreshCw, Image as ImageIcon, CheckCircle } from 'lucide-react';
 
 export default function Modulo5Licao5() {
   const navigate = useNavigate();
@@ -88,28 +90,32 @@ export default function Modulo5Licao5() {
       onVoltar={() => navigate(createPageUrl("Modulos"))}
     >
       {!cameraAberta && (
-        <div className="w-full h-full bg-gradient-to-b from-blue-50 to-purple-50 p-6 pt-12">
-          <div className="grid grid-cols-4 gap-6 mt-8">
-            {passo === 1 && (
-              <ElementoClicavel onClick={() => handleCliqueCerto(2, () => setCameraAberta(true))} posicao="bottom">
-                <div className="flex flex-col items-center gap-2">
-                  <div className="w-14 h-14 bg-white rounded-2xl flex items-center justify-center text-2xl shadow-md">📷</div>
-                </div>
-              </ElementoClicavel>
-            )}
-            {["🔍", "💬", "📱", "📧", "🎵", "📍", "⚙️"].map((emoji, i) => (
-              <div key={i} className="flex flex-col items-center gap-2">
-                <div className="w-14 h-14 bg-white rounded-2xl flex items-center justify-center text-2xl shadow-md">{emoji}</div>
-              </div>
-            ))}
-          </div>
+        <div style={{ height: '100%', position: 'relative' }}>
+          <AndroidHomeScreen
+            appsCustom={[
+              { nome: 'camera', label: 'Câmera', bg: '#37474F', id: 'camera' },
+              { nome: 'busca', label: 'Google', bg: '#fff', corIcone: '#4285F4', id: 'google' },
+              { nome: 'mensagem', label: 'WhatsApp', bg: '#25D366', id: 'whatsapp' },
+              { nome: 'chrome', label: 'Chrome', bg: '#4285F4', id: 'chrome' },
+              { nome: 'email', label: 'Email', bg: '#EA4335', id: 'email' },
+              { nome: 'musica', label: 'Música', bg: '#E91E63', id: 'music' },
+              { nome: 'mapa', label: 'Mapas', bg: '#34A853', id: 'maps' },
+              { nome: 'config', label: 'Config.', bg: '#607D8B', id: 'settings' },
+            ]}
+            appDestacado={passo === 1 ? 'camera' : null}
+            onAppClick={(id) => {
+              if (passo === 1 && id === 'camera') handleCliqueCerto(2, () => setCameraAberta(true));
+            }}
+          />
         </div>
       )}
 
       {cameraAberta && !cameraFrontal && (
-        <div className="w-full h-full bg-gradient-to-b from-sky-200 to-green-300 pt-12 relative flex items-center justify-center">
-          <div className="absolute top-16 left-4 right-4 flex items-center justify-between">
-            <button onClick={() => setCameraAberta(false)} className="text-white text-2xl">✕</button>
+        <div style={{ height: '100%', background: '#111', position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <div style={{ position: 'absolute', top: '12px', left: '12px', zIndex: 100 }}>
+            <button onClick={() => setCameraAberta(false)} style={{ width: '44px', height: '44px', background: 'rgba(0,0,0,0.4)', border: 'none', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
+              <X size={22} color="#fff" />
+            </button>
           </div>
 
           {/* Botão virar câmera — direto, sem ElementoClicavel */}
@@ -128,7 +134,6 @@ export default function Modulo5Licao5() {
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              fontSize: '26px',
               cursor: (virando || passo < 3) ? 'default' : 'pointer',
               opacity: (virando || passo < 3) ? 0.5 : 1,
               touchAction: 'manipulation',
@@ -138,33 +143,33 @@ export default function Modulo5Licao5() {
               transition: 'all 0.3s ease'
             }}
           >
-            {virando ? '⏳' : '🔄'}
+            {virando ? <RefreshCw size={24} color="#fff" className="animate-spin" /> : <RefreshCw size={24} color="#fff" />}
           </button>
 
-          <div className="text-9xl">🏞️</div>
+          <div style={{ fontSize: '72px' }}>🏞️</div>
 
           {fotoTirada && (
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: [0, 1, 0] }}
               transition={{ duration: 0.3 }}
-              className="absolute inset-0 bg-white"
+              style={{ position: 'absolute', inset: 0, background: '#fff' }}
             />
           )}
 
           {fotoTirada && (
-            <div className="absolute bottom-20 left-4">
-              <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} className="w-16 h-16 bg-white rounded-xl flex items-center justify-center text-3xl shadow-lg">
+            <div style={{ position: 'absolute', bottom: '100px', left: '16px' }}>
+              <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} style={{ width: '56px', height: '56px', background: '#fff', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '28px', boxShadow: '0 4px 16px rgba(0,0,0,0.3)' }}>
                 🏞️
               </motion.div>
             </div>
           )}
 
-          <div className="absolute bottom-8 left-0 right-0 flex items-center justify-center">
+          <div style={{ position: 'absolute', bottom: '32px', left: 0, right: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             {passo === 2 && !fotoTirada && (
-              <ElementoClicavel onClick={() => { setFotoTirada(true); handleCliqueCerto(3, null); }} posicao="top">
-                <div className="w-20 h-20 bg-white rounded-full border-4 border-gray-300 flex items-center justify-center cursor-pointer">
-                  <div className="w-16 h-16 bg-white rounded-full" />
+              <ElementoClicavel onClick={() => { setFotoTirada(true); handleCliqueCerto(3, null); }} mostrarSeta={false}>
+                <div style={{ width: '72px', height: '72px', background: '#fff', borderRadius: '50%', border: '4px solid #555', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
+                  <div style={{ width: '56px', height: '56px', background: '#fff', borderRadius: '50%', border: '2px solid #ddd' }} />
                 </div>
               </ElementoClicavel>
             )}
@@ -173,36 +178,43 @@ export default function Modulo5Licao5() {
       )}
 
       {cameraFrontal && (
-        <div className="w-full h-full bg-gradient-to-b from-pink-200 to-purple-300 pt-12 relative flex items-center justify-center">
-          <div className="absolute top-16 left-4 right-4 flex items-center justify-between">
-            <button onClick={() => setCameraFrontal(false)} className="text-white text-2xl">✕</button>
-            <button className="text-white text-3xl">🔄</button>
+        <div style={{ height: '100%', background: '#111', position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <div style={{ position: 'absolute', top: '12px', left: '12px', zIndex: 100 }}>
+            <button onClick={() => setCameraFrontal(false)} style={{ width: '44px', height: '44px', background: 'rgba(0,0,0,0.4)', border: 'none', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
+              <X size={22} color="#fff" />
+            </button>
           </div>
 
-          <div className="text-9xl">😊</div>
+          <div style={{ position: 'absolute', top: '12px', right: '12px' }}>
+            <button style={{ width: '44px', height: '44px', background: 'rgba(255,255,255,0.4)', border: '2px solid rgba(255,255,255,0.6)', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <RefreshCw size={22} color="#fff" />
+            </button>
+          </div>
+
+          <div style={{ fontSize: '72px' }}>😊</div>
 
           {selfieTirada && (
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: [0, 1, 0] }}
               transition={{ duration: 0.3 }}
-              className="absolute inset-0 bg-white"
+              style={{ position: 'absolute', inset: 0, background: '#fff' }}
             />
           )}
 
           {selfieTirada && (
-            <div className="absolute bottom-20 left-4">
-              <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} className="w-16 h-16 bg-white rounded-xl flex items-center justify-center text-3xl shadow-lg">
+            <div style={{ position: 'absolute', bottom: '100px', left: '16px' }}>
+              <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} style={{ width: '56px', height: '56px', background: '#fff', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '28px', boxShadow: '0 4px 16px rgba(0,0,0,0.3)' }}>
                 😊
               </motion.div>
             </div>
           )}
 
-          <div className="absolute bottom-8 left-0 right-0 flex items-center justify-center">
+          <div style={{ position: 'absolute', bottom: '32px', left: 0, right: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             {passo === 4 && !selfieTirada && (
-              <ElementoClicavel onClick={() => { setSelfieTirada(true); setTimeout(() => setMostrarValidacao(true), 1500); }} posicao="top">
-                <div className="w-20 h-20 bg-white rounded-full border-4 border-gray-300 flex items-center justify-center cursor-pointer">
-                  <div className="w-16 h-16 bg-white rounded-full" />
+              <ElementoClicavel onClick={() => { setSelfieTirada(true); setTimeout(() => setMostrarValidacao(true), 1500); }} mostrarSeta={false}>
+                <div style={{ width: '72px', height: '72px', background: '#fff', borderRadius: '50%', border: '4px solid #555', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
+                  <div style={{ width: '56px', height: '56px', background: '#fff', borderRadius: '50%', border: '2px solid #ddd' }} />
                 </div>
               </ElementoClicavel>
             )}

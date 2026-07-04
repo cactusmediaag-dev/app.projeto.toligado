@@ -104,8 +104,8 @@ export default function Modulo9Licao2() {
     >
       {/* Passo 1: Tela inicial do celular com ícone e-Título */}
       {!appAberto && (
-        <div style={{ minHeight: '100%', display: 'flex', flexDirection: 'column' }}>
-          <div style={{ flex: 1, position: 'relative', minHeight: 0 }}>
+        <div style={{ height: '100%', minHeight: '480px', position: 'relative' }}>
+          <div style={{ position: 'absolute', inset: 0 }}>
             <AndroidHomeScreen
               appsCustom={[
                 { icon: '📷', label: 'Câmera', bg: '#1a1a2e', id: 'camera' },

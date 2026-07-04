@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { motion } from 'framer-motion';
 import VozSistema from '../shared/AudioSystem';
 
@@ -7,25 +7,13 @@ export default function InstructionBalloon({ text, onRepeat, mascot = "🧓" }) 
 
   const falar = async () => {
     setFalando(true);
-    await VozSistema.falarForcado(text);
+    if (onRepeat) {
+      onRepeat();
+    } else {
+      await VozSistema.falarForcado(text);
+    }
     setTimeout(() => setFalando(false), 500);
-    onRepeat && onRepeat();
   };
-
-  useEffect(() => {
-    if (!text) return;
-    const t = setTimeout(() => {
-      if (VozSistema.usuarioInteragiu) {
-        VozSistema.falar(text);
-      } else {
-        VozSistema._textosPendentes = [text];
-      }
-    }, 500);
-    return () => {
-      clearTimeout(t);
-      VozSistema.parar();
-    };
-  }, [text]);
 
   return (
     <motion.div

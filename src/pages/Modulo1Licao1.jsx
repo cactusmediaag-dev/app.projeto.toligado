@@ -128,7 +128,7 @@ export default function Modulo1Licao1() {
         width: '100%',
         overflow: 'hidden'
       }}>
-        <div style={{ position: 'relative', width: 'min(300px, 85vw)', flexShrink: 0 }}>
+        <div style={{ position: 'relative', width: 'min(360px, 94vw)', flexShrink: 0 }}>
 
           {/* Moldura */}
           <div style={{
@@ -153,17 +153,21 @@ export default function Modulo1Licao1() {
               }}
               style={{
                 position: 'absolute',
-                right: '-10px', top: '32%',
+                right: '-44px', top: '32%',
+                width: '44px', height: '52px',
+                display: 'flex', alignItems: 'center', justifyContent: 'flex-start',
+                cursor: passo === 1 ? 'pointer' : 'default',
+                zIndex: 20,
+              }}
+            >
+              <div style={{
                 width: '10px', height: '52px',
                 background: passo === 1 ? (mostrarDica ? '#F3984B' : '#666') : '#444',
                 borderRadius: '0 5px 5px 0',
-                cursor: passo === 1 ? 'pointer' : 'default',
-                zIndex: 20,
                 transition: 'background 0.3s ease',
-                boxShadow: mostrarDica && passo === 1 ? '4px 0 16px rgba(243,152,75,0.9)' : 'none',
-                animation: mostrarDica && passo === 1 ? 'buttonPulse 1s ease infinite' : 'none'
-              }}
-            />
+                animation: mostrarDica && passo === 1 ? 'pulse-border 2s infinite' : 'none',
+              }} />
+            </div>
 
             {/* BOTÃO VOLUME + — lateral esquerda */}
             <div
@@ -178,17 +182,21 @@ export default function Modulo1Licao1() {
               }}
               style={{
                 position: 'absolute',
-                left: '-10px', top: '26%',
+                left: '-44px', top: '26%',
+                width: '44px', height: '44px',
+                display: 'flex', alignItems: 'center', justifyContent: 'flex-end',
+                cursor: passo === 2 ? 'pointer' : 'default',
+                zIndex: 20,
+              }}
+            >
+              <div style={{
                 width: '10px', height: '40px',
                 background: passo === 2 ? (mostrarDica ? '#F3984B' : '#666') : '#444',
                 borderRadius: '5px 0 0 5px',
-                cursor: passo === 2 ? 'pointer' : 'default',
-                zIndex: 20,
                 transition: 'background 0.3s ease',
-                boxShadow: mostrarDica && passo === 2 ? '-4px 0 16px rgba(243,152,75,0.9)' : 'none',
-                animation: mostrarDica && passo === 2 ? 'buttonPulse 1s ease infinite' : 'none'
-              }}
-            />
+                animation: mostrarDica && passo === 2 ? 'pulse-border 2s infinite' : 'none',
+              }} />
+            </div>
 
             {/* BOTÃO VOLUME - */}
             <div style={{
@@ -216,7 +224,7 @@ export default function Modulo1Licao1() {
 
             {/* TELA */}
             <div style={{
-              width: '100%', height: 'min(580px, calc(85vw * 1.93))',
+              width: '100%', height: 'min(696px, calc(94vw * 1.93))',
               background: telaAcesa ? 'linear-gradient(160deg, #e8f0fe, #f0e8ff)' : '#000',
               borderRadius: '32px',
               overflow: 'hidden',
@@ -248,10 +256,10 @@ export default function Modulo1Licao1() {
                       }}
                       style={{
                         cursor: passo === 3 ? 'pointer' : 'default',
-                        padding: '2px 4px', borderRadius: '6px',
-                        background: passo === 3 ? 'rgba(243,152,75,0.3)' : 'transparent',
-                        border: passo === 3 ? '2px solid #F3984B' : '2px solid transparent',
-                        animation: mostrarDica && passo === 3 ? 'softPulse 1s ease infinite' : 'none',
+                        minWidth: '44px', minHeight: '44px',
+                        display: 'flex', alignItems: 'center', justifyContent: 'center',
+                        borderRadius: '10px',
+                        animation: mostrarDica && passo === 3 ? 'pulse-border 2s infinite' : 'none',
                         transition: 'all 0.3s ease', fontSize: '14px'
                       }}
                     >🔋</div>
@@ -314,28 +322,7 @@ export default function Modulo1Licao1() {
             </div>
           </div>
 
-          {/* Setas indicativas */}
-          {mostrarDica && passo === 1 && (
-            <div style={{
-              position: 'absolute', right: '-44px', top: '38%',
-              fontSize: '28px', animation: 'arrowPulse 0.7s ease infinite alternate',
-              zIndex: 30, pointerEvents: 'none'
-            }}>👉</div>
-          )}
-          {mostrarDica && passo === 2 && (
-            <div style={{
-              position: 'absolute', left: '-44px', top: '28%',
-              fontSize: '28px', animation: 'arrowPulse2 0.7s ease infinite alternate',
-              zIndex: 30, pointerEvents: 'none'
-            }}>👈</div>
-          )}
-          {mostrarDica && passo === 3 && (
-            <div style={{
-              position: 'absolute', right: '16px', top: '28px',
-              fontSize: '22px', animation: 'arrowPulse 0.7s ease infinite alternate',
-              zIndex: 30, pointerEvents: 'none'
-            }}>⬆️</div>
-          )}
+          {/* Setas indicativas removidas — pulse laranja é o indicador oficial */}
         </div>
       </div>
 
@@ -372,21 +359,10 @@ export default function Modulo1Licao1() {
       {feedbackErro && <FeedbackErro dica={mensagemFeedback} onTentar={() => setFeedbackErro(false)}/>}
 
       <style>{`
-        @keyframes arrowPulse {
-          from { transform: translateX(0); }
-          to   { transform: translateX(8px); }
-        }
-        @keyframes arrowPulse2 {
-          from { transform: translateX(0); }
-          to   { transform: translateX(-8px); }
-        }
-        @keyframes buttonPulse {
-          0%   { box-shadow: 4px 0 8px rgba(243,152,75,0.4); }
-          100% { box-shadow: 4px 0 20px rgba(243,152,75,1); }
-        }
-        @keyframes softPulse {
-          0%   { box-shadow: 0 0 0 0 rgba(243,152,75,0.7); }
-          100% { box-shadow: 0 0 0 8px rgba(243,152,75,0); }
+        @keyframes pulse-border {
+          0% { box-shadow: 0 0 0 0 rgba(243, 152, 75, 0.7); }
+          70% { box-shadow: 0 0 0 20px rgba(243, 152, 75, 0); }
+          100% { box-shadow: 0 0 0 0 rgba(243, 152, 75, 0); }
         }
       `}</style>
     </div>

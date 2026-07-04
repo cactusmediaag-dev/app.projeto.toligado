@@ -9,29 +9,11 @@ export default function ElementoClicavel({
   className = "",
   mostrarSeta = true
 }) {
-  const arrowPositions = {
-    top: "top-[-40px] left-1/2 -translate-x-1/2 rotate-180",
-    bottom: "bottom-[-40px] left-1/2 -translate-x-1/2",
-    left: "left-[-40px] top-1/2 -translate-y-1/2 -rotate-90",
-    right: "right-[-40px] top-1/2 -translate-y-1/2 rotate-90",
-  };
-
   return (
     <motion.div
       className={`relative ${className}`}
       whileTap={{ scale: 0.95 }}
     >
-      {/* Seta Animada */}
-      {mostrarSeta && (
-        <motion.div
-          className={`absolute ${arrowPositions[posicao]} text-4xl pointer-events-none z-20`}
-          animate={{ y: [0, -10, 0] }}
-          transition={{ duration: 1, repeat: Infinity, ease: "easeInOut" }}
-        >
-          ↓
-        </motion.div>
-      )}
-
       {/* Elemento com Pulse - área clicável expandida */}
       <div
         onClick={onClick}

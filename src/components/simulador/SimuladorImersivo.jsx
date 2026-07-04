@@ -27,7 +27,7 @@ export default function SimuladorImersivo({
   useEffect(() => {
     const t = setTimeout(() => {
       if (audioText) speakText(audioText);
-    }, 500);
+    }, 200);
     return () => {
       clearTimeout(t);
       AudioSystem.stop();

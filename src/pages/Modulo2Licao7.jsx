@@ -7,6 +7,7 @@ import SimuladorImersivo from "@/components/simulador/SimuladorImersivo";
 import ElementoClicavel from "@/components/simulador/ElementoClicavel";
 import ValidacaoQuiz from "@/components/simulador/ValidacaoQuiz";
 import { Sons, MoedasAnimadas, FeedbackAcerto, FeedbackErro } from "@/components/shared/GameFeedback";
+import { MessageCircle, ArrowLeft, Lock, Ban, ShieldAlert } from 'lucide-react';
 
 export default function Modulo2Licao7() {
   const navigate = useNavigate();
@@ -81,67 +82,69 @@ export default function Modulo2Licao7() {
       onVoltar={() => navigate(createPageUrl("Modulos"))}
     >
       {!smsAberto && (
-        <div className="w-full h-full bg-gradient-to-b from-green-50 to-green-100 relative pt-12">
+        <div style={{ height: '100%', background: '#F8F9FA', position: 'relative', display: 'flex', flexDirection: 'column' }}>
           {passo === 1 && (
             <ElementoClicavel
               onClick={() => handleCliqueCerto(2, () => setSmsAberto(true))}
-              posicao="bottom"
+              mostrarSeta={false}
             >
               <motion.div
                 initial={{ y: -100 }}
                 animate={{ y: 0 }}
-                className="absolute top-12 left-4 right-4 bg-white rounded-2xl p-4 shadow-lg cursor-pointer border-2 border-blue-300"
+                style={{ position: 'absolute', top: '12px', left: '16px', right: '16px', background: '#fff', borderRadius: '16px', padding: '16px', boxShadow: '0 4px 16px rgba(0,0,0,0.15)', cursor: 'pointer' }}
               >
-                <div className="flex items-center gap-3">
-                  <div className="text-3xl">📩</div>
-                  <div className="flex-1">
-                    <p className="font-bold text-gray-800">1 nova mensagem</p>
-                    <p className="text-sm text-gray-500">Banco Seguro</p>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                  <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: '#25D366', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                    <MessageCircle size={22} color="#fff" />
+                  </div>
+                  <div style={{ flex: 1 }}>
+                    <p style={{ fontWeight: '700', color: '#1a1a1a', fontSize: '16px', margin: 0 }}>1 nova mensagem</p>
+                    <p style={{ fontSize: '14px', color: '#666', margin: 0 }}>Banco Seguro</p>
                   </div>
                 </div>
               </motion.div>
             </ElementoClicavel>
           )}
-          <div className="flex items-center justify-center h-full">
-            <div className="text-center text-gray-400">
-              <div className="text-8xl mb-4">📱</div>
-              <p className="font-semibold">Tela Inicial</p>
-            </div>
+          <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <p style={{ color: '#ccc', fontWeight: '600' }}>Tela Inicial</p>
           </div>
         </div>
       )}
 
       {smsAberto && (
-        <div className="w-full h-full bg-white pt-12">
-          <div className="px-4 mb-4">
-            <button onClick={() => setSmsAberto(false)} className="text-blue-600 font-bold">← Voltar</button>
+        <div style={{ height: '100%', background: '#fff', display: 'flex', flexDirection: 'column' }}>
+          <div style={{ padding: '12px 16px', display: 'flex', alignItems: 'center', gap: '12px', flexShrink: 0, borderBottom: '1px solid #f0f0f0' }}>
+            <button onClick={() => setSmsAberto(false)} style={{ width: '44px', height: '44px', background: 'none', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+              <ArrowLeft size={24} color="#4285F4" />
+            </button>
+            <h2 style={{ fontSize: '20px', fontWeight: '800', color: '#1a1a1a', margin: 0 }}>Mensagens</h2>
           </div>
-          <div className="px-4 py-4">
-            <h2 className="text-xl font-black text-gray-800 mb-6">Mensagens</h2>
-
-            <div className={`bg-green-50 rounded-2xl p-4 mb-4 ${smsLido ? "border-2 border-green-400" : ""}`}>
-              <div className="flex items-center gap-2 mb-2">
-                <span className="text-2xl">🏦</span>
-                <p className="font-bold text-gray-800">Banco Seguro</p>
+          <div style={{ flex: 1, overflowY: 'auto', padding: '16px' }}>
+            <div style={{ background: '#E8F5E9', borderRadius: '16px', padding: '16px', marginBottom: '16px', border: smsLido ? '2px solid #4CAF50' : 'none' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '8px' }}>
+                <div style={{ width: '32px', height: '32px', borderRadius: '50%', background: '#4CAF50', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                  <span style={{ fontSize: '16px' }}>🏦</span>
+                </div>
+                <p style={{ fontWeight: '700', color: '#1a1a1a', fontSize: '18px', margin: 0 }}>Banco Seguro</p>
               </div>
-              <p className="text-gray-700 leading-relaxed mb-3">
-                Seu código de acesso é <span className="font-black text-xl">7823</span>.
+              <p style={{ color: '#1a1a1a', lineHeight: 1.5, marginBottom: '12px', fontSize: '16px' }}>
+                Seu código de acesso é <span style={{ fontWeight: '800', fontSize: '20px' }}>7823</span>.
                 Válido por 5 minutos. Não compartilhe.
               </p>
               {passo === 2 && !smsLido && (
                 <ElementoClicavel
                   onClick={() => { setSmsLido(true); handleCliqueCerto(3, null); }}
-                  posicao="top"
+                  mostrarSeta={false}
                 >
-                  <button className="w-full bg-green-500 text-white py-2 rounded-xl font-bold">
+                  <button style={{ width: '100%', background: '#34A853', color: '#fff', border: 'none', padding: '14px', borderRadius: '12px', fontWeight: '700', fontSize: '16px', cursor: 'pointer' }}>
                     Entendi, é meu segredo! 🤫
                   </button>
                 </ElementoClicavel>
               )}
               {smsLido && (
-                <div className="flex items-center gap-2 text-green-600 font-bold">
-                  <span>🔒</span>
-                  <span className="text-sm">Código secreto guardado</span>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#2E7D32', fontWeight: '700' }}>
+                  <Lock size={16} color="#2E7D32" />
+                  <span style={{ fontSize: '14px' }}>Código secreto guardado</span>
                 </div>
               )}
             </div>
@@ -150,28 +153,30 @@ export default function Modulo2Licao7() {
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                className={`bg-red-50 rounded-2xl p-4 ${spam ? "opacity-50" : ""}`}
+                style={{ background: '#FEF2F2', borderRadius: '16px', padding: '16px', opacity: spam ? 0.5 : 1 }}
               >
-                <div className="flex items-center gap-2 mb-2">
-                  <span className="text-2xl">📱</span>
-                  <p className="font-bold text-gray-800">Número desconhecido</p>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '8px' }}>
+                  <div style={{ width: '32px', height: '32px', borderRadius: '50%', background: '#EF4444', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                    <ShieldAlert size={18} color="#fff" />
+                  </div>
+                  <p style={{ fontWeight: '700', color: '#1a1a1a', fontSize: '18px', margin: 0 }}>Número desconhecido</p>
                 </div>
-                <p className="text-gray-700 leading-relaxed mb-3">
+                <p style={{ color: '#1a1a1a', lineHeight: 1.5, marginBottom: '12px', fontSize: '16px' }}>
                   Parabéns! Você ganhou R$5.000! Clique aqui: bit.ly/xxxx
                 </p>
                 {!spam && (
                   <ElementoClicavel
                     onClick={() => { setSpam(true); setTimeout(() => setMostrarValidacao(true), 1000); }}
-                    posicao="top"
+                    mostrarSeta={false}
                   >
-                    <button className="w-full bg-red-500 text-white py-2 rounded-xl font-bold">
-                      ⛔ Denunciar como Spam
+                    <button style={{ width: '100%', background: '#EF4444', color: '#fff', border: 'none', padding: '14px', borderRadius: '12px', fontWeight: '700', fontSize: '16px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
+                      <Ban size={18} color="#fff" /> Denunciar como Spam
                     </button>
                   </ElementoClicavel>
                 )}
                 {spam && (
-                  <div className="text-center">
-                    <p className="text-red-600 font-bold">✅ Bloqueado e denunciado</p>
+                  <div style={{ textAlign: 'center' }}>
+                    <p style={{ color: '#EF4444', fontWeight: '700' }}>✅ Bloqueado e denunciado</p>
                   </div>
                 )}
               </motion.div>

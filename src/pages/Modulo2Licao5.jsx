@@ -7,6 +7,7 @@ import SimuladorImersivo from "@/components/simulador/SimuladorImersivo";
 import ElementoClicavel from "@/components/simulador/ElementoClicavel";
 import ValidacaoQuiz from "@/components/simulador/ValidacaoQuiz";
 import { Sons, MoedasAnimadas, FeedbackAcerto, FeedbackErro } from "@/components/shared/GameFeedback";
+import { Lock, KeyRound, Trash2, CheckCircle } from 'lucide-react';
 
 export default function Modulo2Licao5() {
   const navigate = useNavigate();
@@ -84,29 +85,32 @@ export default function Modulo2Licao5() {
       totalPassos={4}
       onVoltar={() => navigate(createPageUrl("Modulos"))}
     >
-      <div className="w-full h-full bg-white pt-12 p-6 flex flex-col">
-        <h2 className="text-2xl font-black text-gray-800 mb-8 text-center">Criar Senha Segura</h2>
+      <div style={{ height: '100%', background: '#F8F9FA', display: 'flex', flexDirection: 'column', padding: '24px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '12px', marginBottom: '32px', flexShrink: 0 }}>
+          <Lock size={32} color="#5C2E7F" />
+          <h2 style={{ fontSize: '24px', fontWeight: '800', color: '#1a1a1a', margin: 0 }}>Criar Senha Segura</h2>
+        </div>
 
-        <div className="bg-gray-50 rounded-3xl p-6 mb-6">
-          <label className="text-sm font-bold text-gray-600 mb-3 block">Digite sua senha:</label>
-          <div className="bg-white rounded-2xl p-4 mb-4 border-2 border-gray-200">
-            <div className="flex gap-2 justify-center mb-3">
+        <div style={{ background: '#fff', borderRadius: '24px', padding: '24px', marginBottom: '24px' }}>
+          <label style={{ fontSize: '14px', fontWeight: '700', color: '#666', marginBottom: '12px', display: 'block' }}>Digite sua senha:</label>
+          <div style={{ background: '#F8F9FA', borderRadius: '16px', padding: '16px', marginBottom: '16px', border: '2px solid #e0e0e0' }}>
+            <div style={{ display: 'flex', gap: '8px', justifyContent: 'center' }}>
               {Array.from({ length: 6 }).map((_, i) => (
-                <div key={i} className="w-10 h-10 rounded-xl bg-gray-100 flex items-center justify-center">
-                  <span className="text-2xl">{senha[i] ? "●" : ""}</span>
+                <div key={i} style={{ width: '40px', height: '48px', borderRadius: '12px', background: '#fff', border: '2px solid #e0e0e0', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <span style={{ fontSize: '24px', fontWeight: '700', color: '#1a1a1a' }}>{senha[i] ? "●" : ""}</span>
                 </div>
               ))}
             </div>
           </div>
 
           {senha && (
-            <div className="mb-4">
-              <div className="flex gap-2 mb-2">
-                <div className={`flex-1 h-2 rounded-full ${forca >= 1 ? "bg-red-400" : "bg-gray-200"}`} />
-                <div className={`flex-1 h-2 rounded-full ${forca >= 2 ? "bg-yellow-400" : "bg-gray-200"}`} />
-                <div className={`flex-1 h-2 rounded-full ${forca >= 3 ? "bg-green-400" : "bg-gray-200"}`} />
+            <div style={{ marginBottom: '16px' }}>
+              <div style={{ display: 'flex', gap: '8px', marginBottom: '8px' }}>
+                <div style={{ flex: 1, height: '8px', borderRadius: '4px', background: forca >= 1 ? '#EF4444' : '#e0e0e0' }} />
+                <div style={{ flex: 1, height: '8px', borderRadius: '4px', background: forca >= 2 ? '#F59E0B' : '#e0e0e0' }} />
+                <div style={{ flex: 1, height: '8px', borderRadius: '4px', background: forca >= 3 ? '#10B981' : '#e0e0e0' }} />
               </div>
-              <p className={`text-sm font-bold text-center ${forca === 1 ? "text-red-500" : forca === 2 ? "text-yellow-600" : "text-green-600"}`}>
+              <p style={{ fontSize: '14px', fontWeight: '700', textAlign: 'center', color: forca === 1 ? '#EF4444' : forca === 2 ? '#F59E0B' : '#10B981', margin: 0 }}>
                 {forca === 1 ? "FRACA" : forca === 2 ? "MÉDIA" : "FORTE"}
               </p>
             </div>
@@ -119,9 +123,9 @@ export default function Modulo2Licao5() {
                 setForca(1);
                 handleCliqueCerto(2, null);
               }}
-              posicao="top"
+              mostrarSeta={false}
             >
-              <button className="w-full bg-blue-500 text-white py-3 rounded-2xl font-bold">
+              <button style={{ width: '100%', background: '#4285F4', color: '#fff', border: 'none', padding: '16px', borderRadius: '16px', fontWeight: '700', fontSize: '18px', cursor: 'pointer', minHeight: '48px' }}>
                 Digitar senha
               </button>
             </ElementoClicavel>
@@ -134,10 +138,10 @@ export default function Modulo2Licao5() {
                 setForca(0);
                 handleCliqueCerto(3, null);
               }}
-              posicao="top"
+              mostrarSeta={false}
             >
-              <button className="w-full bg-red-500 text-white py-3 rounded-2xl font-bold">
-                🗑️ Apagar
+              <button style={{ width: '100%', background: '#EF4444', color: '#fff', border: 'none', padding: '16px', borderRadius: '16px', fontWeight: '700', fontSize: '18px', cursor: 'pointer', minHeight: '48px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
+                <Trash2 size={20} color="#fff" /> Apagar
               </button>
             </ElementoClicavel>
           )}
@@ -160,23 +164,23 @@ export default function Modulo2Licao5() {
                   }
                 }, 300);
               }}
-              posicao="top"
+              mostrarSeta={false}
             >
-              <button className="w-full bg-green-500 text-white py-3 rounded-2xl font-bold">
-                Digitar senha forte
+              <button style={{ width: '100%', background: '#10B981', color: '#fff', border: 'none', padding: '16px', borderRadius: '16px', fontWeight: '700', fontSize: '18px', cursor: 'pointer', minHeight: '48px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
+                <KeyRound size={20} color="#fff" /> Digitar senha forte
               </button>
             </ElementoClicavel>
           )}
         </div>
 
         {passo === 4 && (
-          <div className="bg-gray-50 rounded-3xl p-6">
-            <label className="text-sm font-bold text-gray-600 mb-3 block">Confirme sua senha:</label>
-            <div className="bg-white rounded-2xl p-4 mb-4 border-2 border-gray-200">
-              <div className="flex gap-2 justify-center">
+          <div style={{ background: '#fff', borderRadius: '24px', padding: '24px' }}>
+            <label style={{ fontSize: '14px', fontWeight: '700', color: '#666', marginBottom: '12px', display: 'block' }}>Confirme sua senha:</label>
+            <div style={{ background: '#F8F9FA', borderRadius: '16px', padding: '16px', marginBottom: '16px', border: '2px solid #e0e0e0' }}>
+              <div style={{ display: 'flex', gap: '8px', justifyContent: 'center' }}>
                 {Array.from({ length: 6 }).map((_, i) => (
-                  <div key={i} className="w-10 h-10 rounded-xl bg-gray-100 flex items-center justify-center">
-                    <span className="text-2xl">{senhaConfirm[i] ? "●" : ""}</span>
+                  <div key={i} style={{ width: '40px', height: '48px', borderRadius: '12px', background: '#fff', border: '2px solid #e0e0e0', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <span style={{ fontSize: '24px', fontWeight: '700', color: '#1a1a1a' }}>{senhaConfirm[i] ? "●" : ""}</span>
                   </div>
                 ))}
               </div>
@@ -187,10 +191,10 @@ export default function Modulo2Licao5() {
                 setSenhaConfirm(senha);
                 setTimeout(() => setMostrarValidacao(true), 800);
               }}
-              posicao="top"
+              mostrarSeta={false}
             >
-              <button className="w-full bg-green-500 text-white py-3 rounded-2xl font-bold">
-                Confirmar ✅
+              <button style={{ width: '100%', background: '#10B981', color: '#fff', border: 'none', padding: '16px', borderRadius: '16px', fontWeight: '700', fontSize: '18px', cursor: 'pointer', minHeight: '48px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
+                <CheckCircle size={20} color="#fff" /> Confirmar
               </button>
             </ElementoClicavel>
           </div>

@@ -7,6 +7,7 @@ import SimuladorImersivo from "@/components/simulador/SimuladorImersivo";
 import ElementoClicavel from "@/components/simulador/ElementoClicavel";
 import ValidacaoQuiz from "@/components/simulador/ValidacaoQuiz";
 import { Sons, MoedasAnimadas, FeedbackAcerto, FeedbackErro } from "@/components/shared/GameFeedback";
+import { Search, AlertTriangle, ShieldCheck, Trash2, Ban } from 'lucide-react';
 
 export default function Modulo2Licao4() {
   const navigate = useNavigate();
@@ -79,31 +80,34 @@ export default function Modulo2Licao4() {
       totalPassos={3}
       onVoltar={() => navigate(createPageUrl("Modulos"))}
     >
-      <div className="w-full h-full bg-gradient-to-b from-green-50 to-white pt-12 overflow-y-auto">
+      <div style={{ height: '100%', background: '#ECE5DD', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
         {/* WhatsApp header */}
-        <div className="bg-green-600 px-4 py-3 flex items-center gap-3">
-          <div className="w-10 h-10 bg-gray-300 rounded-full" />
-          <span className="text-white font-bold">Grupo Família</span>
+        <div style={{ background: '#25D366', padding: '16px', display: 'flex', alignItems: 'center', gap: '12px', flexShrink: 0 }}>
+          <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+            <span style={{ fontSize: '20px' }}>👨‍👩‍👧</span>
+          </div>
+          <span style={{ color: '#fff', fontWeight: '700', fontSize: '18px' }}>Grupo Família</span>
         </div>
 
         {/* Mensagem suspeita */}
-        <div className="p-4">
-          <div className={`bg-white rounded-2xl p-4 shadow-md ${analisado ? "border-2 border-red-400" : ""}`}>
-            <p className="text-gray-800 font-semibold leading-relaxed mb-3">
-              ⚠️ <span className={analisado ? "bg-red-100" : ""}>URGENTE</span>: O governo vai cobrar taxa de R$500 de todos os aposentados até <span className={analisado ? "bg-red-100" : ""}>amanhã</span>! 
-              <span className={analisado ? "bg-red-100" : ""}> Compartilhe para avisar todos!</span>
+        <div style={{ flex: 1, overflowY: 'auto', padding: '16px' }}>
+          <div style={{ background: '#fff', borderRadius: '16px', padding: '16px', boxShadow: '0 1px 4px rgba(0,0,0,0.1)', border: analisado ? '2px solid #EF4444' : 'none' }}>
+            <p style={{ color: '#1a1a1a', fontWeight: '600', lineHeight: 1.5, marginBottom: '12px', fontSize: '16px' }}>
+              <AlertTriangle size={16} color="#EF4444" style={{ display: 'inline', verticalAlign: 'middle', marginRight: '4px' }} />
+              <span style={{ background: analisado ? '#FEE2E2' : 'transparent' }}>URGENTE</span>: O governo vai cobrar taxa de R$500 de todos os aposentados até <span style={{ background: analisado ? '#FEE2E2' : 'transparent' }}>amanhã</span>!
+              <span style={{ background: analisado ? '#FEE2E2' : 'transparent' }}> Compartilhe para avisar todos!</span>
             </p>
-            <p className="text-xs text-gray-400">Recebida há 5 min</p>
+            <p style={{ fontSize: '12px', color: '#9CA3AF' }}>Recebida há 5 min</p>
           </div>
 
           {passo === 1 && !analisado && (
-            <div className="mt-4">
+            <div style={{ marginTop: '16px' }}>
               <ElementoClicavel
                 onClick={() => handleCliqueCerto(2, () => setAnalisado(true))}
-                posicao="top"
+                mostrarSeta={false}
               >
-                <button className="w-full bg-blue-500 text-white py-3 rounded-2xl font-bold text-lg">
-                  Ler com calma 🔍
+                <button style={{ width: '100%', background: '#4285F4', color: '#fff', border: 'none', padding: '16px', borderRadius: '16px', fontWeight: '700', fontSize: '18px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
+                  <Search size={20} color="#fff" /> Ler com calma
                 </button>
               </ElementoClicavel>
             </div>
@@ -113,24 +117,26 @@ export default function Modulo2Licao4() {
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              className="mt-4 space-y-3"
+              style={{ marginTop: '16px', display: 'flex', flexDirection: 'column', gap: '12px' }}
             >
-              <div className="bg-red-50 border-2 border-red-200 rounded-2xl p-4">
-                <p className="text-sm font-bold text-red-700 mb-2">⚠️ Sinais de Alerta:</p>
-                <ul className="space-y-2 text-sm text-red-600">
-                  <li>🔴 Palavra "URGENTE" — usado para assustar</li>
-                  <li>🔴 Prazo curtíssimo — pressão para agir rápido</li>
-                  <li>🔴 Pede para compartilhar — sinal de fake</li>
+              <div style={{ background: '#FEF2F2', border: '2px solid #FECACA', borderRadius: '16px', padding: '16px' }}>
+                <p style={{ fontSize: '14px', fontWeight: '700', color: '#B91C1C', marginBottom: '8px', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                  <AlertTriangle size={16} color="#EF4444" /> Sinais de Alerta:
+                </p>
+                <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '8px', fontSize: '14px', color: '#DC2626' }}>
+                  <li>• Palavra "URGENTE" — usado para assustar</li>
+                  <li>• Prazo curtíssimo — pressão para agir rápido</li>
+                  <li>• Pede para compartilhar — sinal de fake</li>
                 </ul>
               </div>
 
               {passo === 2 && (
                 <ElementoClicavel
                   onClick={() => handleCliqueCerto(3, () => setVerificado(true))}
-                  posicao="top"
+                  mostrarSeta={false}
                 >
-                  <button className="w-full bg-red-500 text-white py-4 rounded-2xl font-bold text-lg flex items-center justify-center gap-2">
-                    🚫 Não Compartilhar
+                  <button style={{ width: '100%', background: '#EF4444', color: '#fff', border: 'none', padding: '18px', borderRadius: '16px', fontWeight: '700', fontSize: '18px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
+                    <Ban size={20} color="#fff" /> Não Compartilhar
                   </button>
                 </ElementoClicavel>
               )}
@@ -141,20 +147,20 @@ export default function Modulo2Licao4() {
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              className="mt-4"
+              style={{ marginTop: '16px' }}
             >
-              <div className="bg-green-100 border-2 border-green-400 rounded-2xl p-4 mb-4">
-                <p className="text-2xl mb-2">✅</p>
-                <p className="text-lg font-bold text-green-700">Muito bem! Você não caiu no golpe!</p>
+              <div style={{ background: '#E8F5E9', border: '2px solid #4CAF50', borderRadius: '16px', padding: '16px', marginBottom: '16px' }}>
+                <ShieldCheck size={32} color="#4CAF50" style={{ marginBottom: '8px' }} />
+                <p style={{ fontSize: '18px', fontWeight: '700', color: '#2E7D32', margin: 0 }}>Muito bem! Você não caiu no golpe!</p>
               </div>
 
               {passo === 3 && (
                 <ElementoClicavel
                   onClick={() => setMostrarValidacao(true)}
-                  posicao="top"
+                  mostrarSeta={false}
                 >
-                  <button className="w-full bg-blue-600 text-white py-4 rounded-2xl font-bold text-lg">
-                    Verificar no Comprova 🔎
+                  <button style={{ width: '100%', background: '#4285F4', color: '#fff', border: 'none', padding: '18px', borderRadius: '16px', fontWeight: '700', fontSize: '18px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
+                    <Search size={20} color="#fff" /> Verificar no Comprova
                   </button>
                 </ElementoClicavel>
               )}

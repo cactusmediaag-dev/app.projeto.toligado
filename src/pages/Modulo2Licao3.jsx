@@ -7,6 +7,8 @@ import SimuladorImersivo from "@/components/simulador/SimuladorImersivo";
 import ElementoClicavel from "@/components/simulador/ElementoClicavel";
 import ValidacaoQuiz from "@/components/simulador/ValidacaoQuiz";
 import { Sons, MoedasAnimadas, FeedbackAcerto, FeedbackErro } from "@/components/shared/GameFeedback";
+import AndroidHomeScreen from "@/components/simulador/AndroidHomeScreen";
+import { Image as ImageIcon, Menu, Cloud, ChevronRight, ArrowLeft, Settings, Trash2, HelpCircle } from 'lucide-react';
 
 export default function Modulo2Licao3() {
   const navigate = useNavigate();
@@ -86,49 +88,52 @@ export default function Modulo2Licao3() {
       onVoltar={() => navigate(createPageUrl("Modulos"))}
     >
       {!fotosAberto && (
-        <div className="w-full h-full bg-gradient-to-b from-green-50 to-green-100 p-6 pt-12">
-          <div className="grid grid-cols-4 gap-6 mt-8">
-            {passo === 1 && (
-              <ElementoClicavel
-                onClick={() => handleCliqueCerto(2, () => setFotosAberto(true))}
-                posicao="bottom"
-              >
-                <div className="flex flex-col items-center gap-2">
-                  <div className="w-14 h-14 bg-gradient-to-br from-yellow-400 via-red-400 to-pink-400 rounded-2xl flex items-center justify-center text-2xl shadow-md">
-                    📸
-                  </div>
-                </div>
-              </ElementoClicavel>
-            )}
-            {["G", "⚙️", "📱", "📧", "🎵", "📍", "💬"].map((emoji, i) => (
-              <div key={i} className="flex flex-col items-center gap-2">
-                <div className="w-14 h-14 bg-white rounded-2xl flex items-center justify-center text-2xl shadow-md">
-                  {emoji}
-                </div>
-              </div>
-            ))}
-          </div>
+        <div style={{ height: '100%', position: 'relative' }}>
+          <AndroidHomeScreen
+            appsCustom={[
+              { nome: 'camera', label: 'Câmera', bg: '#37474F', id: 'camera' },
+              { nome: 'mensagem', label: 'WhatsApp', bg: '#25D366', id: 'whatsapp' },
+              { nome: 'chrome', label: 'Chrome', bg: '#4285F4', id: 'chrome' },
+              { nome: 'config', label: 'Config.', bg: '#607D8B', id: 'settings' },
+              { nome: 'fotos', label: 'Fotos', bg: '#FF7043', id: 'photos' },
+              { nome: 'busca', label: 'Google', bg: '#fff', corIcone: '#4285F4', id: 'google' },
+              { nome: 'musica', label: 'Música', bg: '#E91E63', id: 'music' },
+              { nome: 'email', label: 'Email', bg: '#EA4335', id: 'email' },
+            ]}
+            appDestacado={passo === 1 ? 'photos' : null}
+            onAppClick={(id) => {
+              if (passo === 1 && id === 'photos') handleCliqueCerto(2, () => setFotosAberto(true));
+            }}
+          />
         </div>
       )}
 
       {fotosAberto && !menuAberto && !backupAberto && (
-        <div className="w-full h-full bg-white pt-12">
-          <div className="px-4 mb-4 flex items-center justify-between">
-            {passo === 2 && (
+        <div style={{ height: '100%', background: '#fff', display: 'flex', flexDirection: 'column' }}>
+          <div style={{ padding: '16px', borderBottom: '1px solid #f0f0f0', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexShrink: 0 }}>
+            {passo === 2 ? (
               <ElementoClicavel
                 onClick={() => handleCliqueCerto(3, () => setMenuAberto(true))}
-                posicao="right"
+                mostrarSeta={false}
               >
-                <button className="text-3xl cursor-pointer">☰</button>
+                <div style={{ width: '44px', height: '44px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
+                  <Menu size={24} color="#5f6368" />
+                </div>
               </ElementoClicavel>
+            ) : (
+              <div style={{ width: '44px', height: '44px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <Menu size={24} color="#5f6368" />
+              </div>
             )}
-            {passo !== 2 && <button className="text-3xl">☰</button>}
-            <h2 className="text-xl font-black text-gray-800">Google Fotos</h2>
-            <div className="w-8" />
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <ImageIcon size={24} color="#FF7043" />
+              <h2 style={{ fontSize: '20px', fontWeight: '800', color: '#1a1a1a', margin: 0 }}>Google Fotos</h2>
+            </div>
+            <div style={{ width: '44px' }} />
           </div>
-          <div className="px-4 grid grid-cols-3 gap-2">
+          <div style={{ padding: '8px', display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '8px', alignContent: 'flex-start' }}>
             {["🌅", "👨‍👩‍👧", "🌻", "🎂", "🏖️", "🐶"].map((emoji, i) => (
-              <div key={i} className="aspect-square bg-gradient-to-br from-blue-100 to-purple-100 rounded-2xl flex items-center justify-center text-5xl shadow-md">
+              <div key={i} style={{ width: '100%', aspectRatio: '1', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '40px', background: '#f5f5f5' }}>
                 {emoji}
               </div>
             ))}
@@ -140,84 +145,98 @@ export default function Modulo2Licao3() {
         <motion.div
           initial={{ x: -300 }}
           animate={{ x: 0 }}
-          className="absolute left-0 top-0 w-72 h-full bg-white shadow-2xl pt-12 z-20"
+          style={{ position: 'absolute', left: 0, top: 0, width: '280px', height: '100%', background: '#fff', boxShadow: '4px 0 24px rgba(0,0,0,0.2)', zIndex: 20, display: 'flex', flexDirection: 'column' }}
         >
-          <div className="p-4">
-            <h3 className="text-xl font-black text-gray-800 mb-6">Menu</h3>
-            <div className="space-y-2">
-              {passo === 3 && (
-                <ElementoClicavel
-                  onClick={() => handleCliqueCerto(4, () => { setMenuAberto(false); setBackupAberto(true); })}
-                  posicao="right"
-                >
-                  <div className="p-4 hover:bg-gray-100 rounded-xl cursor-pointer">
-                    <p className="font-bold text-gray-700">☁️ Backup e Sync</p>
-                  </div>
-                </ElementoClicavel>
-              )}
-              {[
-                "⚙️ Configurações",
-                "🗑️ Lixeira",
-                "❓ Ajuda",
-              ].map((item, i) => (
-                <div key={i} className="p-4 rounded-xl">
-                  <p className="font-bold text-gray-700">{item}</p>
+          <div style={{ padding: '16px', borderBottom: '1px solid #f0f0f0', flexShrink: 0 }}>
+            <h3 style={{ fontSize: '20px', fontWeight: '800', color: '#1a1a1a', margin: 0 }}>Menu</h3>
+          </div>
+          <div style={{ padding: '8px 12px', display: 'flex', flexDirection: 'column', gap: '4px' }}>
+            {passo === 3 && (
+              <ElementoClicavel
+                onClick={() => handleCliqueCerto(4, () => { setMenuAberto(false); setBackupAberto(true); })}
+                mostrarSeta={false}
+              >
+                <div style={{ padding: '16px', display: 'flex', alignItems: 'center', gap: '14px', cursor: 'pointer', borderRadius: '12px' }}>
+                  <Cloud size={24} color="#4285F4" />
+                  <span style={{ fontSize: '18px', fontWeight: '600', color: '#1a1a1a' }}>Backup e Sync</span>
                 </div>
-              ))}
-            </div>
+              </ElementoClicavel>
+            )}
+            {[
+              { Icon: Settings, nome: "Configurações" },
+              { Icon: Trash2, nome: "Lixeira" },
+              { Icon: HelpCircle, nome: "Ajuda" },
+            ].map((item, i) => {
+              const Ic = item.Icon;
+              return (
+                <div key={i} style={{ padding: '16px', display: 'flex', alignItems: 'center', gap: '14px', borderRadius: '12px' }}>
+                  <Ic size={24} color="#5f6368" />
+                  <span style={{ fontSize: '18px', fontWeight: '600', color: '#1a1a1a' }}>{item.nome}</span>
+                </div>
+              );
+            })}
           </div>
           <button
             onClick={() => setMenuAberto(false)}
-            className="absolute top-4 right-4 text-gray-600 text-2xl"
+            style={{ position: 'absolute', top: '12px', right: '12px', width: '44px', height: '44px', background: 'none', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
           >
-            ✕
+            <span style={{ fontSize: '20px', color: '#666' }}>✕</span>
           </button>
         </motion.div>
       )}
 
       {backupAberto && (
-        <div className="w-full h-full bg-white pt-12 p-6">
-          <button onClick={() => setBackupAberto(false)} className="text-blue-600 font-bold mb-6">← Voltar</button>
-          <h2 className="text-2xl font-black text-gray-800 mb-8">Backup e Sincronização</h2>
-          <div className="bg-blue-50 border-2 border-blue-200 rounded-3xl p-6 mb-6">
-            <p className="text-gray-700 font-semibold mb-4">
-              Suas fotos e vídeos serão salvos automaticamente na nuvem do Google ☁️
-            </p>
-            <div className="flex items-center justify-between">
-              <span className="text-lg font-bold text-gray-800">Backup automático</span>
-              {passo === 4 && (
-                <ElementoClicavel
-                  onClick={() => {
-                    setBackupAtivo(true);
-                    setTimeout(() => setMostrarValidacao(true), 1500);
-                  }}
-                  posicao="right"
-                >
-                  <div className={`w-16 h-8 rounded-full relative cursor-pointer transition-all ${backupAtivo ? "bg-green-500" : "bg-gray-300"}`}>
-                    <div className={`absolute top-1 w-6 h-6 rounded-full bg-white shadow transition-all ${backupAtivo ? "left-9" : "left-1"}`} />
-                  </div>
-                </ElementoClicavel>
-              )}
-            </div>
+        <div style={{ height: '100%', background: '#fff', display: 'flex', flexDirection: 'column' }}>
+          <div style={{ padding: '12px 16px', display: 'flex', alignItems: 'center', gap: '12px', flexShrink: 0, borderBottom: '1px solid #f0f0f0' }}>
+            <button onClick={() => setBackupAberto(false)} style={{ width: '44px', height: '44px', background: 'none', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+              <ArrowLeft size={24} color="#4285F4" />
+            </button>
+            <h2 style={{ fontSize: '22px', fontWeight: '800', color: '#1a1a1a', margin: 0 }}>Backup e Sincronização</h2>
           </div>
+          <div style={{ flex: 1, padding: '24px', display: 'flex', flexDirection: 'column' }}>
+            <div style={{ background: '#E3F2FD', borderRadius: '24px', padding: '24px', marginBottom: '24px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '20px' }}>
+                <Cloud size={32} color="#4285F4" />
+                <p style={{ fontSize: '16px', fontWeight: '600', color: '#1a1a1a', margin: 0, flex: 1 }}>
+                  Suas fotos e vídeos serão salvos automaticamente na nuvem do Google ☁️
+                </p>
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                <span style={{ fontSize: '18px', fontWeight: '700', color: '#1a1a1a' }}>Backup automático</span>
+                {passo === 4 ? (
+                  <ElementoClicavel
+                    onClick={() => {
+                      setBackupAtivo(true);
+                      setTimeout(() => setMostrarValidacao(true), 1500);
+                    }}
+                    mostrarSeta={false}
+                  >
+                    <div style={{ width: '52px', height: '32px', borderRadius: '16px', background: backupAtivo ? '#34A853' : '#ccc', position: 'relative', cursor: 'pointer', transition: 'background 0.3s ease' }}>
+                      <div style={{ position: 'absolute', top: '4px', width: '24px', height: '24px', borderRadius: '50%', background: '#fff', boxShadow: '0 1px 4px rgba(0,0,0,0.2)', transition: 'left 0.3s ease', left: backupAtivo ? '24px' : '4px' }} />
+                    </div>
+                  </ElementoClicavel>
+                ) : (
+                  <div style={{ width: '52px', height: '32px', borderRadius: '16px', background: backupAtivo ? '#34A853' : '#ccc', position: 'relative' }}>
+                    <div style={{ position: 'absolute', top: '4px', width: '24px', height: '24px', borderRadius: '50%', background: '#fff', boxShadow: '0 1px 4px rgba(0,0,0,0.2)', left: backupAtivo ? '24px' : '4px' }} />
+                  </div>
+                )}
+              </div>
+            </div>
 
-          {backupAtivo && (
-            <motion.div
-              initial={{ scale: 0 }}
-              animate={{ scale: 1 }}
-              className="text-center"
-            >
+            {backupAtivo && (
               <motion.div
-                animate={{ y: [-20, 0] }}
-                transition={{ duration: 1 }}
-                className="text-7xl mb-4"
+                initial={{ scale: 0 }}
+                animate={{ scale: 1 }}
+                style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', textAlign: 'center', gap: '8px' }}
               >
-                ☁️
+                <motion.div animate={{ y: [-20, 0] }} transition={{ duration: 1 }}>
+                  <Cloud size={64} color="#4285F4" />
+                </motion.div>
+                <p style={{ fontSize: '24px', fontWeight: '800', color: '#34A853', margin: 0 }}>Backup Ativado!</p>
+                <p style={{ fontSize: '16px', fontWeight: '600', color: '#666', margin: 0 }}>Suas fotos estão protegidas</p>
               </motion.div>
-              <p className="text-2xl font-bold text-green-600 mb-2">✅ Backup Ativado!</p>
-              <p className="text-gray-600 font-semibold">Suas fotos estão protegidas</p>
-            </motion.div>
-          )}
+            )}
+          </div>
         </div>
       )}
 

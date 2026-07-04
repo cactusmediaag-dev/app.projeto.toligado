@@ -7,6 +7,7 @@ import SimuladorImersivo from "@/components/simulador/SimuladorImersivo";
 import ElementoClicavel from "@/components/simulador/ElementoClicavel";
 import ValidacaoQuiz from "@/components/simulador/ValidacaoQuiz";
 import { Sons, MoedasAnimadas, FeedbackAcerto, FeedbackErro } from "@/components/shared/GameFeedback";
+import { RefreshCw, ArrowLeft, CheckCircle, Shield } from 'lucide-react';
 
 export default function Modulo2Licao8() {
   const navigate = useNavigate();
@@ -87,126 +88,131 @@ export default function Modulo2Licao8() {
       onVoltar={() => navigate(createPageUrl("Modulos"))}
     >
       {!atualizacaoAberta && (
-        <div className="w-full h-full bg-gradient-to-b from-green-50 to-green-100 relative pt-12">
+        <div style={{ height: '100%', background: '#F8F9FA', position: 'relative', display: 'flex', flexDirection: 'column' }}>
           {passo === 1 && (
             <ElementoClicavel
               onClick={() => handleCliqueCerto(2, () => setAtualizacaoAberta(true))}
-              posicao="bottom"
+              mostrarSeta={false}
             >
               <motion.div
                 initial={{ y: -100 }}
                 animate={{ y: 0 }}
-                className="absolute top-12 left-4 right-4 bg-white rounded-2xl p-4 shadow-lg cursor-pointer border-2 border-blue-300"
+                style={{ position: 'absolute', top: '12px', left: '16px', right: '16px', background: '#fff', borderRadius: '16px', padding: '16px', boxShadow: '0 4px 16px rgba(0,0,0,0.15)', cursor: 'pointer' }}
               >
-                <div className="flex items-center gap-3">
-                  <div className="text-3xl">⬇️</div>
-                  <div className="flex-1">
-                    <p className="font-bold text-gray-800">Atualização disponível</p>
-                    <p className="text-sm text-gray-500">Android 14</p>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                  <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: '#4285F4', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                    <RefreshCw size={22} color="#fff" />
+                  </div>
+                  <div style={{ flex: 1 }}>
+                    <p style={{ fontWeight: '700', color: '#1a1a1a', fontSize: '16px', margin: 0 }}>Atualização disponível</p>
+                    <p style={{ fontSize: '14px', color: '#666', margin: 0 }}>Android 14</p>
                   </div>
                 </div>
               </motion.div>
             </ElementoClicavel>
           )}
-          <div className="flex items-center justify-center h-full">
-            <div className="text-center text-gray-400">
-              <div className="text-8xl mb-4">📱</div>
-              <p className="font-semibold">Tela Inicial</p>
-            </div>
+          <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <p style={{ color: '#ccc', fontWeight: '600' }}>Tela Inicial</p>
           </div>
         </div>
       )}
 
       {atualizacaoAberta && !instalando && (
-        <div className="w-full h-full bg-white pt-12 p-6">
-          <button onClick={() => setAtualizacaoAberta(false)} className="text-blue-600 font-bold mb-6">← Voltar</button>
-          <h2 className="text-2xl font-black text-gray-800 mb-6">Atualização do Sistema</h2>
+        <div style={{ height: '100%', background: '#F8F9FA', display: 'flex', flexDirection: 'column' }}>
+          <div style={{ padding: '12px 16px', display: 'flex', alignItems: 'center', gap: '12px', flexShrink: 0 }}>
+            <button onClick={() => setAtualizacaoAberta(false)} style={{ width: '44px', height: '44px', background: 'none', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+              <ArrowLeft size={24} color="#4285F4" />
+            </button>
+            <h2 style={{ fontSize: '24px', fontWeight: '800', color: '#1a1a1a', margin: 0 }}>Atualização do Sistema</h2>
+          </div>
 
-          <div className="bg-blue-50 border-2 border-blue-200 rounded-3xl p-6 mb-6">
-            <div className="text-center mb-6">
-              <div className="text-6xl mb-3">🔄</div>
-              <p className="text-xl font-bold text-gray-800 mb-2">Android 14</p>
-              <p className="text-sm text-gray-500">Tamanho: 250 MB</p>
+          <div style={{ flex: 1, padding: '24px', overflowY: 'auto' }}>
+            <div style={{ background: '#fff', borderRadius: '24px', padding: '24px' }}>
+              <div style={{ textAlign: 'center', marginBottom: '24px' }}>
+                <RefreshCw size={48} color="#4285F4" style={{ marginBottom: '12px' }} />
+                <p style={{ fontSize: '20px', fontWeight: '800', color: '#1a1a1a', marginBottom: '4px', margin: '0 0 4px' }}>Android 14</p>
+                <p style={{ fontSize: '14px', color: '#666', margin: 0 }}>Tamanho: 250 MB</p>
+              </div>
+
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginBottom: '24px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#1a1a1a' }}>
+                  <CheckCircle size={20} color="#34A853" />
+                  <span style={{ fontWeight: '600', fontSize: '16px' }}>Correções de segurança</span>
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#1a1a1a' }}>
+                  <CheckCircle size={20} color="#34A853" />
+                  <span style={{ fontWeight: '600', fontSize: '16px' }}>Melhorias de desempenho</span>
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#1a1a1a' }}>
+                  <CheckCircle size={20} color="#34A853" />
+                  <span style={{ fontWeight: '600', fontSize: '16px' }}>Novos recursos de acessibilidade</span>
+                </div>
+              </div>
+
+              {passo === 2 && (
+                <ElementoClicavel
+                  onClick={() => {
+                    setInstalando(true);
+                    let p = 0;
+                    const intervalo = setInterval(() => {
+                      p += 10;
+                      setProgresso(p);
+                      if (p >= 100) {
+                        clearInterval(intervalo);
+                        setConcluido(true);
+                        setPasso(3);
+                      }
+                    }, 200);
+                  }}
+                  mostrarSeta={false}
+                >
+                  <button style={{ width: '100%', background: '#34A853', color: '#fff', border: 'none', padding: '18px', borderRadius: '16px', fontWeight: '700', fontSize: '18px', cursor: 'pointer' }}>
+                    Instalar Agora
+                  </button>
+                </ElementoClicavel>
+              )}
             </div>
-
-            <div className="space-y-3 mb-6">
-              <div className="flex items-center gap-2 text-gray-700">
-                <span className="text-xl">✅</span>
-                <span className="font-semibold">Correções de segurança</span>
-              </div>
-              <div className="flex items-center gap-2 text-gray-700">
-                <span className="text-xl">✅</span>
-                <span className="font-semibold">Melhorias de desempenho</span>
-              </div>
-              <div className="flex items-center gap-2 text-gray-700">
-                <span className="text-xl">✅</span>
-                <span className="font-semibold">Novos recursos de acessibilidade</span>
-              </div>
-            </div>
-
-            {passo === 2 && (
-              <ElementoClicavel
-                onClick={() => {
-                  setInstalando(true);
-                  let p = 0;
-                  const intervalo = setInterval(() => {
-                    p += 10;
-                    setProgresso(p);
-                    if (p >= 100) {
-                      clearInterval(intervalo);
-                      setConcluido(true);
-                      setPasso(3);
-                    }
-                  }, 200);
-                }}
-                posicao="top"
-              >
-                <button className="w-full bg-green-500 text-white py-4 rounded-2xl font-bold text-lg">
-                  Instalar Agora
-                </button>
-              </ElementoClicavel>
-            )}
           </div>
         </div>
       )}
 
       {instalando && (
-        <div className="w-full h-full bg-white pt-12 p-6 flex flex-col items-center justify-center">
-          <div className="text-center w-full max-w-sm">
+        <div style={{ height: '100%', background: '#fff', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '24px' }}>
+          <div style={{ textAlign: 'center', width: '100%', maxWidth: '320px' }}>
             <motion.div
               animate={{ rotate: 360 }}
               transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
-              className="text-7xl mb-6"
+              style={{ marginBottom: '24px', display: 'flex', justifyContent: 'center' }}
             >
-              🔄
+              <RefreshCw size={64} color="#4285F4" />
             </motion.div>
-            <h3 className="text-2xl font-bold text-gray-800 mb-6">
+            <h3 style={{ fontSize: '24px', fontWeight: '800', color: '#1a1a1a', marginBottom: '24px', margin: '0 0 24px' }}>
               {concluido ? "Atualização Concluída!" : "Instalando..."}
             </h3>
-            <div className="w-full bg-gray-200 rounded-full h-4 overflow-hidden mb-4">
+            <div style={{ width: '100%', background: '#e0e0e0', borderRadius: '4px', height: '16px', overflow: 'hidden', marginBottom: '16px' }}>
               <motion.div
-                className="h-full bg-gradient-to-r from-green-400 to-green-600 rounded-full"
+                style={{ height: '100%', background: 'linear-gradient(90deg, #4CAF50, #2E7D32)', borderRadius: '4px' }}
                 initial={{ width: 0 }}
                 animate={{ width: `${progresso}%` }}
               />
             </div>
-            <p className="text-gray-600 font-semibold text-lg">{progresso}%</p>
+            <p style={{ color: '#666', fontWeight: '600', fontSize: '18px', margin: 0 }}>{progresso}%</p>
 
             {concluido && (
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="mt-8"
+                style={{ marginTop: '32px' }}
               >
-                <div className="text-6xl mb-4">🛡️</div>
-                <p className="text-green-600 font-bold text-xl mb-6">
+                <Shield size={56} color="#34A853" style={{ marginBottom: '16px' }} />
+                <p style={{ color: '#34A853', fontWeight: '800', fontSize: '20px', marginBottom: '24px', margin: '0 0 24px' }}>
                   ✅ Seu celular está protegido!
                 </p>
                 <ElementoClicavel
                   onClick={() => setMostrarValidacao(true)}
-                  posicao="top"
+                  mostrarSeta={false}
                 >
-                  <button className="w-full bg-green-500 text-white py-4 rounded-2xl font-bold text-lg">
+                  <button style={{ width: '100%', background: '#34A853', color: '#fff', border: 'none', padding: '18px', borderRadius: '16px', fontWeight: '700', fontSize: '18px', cursor: 'pointer' }}>
                     Ótimo! 😊
                   </button>
                 </ElementoClicavel>

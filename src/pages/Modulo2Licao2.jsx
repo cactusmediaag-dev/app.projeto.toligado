@@ -7,6 +7,8 @@ import SimuladorImersivo from "@/components/simulador/SimuladorImersivo";
 import ElementoClicavel from "@/components/simulador/ElementoClicavel";
 import ValidacaoQuiz from "@/components/simulador/ValidacaoQuiz";
 import { Sons, MoedasAnimadas, FeedbackAcerto, FeedbackErro } from "@/components/shared/GameFeedback";
+import AndroidHomeScreen from "@/components/simulador/AndroidHomeScreen";
+import { Bluetooth, ChevronRight, ArrowLeft, Wifi, Sun, Battery } from 'lucide-react';
 
 export default function Modulo2Licao2() {
   const navigate = useNavigate();
@@ -87,94 +89,102 @@ export default function Modulo2Licao2() {
       onVoltar={() => navigate(createPageUrl("Modulos"))}
     >
       {!configAberta && !bluetoothAberto && (
-        <div className="w-full h-full bg-gradient-to-b from-green-50 to-green-100 p-6 pt-12">
-          <div className="grid grid-cols-4 gap-6 mt-8">
-            {passo === 1 && (
-              <ElementoClicavel
-                onClick={() => handleCliqueCerto(2, () => setConfigAberta(true))}
-                posicao="bottom"
-              >
-                <div className="flex flex-col items-center gap-2">
-                  <div className="w-14 h-14 bg-white rounded-2xl flex items-center justify-center text-2xl shadow-md">
-                    ⚙️
-                  </div>
-                </div>
-              </ElementoClicavel>
-            )}
-            {["G", "📷", "📱", "📧", "🎵", "📍", "💬"].map((emoji, i) => (
-              <div key={i} className="flex flex-col items-center gap-2">
-                <div className="w-14 h-14 bg-white rounded-2xl flex items-center justify-center text-2xl shadow-md">
-                  {emoji}
-                </div>
-              </div>
-            ))}
-          </div>
+        <div style={{ height: '100%', position: 'relative' }}>
+          <AndroidHomeScreen
+            appsCustom={[
+              { nome: 'camera', label: 'Câmera', bg: '#37474F', id: 'camera' },
+              { nome: 'mensagem', label: 'WhatsApp', bg: '#25D366', id: 'whatsapp' },
+              { nome: 'chrome', label: 'Chrome', bg: '#4285F4', id: 'chrome' },
+              { nome: 'config', label: 'Config.', bg: '#607D8B', id: 'settings' },
+              { nome: 'fotos', label: 'Fotos', bg: '#FF7043', id: 'photos' },
+              { nome: 'busca', label: 'Google', bg: '#fff', corIcone: '#4285F4', id: 'google' },
+              { nome: 'musica', label: 'Música', bg: '#E91E63', id: 'music' },
+              { nome: 'email', label: 'Email', bg: '#EA4335', id: 'email' },
+            ]}
+            appDestacado={passo === 1 ? 'settings' : null}
+            onAppClick={(id) => {
+              if (passo === 1 && id === 'settings') handleCliqueCerto(2, () => setConfigAberta(true));
+            }}
+          />
         </div>
       )}
 
       {configAberta && !bluetoothAberto && (
-        <div className="w-full h-full bg-white pt-12">
-          <div className="px-4 mb-4">
-            <h2 className="text-2xl font-black text-gray-800">Configurações</h2>
+        <div style={{ height: '100%', background: '#F8F9FA', display: 'flex', flexDirection: 'column' }}>
+          <div style={{ padding: '16px', flexShrink: 0 }}>
+            <h2 style={{ fontSize: '24px', fontWeight: '800', color: '#1a1a1a', margin: 0 }}>Configurações</h2>
           </div>
-          <div className="space-y-2">
+          <div style={{ padding: '8px 12px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
             {passo === 2 && (
               <ElementoClicavel
                 onClick={() => handleCliqueCerto(3, () => setBluetoothAberto(true))}
-                posicao="right"
+                mostrarSeta={false}
               >
-                <div className="px-4 py-4 flex items-center gap-3 hover:bg-gray-50 cursor-pointer">
-                  <div className="text-3xl">📡</div>
-                  <span className="text-lg font-bold text-gray-700">Bluetooth</span>
+                <div style={{ background: '#fff', borderRadius: '16px', padding: '16px', display: 'flex', alignItems: 'center', gap: '14px', cursor: 'pointer' }}>
+                  <div style={{ width: '36px', height: '36px', borderRadius: '50%', background: '#4285F4', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                    <Bluetooth size={20} color="#fff" />
+                  </div>
+                  <span style={{ fontSize: '18px', fontWeight: '600', color: '#1a1a1a', flex: 1 }}>Bluetooth</span>
+                  <ChevronRight size={20} color="#bbb" />
                 </div>
               </ElementoClicavel>
             )}
             {[
-              { emoji: "📶", nome: "Wi-Fi" },
-              { emoji: "🔆", nome: "Tela" },
-              { emoji: "🔋", nome: "Bateria" },
-            ].map((item, i) => (
-              <div key={i} className="px-4 py-4 flex items-center gap-3">
-                <div className="text-3xl">{item.emoji}</div>
-                <span className="text-lg font-bold text-gray-700">{item.nome}</span>
-              </div>
-            ))}
+              { Icon: Wifi, nome: "Wi-Fi", cor: '#4285F4' },
+              { Icon: Sun, nome: "Tela", cor: '#FF9800' },
+              { Icon: Battery, nome: "Bateria", cor: '#34A853' },
+            ].map((item, i) => {
+              const Ic = item.Icon;
+              return (
+                <div key={i} style={{ background: '#fff', borderRadius: '16px', padding: '16px', display: 'flex', alignItems: 'center', gap: '14px' }}>
+                  <div style={{ width: '36px', height: '36px', borderRadius: '50%', background: item.cor, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                    <Ic size={20} color="#fff" />
+                  </div>
+                  <span style={{ fontSize: '18px', fontWeight: '600', color: '#1a1a1a', flex: 1 }}>{item.nome}</span>
+                  <ChevronRight size={20} color="#bbb" />
+                </div>
+              );
+            })}
           </div>
         </div>
       )}
 
       {bluetoothAberto && (
-        <div className="w-full h-full bg-white pt-12 p-6">
-          <button onClick={() => setBluetoothAberto(false)} className="text-blue-600 font-bold mb-6">← Voltar</button>
-          <div className="flex items-center justify-between mb-8">
-            <h2 className="text-2xl font-black text-gray-800">Bluetooth</h2>
-            {passo === 3 && (
+        <div style={{ height: '100%', background: '#F8F9FA', display: 'flex', flexDirection: 'column' }}>
+          <div style={{ padding: '12px 16px', display: 'flex', alignItems: 'center', gap: '12px', flexShrink: 0 }}>
+            <button onClick={() => setBluetoothAberto(false)} style={{ width: '44px', height: '44px', background: 'none', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+              <ArrowLeft size={24} color="#4285F4" />
+            </button>
+            <h2 style={{ fontSize: '24px', fontWeight: '800', color: '#1a1a1a', margin: 0 }}>Bluetooth</h2>
+          </div>
+          <div style={{ padding: '12px 16px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexShrink: 0 }}>
+            <span style={{ fontSize: '18px', fontWeight: '600', color: '#1a1a1a' }}>Usar Bluetooth</span>
+            {passo === 3 ? (
               <ElementoClicavel
                 onClick={() => {
                   setBluetoothLigado(true);
                   setTimeout(() => {
-                    setDispositivos([{ nome: "🎧 Fone JBL", id: 1 }]);
+                    setDispositivos([{ nome: "Fone JBL", id: 1 }]);
                     setPasso(4);
                   }, 1000);
                 }}
-                posicao="right"
+                mostrarSeta={false}
               >
-                <div className={`w-16 h-8 rounded-full relative cursor-pointer transition-all ${bluetoothLigado ? "bg-green-500" : "bg-gray-300"}`}>
-                  <div className={`absolute top-1 w-6 h-6 rounded-full bg-white shadow transition-all ${bluetoothLigado ? "left-9" : "left-1"}`} />
+                <div style={{ width: '52px', height: '32px', borderRadius: '16px', background: bluetoothLigado ? '#34A853' : '#ccc', position: 'relative', cursor: 'pointer', transition: 'background 0.3s ease' }}>
+                  <div style={{ position: 'absolute', top: '4px', width: '24px', height: '24px', borderRadius: '50%', background: '#fff', boxShadow: '0 1px 4px rgba(0,0,0,0.2)', transition: 'left 0.3s ease', left: bluetoothLigado ? '24px' : '4px' }} />
                 </div>
               </ElementoClicavel>
-            )}
-            {passo !== 3 && (
-              <div className={`w-16 h-8 rounded-full relative ${bluetoothLigado ? "bg-green-500" : "bg-gray-300"}`}>
-                <div className={`absolute top-1 w-6 h-6 rounded-full bg-white shadow ${bluetoothLigado ? "left-9" : "left-1"}`} />
+            ) : (
+              <div style={{ width: '52px', height: '32px', borderRadius: '16px', background: bluetoothLigado ? '#34A853' : '#ccc', position: 'relative' }}>
+                <div style={{ position: 'absolute', top: '4px', width: '24px', height: '24px', borderRadius: '50%', background: '#fff', boxShadow: '0 1px 4px rgba(0,0,0,0.2)', left: bluetoothLigado ? '24px' : '4px' }} />
               </div>
             )}
           </div>
 
           {!bluetoothLigado && (
-            <div className="text-center text-gray-400 py-16">
-              <div className="text-6xl mb-4">📡</div>
-              <p className="font-semibold">Bluetooth desligado</p>
+            <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '12px' }}>
+              <Bluetooth size={56} color="#ccc" />
+              <p style={{ fontSize: '16px', fontWeight: '600', color: '#aaa' }}>Bluetooth desligado</p>
             </div>
           )}
 
@@ -182,38 +192,40 @@ export default function Modulo2Licao2() {
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              className="text-center text-gray-400 py-16"
+              style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '12px' }}
             >
-              <motion.div
-                animate={{ scale: [1, 1.2, 1] }}
-                transition={{ duration: 1, repeat: Infinity }}
-                className="text-6xl mb-4"
-              >
-                📡
+              <motion.div animate={{ scale: [1, 1.2, 1] }} transition={{ duration: 1, repeat: Infinity }}>
+                <Bluetooth size={56} color="#4285F4" />
               </motion.div>
-              <p className="font-semibold">Procurando dispositivos...</p>
+              <p style={{ fontSize: '16px', fontWeight: '600', color: '#666' }}>Procurando dispositivos...</p>
             </motion.div>
           )}
 
           {dispositivos.length > 0 && (
-            <div className="space-y-3">
-              <p className="text-sm text-gray-500 font-semibold mb-3">Dispositivos disponíveis:</p>
+            <div style={{ padding: '12px 16px' }}>
+              <p style={{ fontSize: '14px', color: '#666', fontWeight: '600', marginBottom: '12px' }}>Dispositivos disponíveis:</p>
               {passo === 4 && !conectado && (
                 <ElementoClicavel
                   onClick={() => {
                     setConectado(true);
                     setTimeout(() => setMostrarValidacao(true), 1000);
                   }}
-                  posicao="right"
+                  mostrarSeta={false}
                 >
-                  <div className="p-4 bg-gray-100 rounded-2xl cursor-pointer active:scale-95 transition-all">
-                    <p className="text-lg font-bold text-gray-700">🎧 Fone JBL</p>
+                  <div style={{ background: '#fff', borderRadius: '16px', padding: '16px', display: 'flex', alignItems: 'center', gap: '14px', cursor: 'pointer' }}>
+                    <div style={{ width: '36px', height: '36px', borderRadius: '50%', background: '#E3F2FD', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                      <Bluetooth size={20} color="#4285F4" />
+                    </div>
+                    <span style={{ fontSize: '18px', fontWeight: '600', color: '#1a1a1a' }}>Fone JBL</span>
                   </div>
                 </ElementoClicavel>
               )}
               {conectado && (
-                <div className="p-4 bg-green-100 border-2 border-green-400 rounded-2xl">
-                  <p className="text-lg font-bold text-green-700">✅ Fone JBL - Conectado</p>
+                <div style={{ background: '#E8F5E9', border: '2px solid #4CAF50', borderRadius: '16px', padding: '16px', display: 'flex', alignItems: 'center', gap: '14px' }}>
+                  <div style={{ width: '36px', height: '36px', borderRadius: '50%', background: '#4CAF50', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                    <Bluetooth size={20} color="#fff" />
+                  </div>
+                  <span style={{ fontSize: '18px', fontWeight: '600', color: '#2E7D32' }}>Fone JBL - Conectado</span>
                 </div>
               )}
             </div>

@@ -7,6 +7,8 @@ import SimuladorImersivo from "@/components/simulador/SimuladorImersivo";
 import ElementoClicavel from "@/components/simulador/ElementoClicavel";
 import ValidacaoQuiz from "@/components/simulador/ValidacaoQuiz";
 import { Sons, MoedasAnimadas, FeedbackAcerto, FeedbackErro } from "@/components/shared/GameFeedback";
+import AndroidHomeScreen from "@/components/simulador/AndroidHomeScreen";
+import { Sun, Type, Bell, Wifi, Battery, ChevronRight, ArrowLeft } from 'lucide-react';
 
 export default function Modulo2Licao1() {
   const navigate = useNavigate();
@@ -90,134 +92,144 @@ export default function Modulo2Licao1() {
       onVoltar={() => navigate(createPageUrl("Modulos"))}
     >
       {!configAberta && (
-        <div className="w-full h-full bg-gradient-to-b from-green-50 to-green-100 p-6 pt-12">
-          <div className="grid grid-cols-4 gap-6 mt-8">
-            {passo === 1 && (
-              <ElementoClicavel
-                onClick={() => handleCliqueCerto(2, () => setConfigAberta(true))}
-                posicao="bottom"
-              >
-                <div className="flex flex-col items-center gap-2">
-                  <div className="w-14 h-14 bg-white rounded-2xl flex items-center justify-center text-2xl shadow-md">
-                    ⚙️
-                  </div>
-                  <span className="text-xs text-gray-600 font-semibold">Config</span>
-                </div>
-              </ElementoClicavel>
-            )}
-            {["🔍", "📷", "📱", "📧", "🎵", "📍", "💬"].map((emoji, i) => (
-              <div key={i} className="flex flex-col items-center gap-2">
-                <div className="w-14 h-14 bg-white rounded-2xl flex items-center justify-center text-2xl shadow-md">
-                  {emoji}
-                </div>
-              </div>
-            ))}
-          </div>
+        <div style={{ height: '100%', position: 'relative' }}>
+          <AndroidHomeScreen
+            appsCustom={[
+              { nome: 'camera', label: 'Câmera', bg: '#37474F', id: 'camera' },
+              { nome: 'mensagem', label: 'WhatsApp', bg: '#25D366', id: 'whatsapp' },
+              { nome: 'chrome', label: 'Chrome', bg: '#4285F4', id: 'chrome' },
+              { nome: 'config', label: 'Config.', bg: '#607D8B', id: 'settings' },
+              { nome: 'fotos', label: 'Fotos', bg: '#FF7043', id: 'photos' },
+              { nome: 'busca', label: 'Google', bg: '#fff', corIcone: '#4285F4', id: 'google' },
+              { nome: 'musica', label: 'Música', bg: '#E91E63', id: 'music' },
+              { nome: 'email', label: 'Email', bg: '#EA4335', id: 'email' },
+            ]}
+            appDestacado={passo === 1 ? 'settings' : null}
+            onAppClick={(id) => {
+              if (passo === 1 && id === 'settings') handleCliqueCerto(2, () => setConfigAberta(true));
+            }}
+          />
         </div>
       )}
 
       {configAberta && !brilhoAberto && !fonteAberta && (
-        <div className="w-full h-full bg-white pt-12 overflow-y-auto">
-          <div className="px-4 mb-4">
-            <h2 className="text-2xl font-black text-gray-800">Configurações</h2>
+        <div style={{ height: '100%', background: '#F8F9FA', display: 'flex', flexDirection: 'column' }}>
+          <div style={{ padding: '16px', flexShrink: 0 }}>
+            <h2 style={{ fontSize: '24px', fontWeight: '800', color: '#1a1a1a', margin: 0 }}>Configurações</h2>
           </div>
-          <div className="space-y-2">
+          <div style={{ padding: '8px 12px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
             {passo === 2 && (
               <ElementoClicavel
                 onClick={() => handleCliqueCerto(3, () => setBrilhoAberto(true))}
-                posicao="right"
+                mostrarSeta={false}
               >
-                <div className="px-4 py-4 flex items-center gap-3 hover:bg-gray-50 cursor-pointer">
-                  <div className="text-3xl">🔆</div>
-                  <span className="text-lg font-bold text-gray-700">Tela e Brilho</span>
+                <div style={{ background: '#fff', borderRadius: '16px', padding: '16px', display: 'flex', alignItems: 'center', gap: '14px', cursor: 'pointer' }}>
+                  <div style={{ width: '36px', height: '36px', borderRadius: '50%', background: '#FF9800', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                    <Sun size={20} color="#fff" />
+                  </div>
+                  <span style={{ fontSize: '18px', fontWeight: '600', color: '#1a1a1a', flex: 1 }}>Tela e Brilho</span>
+                  <ChevronRight size={20} color="#bbb" />
                 </div>
               </ElementoClicavel>
             )}
             {passo >= 4 && (
               <ElementoClicavel
                 onClick={() => handleCliqueCerto(5, () => setFonteAberta(true))}
-                posicao="right"
+                mostrarSeta={false}
               >
-                <div className="px-4 py-4 flex items-center gap-3 hover:bg-gray-50 cursor-pointer">
-                  <div className="text-3xl">🔤</div>
-                  <span className="text-lg font-bold text-gray-700">Tamanho da Fonte</span>
+                <div style={{ background: '#fff', borderRadius: '16px', padding: '16px', display: 'flex', alignItems: 'center', gap: '14px', cursor: 'pointer' }}>
+                  <div style={{ width: '36px', height: '36px', borderRadius: '50%', background: '#4285F4', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                    <Type size={20} color="#fff" />
+                  </div>
+                  <span style={{ fontSize: '18px', fontWeight: '600', color: '#1a1a1a', flex: 1 }}>Tamanho da Fonte</span>
+                  <ChevronRight size={20} color="#bbb" />
                 </div>
               </ElementoClicavel>
             )}
             {[
-              { emoji: "🔔", nome: "Notificações" },
-              { emoji: "📶", nome: "Wi-Fi" },
-              { emoji: "🔋", nome: "Bateria" },
-            ].map((item, i) => (
-              <div key={i} className="px-4 py-4 flex items-center gap-3">
-                <div className="text-3xl">{item.emoji}</div>
-                <span className="text-lg font-bold text-gray-700">{item.nome}</span>
-              </div>
-            ))}
+              { Icon: Bell, nome: "Notificações", cor: '#EA4335' },
+              { Icon: Wifi, nome: "Wi-Fi", cor: '#4285F4' },
+              { Icon: Battery, nome: "Bateria", cor: '#34A853' },
+            ].map((item, i) => {
+              const Ic = item.Icon;
+              return (
+                <div key={i} style={{ background: '#fff', borderRadius: '16px', padding: '16px', display: 'flex', alignItems: 'center', gap: '14px' }}>
+                  <div style={{ width: '36px', height: '36px', borderRadius: '50%', background: item.cor, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                    <Ic size={20} color="#fff" />
+                  </div>
+                  <span style={{ fontSize: '18px', fontWeight: '600', color: '#1a1a1a', flex: 1 }}>{item.nome}</span>
+                  <ChevronRight size={20} color="#bbb" />
+                </div>
+              );
+            })}
           </div>
         </div>
       )}
 
       {brilhoAberto && (
-        <div className="w-full h-full bg-white pt-12 p-6">
-          <button onClick={() => { setBrilhoAberto(false); setPasso(4); }} className="text-blue-600 font-bold mb-6">← Voltar</button>
-          <h2 className="text-2xl font-black text-gray-800 mb-8">Brilho da Tela</h2>
-          <div className="bg-gray-100 rounded-3xl p-8 text-center">
-            <div className="text-6xl mb-6" style={{ fontSize: brilho > 70 ? "80px" : "60px" }}>☀️</div>
-            <p className="text-4xl font-black text-gray-700 mb-6">{brilho}%</p>
-            {passo === 3 && (
-              <ElementoClicavel
-                onClick={() => {
-                  let val = 50;
-                  const intervalo = setInterval(() => {
-                    if (val < 100) {
-                      val += 10;
-                      setBrilho(val);
-                    } else {
-                      clearInterval(intervalo);
-                      handleCliqueCerto(4, () => setBrilhoAberto(false));
-                    }
-                  }, 100);
-                }}
-                posicao="top"
-              >
-                <div className="w-full h-12 bg-gray-300 rounded-full relative overflow-hidden cursor-pointer">
-                  <div
-                    className="h-full bg-gradient-to-r from-yellow-400 to-orange-400 rounded-full transition-all"
-                    style={{ width: `${brilho}%` }}
-                  />
-                  <div
-                    className="absolute top-1/2 -translate-y-1/2 w-8 h-8 bg-white rounded-full shadow-lg"
-                    style={{ left: `calc(${brilho}% - 16px)` }}
-                  />
-                </div>
-              </ElementoClicavel>
-            )}
+        <div style={{ height: '100%', background: '#F8F9FA', display: 'flex', flexDirection: 'column' }}>
+          <div style={{ padding: '12px 16px', display: 'flex', alignItems: 'center', gap: '12px', flexShrink: 0 }}>
+            <button onClick={() => { setBrilhoAberto(false); setPasso(4); }} style={{ width: '44px', height: '44px', background: 'none', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+              <ArrowLeft size={24} color="#4285F4" />
+            </button>
+            <h2 style={{ fontSize: '24px', fontWeight: '800', color: '#1a1a1a', margin: 0 }}>Brilho da Tela</h2>
+          </div>
+          <div style={{ flex: 1, padding: '24px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+            <div style={{ background: '#fff', borderRadius: '24px', padding: '32px', width: '100%', textAlign: 'center' }}>
+              <Sun size={48} color="#FF9800" style={{ marginBottom: '16px' }} />
+              <p style={{ fontSize: '36px', fontWeight: '800', color: '#1a1a1a', marginBottom: '24px' }}>{brilho}%</p>
+              {passo === 3 && (
+                <ElementoClicavel
+                  onClick={() => {
+                    let val = 50;
+                    const intervalo = setInterval(() => {
+                      if (val < 100) {
+                        val += 10;
+                        setBrilho(val);
+                      } else {
+                        clearInterval(intervalo);
+                        handleCliqueCerto(4, () => setBrilhoAberto(false));
+                      }
+                    }, 100);
+                  }}
+                  mostrarSeta={false}
+                >
+                  <div style={{ width: '100%', height: '48px', background: '#e0e0e0', borderRadius: '24px', position: 'relative', overflow: 'hidden', cursor: 'pointer' }}>
+                    <div style={{ height: '100%', width: `${brilho}%`, background: 'linear-gradient(90deg, #FFC107, #FF9800)', borderRadius: '24px', transition: 'width 0.3s ease' }} />
+                    <div style={{ position: 'absolute', top: '50%', transform: 'translateY(-50%)', left: `calc(${brilho}% - 24px)`, width: '48px', height: '48px', borderRadius: '50%', background: '#fff', boxShadow: '0 2px 8px rgba(0,0,0,0.2)' }} />
+                  </div>
+                </ElementoClicavel>
+              )}
+            </div>
           </div>
         </div>
       )}
 
       {fonteAberta && (
-        <div className="w-full h-full bg-white pt-12 p-6">
-          <button onClick={() => setFonteAberta(false)} className="text-blue-600 font-bold mb-6">← Voltar</button>
-          <h2 className="text-2xl font-black text-gray-800 mb-8">Tamanho da Fonte</h2>
-          <div className="space-y-3">
+        <div style={{ height: '100%', background: '#F8F9FA', display: 'flex', flexDirection: 'column' }}>
+          <div style={{ padding: '12px 16px', display: 'flex', alignItems: 'center', gap: '12px', flexShrink: 0 }}>
+            <button onClick={() => setFonteAberta(false)} style={{ width: '44px', height: '44px', background: 'none', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+              <ArrowLeft size={24} color="#4285F4" />
+            </button>
+            <h2 style={{ fontSize: '24px', fontWeight: '800', color: '#1a1a1a', margin: 0 }}>Tamanho da Fonte</h2>
+          </div>
+          <div style={{ flex: 1, padding: '16px', display: 'flex', flexDirection: 'column', gap: '12px' }}>
             {[
-              { nome: "Pequena", size: "text-sm" },
-              { nome: "Normal", size: "text-base" },
-              { nome: "Grande", size: "text-xl" },
+              { nome: "Pequena", size: '14px' },
+              { nome: "Normal", size: '18px' },
+              { nome: "Grande", size: '24px' },
             ].map((fonte, i) => (
-              <div key={i} className="p-4 bg-gray-100 rounded-2xl">
-                <p className={`${fonte.size} font-semibold text-gray-700`}>Aa {fonte.nome}</p>
+              <div key={i} style={{ padding: '16px', background: '#fff', borderRadius: '16px' }}>
+                <p style={{ fontSize: fonte.size, fontWeight: '600', color: '#1a1a1a', margin: 0 }}>Aa {fonte.nome}</p>
               </div>
             ))}
             {passo === 5 && (
               <ElementoClicavel
                 onClick={() => setMostrarValidacao(true)}
-                posicao="top"
+                mostrarSeta={false}
               >
-                <div className="p-4 bg-green-100 border-2 border-green-400 rounded-2xl cursor-pointer active:scale-95 transition-all">
-                  <p className="text-2xl font-semibold text-gray-700">Aa Muito Grande</p>
+                <div style={{ padding: '16px', background: '#E8F5E9', border: '2px solid #4CAF50', borderRadius: '16px', cursor: 'pointer' }}>
+                  <p style={{ fontSize: '28px', fontWeight: '600', color: '#1a1a1a', margin: 0 }}>Aa Muito Grande</p>
                 </div>
               </ElementoClicavel>
             )}

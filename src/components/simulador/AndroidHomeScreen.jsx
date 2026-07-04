@@ -1,12 +1,12 @@
 import React from "react";
 import { motion } from "framer-motion";
 
-export default function AndroidHomeScreen({ onAppClick }) {
+export default function AndroidHomeScreen({ onAppClick, appsCustom = null, appDestacado = null }) {
   const now = new Date();
   const time = now.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
   const date = now.toLocaleDateString('pt-BR', { weekday: 'long', day: 'numeric', month: 'long' });
 
-  const apps = [
+  const defaultApps = [
     { icon: '📷', label: 'Câmera', bg: '#1a1a2e', id: 'camera' },
     { icon: '📱', label: 'Telefone', bg: '#4CAF50', id: 'phone' },
     { icon: '💬', label: 'WhatsApp', bg: '#25D366', id: 'whatsapp' },
@@ -16,6 +16,7 @@ export default function AndroidHomeScreen({ onAppClick }) {
     { icon: '🔍', label: 'Google', bg: '#4285F4', id: 'google' },
     { icon: '🎵', label: 'Música', bg: '#E91E63', id: 'music' },
   ];
+  const apps = appsCustom || defaultApps;
 
   const dockApps = [
     { icon: '📱', label: 'Tel.' },
@@ -64,7 +65,12 @@ export default function AndroidHomeScreen({ onAppClick }) {
                 className="w-13 h-13 rounded-xl flex items-center justify-center text-[26px] mx-auto"
                 style={{
                   background: app.bg,
-                  boxShadow: '0 2px 6px rgba(0,0,0,0.2)'
+                  boxShadow: appDestacado && appDestacado === app.id
+                    ? '0 0 0 0 rgba(243,152,75,0.7)'
+                    : '0 2px 6px rgba(0,0,0,0.2)',
+                  animation: appDestacado && appDestacado === app.id
+                    ? 'pulse-border-ahs 2s infinite'
+                    : 'none'
                 }}
               >
                 {app.icon}
@@ -76,6 +82,14 @@ export default function AndroidHomeScreen({ onAppClick }) {
           ))}
         </div>
       </div>
+
+      <style>{`
+        @keyframes pulse-border-ahs {
+          0% { box-shadow: 0 0 0 0 rgba(243, 152, 75, 0.7); }
+          70% { box-shadow: 0 0 0 20px rgba(243, 152, 75, 0); }
+          100% { box-shadow: 0 0 0 0 rgba(243, 152, 75, 0); }
+        }
+      `}</style>
 
       {/* Dock */}
       <div

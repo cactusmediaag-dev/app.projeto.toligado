@@ -71,8 +71,9 @@ export default function Modulo9Licao5() {
       totalPassos={5}
       onVoltar={() => navigate(createPageUrl("Modulos"))}
     >
+      <div style={{ minHeight: '100%', display: 'flex', flexDirection: 'column' }}>
       {/* Header e-Título */}
-      <div style={{ background: '#1E5A9C', padding: '16px 20px', display: 'flex', alignItems: 'center', gap: '12px' }}>
+      <div style={{ background: '#1E5A9C', padding: '16px 20px', display: 'flex', alignItems: 'center', gap: '12px', flexShrink: 0 }}>
         <span style={{ fontSize: '28px' }}>🗳️</span>
         <div>
           <h2 style={{ color: '#fff', margin: 0, fontWeight: '800', fontSize: '20px' }}>e-Título</h2>
@@ -92,7 +93,7 @@ export default function Modulo9Licao5() {
           </div>
 
           {passo === 1 && (
-            <ElementoClicavel onClick={() => handleCliqueCerto(2, () => setJustificativaAberta(true))} posicao="bottom">
+            <ElementoClicavel onClick={() => handleCliqueCerto(2, () => setJustificativaAberta(true))} mostrarSeta={false} posicao="bottom">
               <div className="rounded-2xl p-5 flex items-center gap-4 cursor-pointer" style={{ background: '#FFF8E1', border: '2px solid #F9A825' }}>
                 <span style={{ fontSize: '32px' }}>📍</span>
                 <div>
@@ -114,7 +115,7 @@ export default function Modulo9Licao5() {
 
             {/* Passo 2: Botão Justificar Agora */}
             {passo === 2 && !localizacaoPermitida && (
-              <ElementoClicavel onClick={() => handleCliqueCerto(3, null)} posicao="top">
+              <ElementoClicavel onClick={() => handleCliqueCerto(3, null)} mostrarSeta={false} posicao="top">
                 <button className="w-full py-4 rounded-xl font-bold text-white mb-4" style={{ background: '#2E7D32', minHeight: '48px', fontSize: '18px' }}>
                   ✅ JUSTIFICAR AGORA
                 </button>
@@ -129,7 +130,7 @@ export default function Modulo9Licao5() {
                   <p className="font-bold mt-2" style={{ fontSize: '18px', color: '#1E5A9C' }}>Permitir localização?</p>
                   <p className="text-gray-600 mt-1" style={{ fontSize: '15px' }}>O app precisa confirmar que você está fora da sua cidade</p>
                 </div>
-                <ElementoClicavel onClick={() => { setLocalizacaoPermitida(true); handleCliqueCerto(4, null); }} posicao="top">
+                <ElementoClicavel onClick={() => { setLocalizacaoPermitida(true); handleCliqueCerto(4, null); }} mostrarSeta={false} posicao="top">
                   <button className="w-full py-4 rounded-xl font-bold text-white" style={{ background: '#1E5A9C', minHeight: '48px', fontSize: '18px' }}>
                     🛰️ PERMITIR
                   </button>
@@ -157,7 +158,7 @@ export default function Modulo9Licao5() {
                     <p className="text-gray-600 mt-1" style={{ fontSize: '15px', lineHeight: 1.4 }}>Perdeu o prazo? Sem problema! Você pode justificar depois, anexando um comprovante.</p>
                   </div>
                 </div>
-                <ElementoClicavel onClick={() => handleCliqueCerto(5, () => setDebitosAberto(true))} posicao="bottom">
+                <ElementoClicavel onClick={() => handleCliqueCerto(5, () => setDebitosAberto(true))} mostrarSeta={false} posicao="bottom">
                   <button className="w-full py-4 rounded-xl font-bold" style={{ background: '#F9A825', color: '#fff', minHeight: '48px', fontSize: '18px' }}>
                     Continuar →
                   </button>
@@ -185,7 +186,7 @@ export default function Modulo9Licao5() {
               <p className="text-gray-600 mb-4" style={{ fontSize: '15px' }}>Pague pelo Pix direto no app!</p>
 
               {passo === 5 && (
-                <ElementoClicavel onClick={() => setMostrarValidacao(true)} posicao="top">
+                <ElementoClicavel onClick={() => setMostrarValidacao(true)} mostrarSeta={false} posicao="top">
                   <button className="w-full py-4 rounded-xl font-bold text-white flex items-center justify-center gap-2" style={{ background: '#2E7D32', minHeight: '48px', fontSize: '18px' }}>
                     💚 PAGAR COM PIX
                   </button>
@@ -201,6 +202,7 @@ export default function Modulo9Licao5() {
           </div>
         </div>
       )}
+      </div>
     </SimuladorImersivo>
   );
 }

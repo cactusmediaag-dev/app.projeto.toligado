@@ -4,6 +4,7 @@ import { createPageUrl } from "@/utils";
 import { base44 } from "@/api/base44Client";
 import SimuladorImersivo from "@/components/simulador/SimuladorImersivo";
 import ElementoClicavel from "@/components/simulador/ElementoClicavel";
+import AndroidHomeScreen from "@/components/simulador/AndroidHomeScreen";
 import ValidacaoQuiz from "@/components/simulador/ValidacaoQuiz";
 
 const SOM_CLIQUE = 'data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2/LDciUFLIHO8tiJNwgZaLvt559NEAxQp+PwtmMcBjiR1/LMeSwFJHfH8N2QQAoUXrTp66hVFApGn+DyvmwhBSuBzvLZiTYIGGi77eeeTRALUKjo77RgGgU7k9jxzHkrBSh+zPHajkILElyx6OyrWBUIRp/h8rBsGwU2idXx0n8qBSl5yO/bj0QKElqx5+iwWRQJP5jb8L90IAU2jdrzzoErByh1xe/akUALD1ap5earWRULRp7h8bJuHQU0hdLu0IEtBSh2yPDamT4JFlux6OanVxYLPJPY78p2KQUodMju2phACRZYr+XmqlgVCz2V2/DLdioFKHLG7tqZPwkWWLDn56lXFgk9ldrvy3cqBSl0yO/amkEJFVew5+aoVxYIPZXb78p3KgUqdsrw2plACBVWsOjnp1cWCT2V2+/KdioFKXbH79qZQAgVV7Dn56hYFQk9lNvvy3cqBSl2ye/amUAIFVew5+eoVxYJPJTa78t3KgUpdsjv2plACBVYsOjnqFgVCTyU2u/LdioFKXbJ79qZQQgVWLDo56hYFQk8lNrvy3cqBSl2yO/amUEIFVew6OeoWBUJPJPa78x4KgUpdsnu25lBCBVXsefnqFgVCTyU2u/MdyoFKXbI79uZQQgVWLHn56hYFQk8lNrvy3cqBSl2yO/bmUEIFVix5+eoWRUJPJPa78x3KgUpdsjv25lBCBVYsefnqFgVCTyT2u/MdyoFKXXI79uZQQgVWLHn56hZFQk8k9rvzHcqBSl1yO/bmUEIFVmx5+epWRUJO5Pa78x3KwUpdcjv25lBCBVYsejnqFgVCTuT2u/NdyoFKXXI79qZQQgVWLHn56hZFQk7k9rvzHcqBSl1yO/bmUEIFVmx6OeoWRUJO5Pa78x3KgUpdcjv25lBCBVZsejnqFkVCTuT2u/MdyoFKXXI79uZQQgVWbHo56hZFQk7k9rvzHcqBSl1yO/bmUEIFVmx6OeoWRUJO5Pa78x3KgUpdcjv25lBCBVZsejnqFkVCTuT2u/MdyoFKXXI79uZQQgVWbHo56hZFQk7k9rvzHcqBSl1yO/bmUEIFVmx6OeoWRUJO5Pa78x3KgUpdcjv25lBCBVZsejnqFkVCTuT2u/MdyoFKXXI79uZQQgVWbHo56hZFQk7k9rvzHcqBSl1yO/bmUEIFVmx6OeoWRUJO5Pa78x3KgUp';
@@ -70,7 +71,7 @@ export default function Modulo9Licao2() {
       <div className="mb-4">
         <label className="block mb-2" style={{ fontSize: '15px', fontWeight: '600', color: '#555' }}>{label}</label>
         {passo === passoAtual && !preenchido && (
-          <ElementoClicavel onClick={onClick} posicao="top">
+          <ElementoClicavel onClick={onClick} mostrarSeta={false} posicao="top">
             <input
               type="text"
               placeholder={label.includes('SENHA') ? '••••••' : label}
@@ -103,21 +104,22 @@ export default function Modulo9Licao2() {
     >
       {/* Passo 1: Tela inicial do celular com ícone e-Título */}
       {!appAberto && (
-        <div className="w-full h-full bg-gradient-to-b from-blue-50 to-blue-100 p-6 pt-12">
-          <div className="text-center mb-8">
-            <p className="text-gray-500" style={{ fontSize: '16px' }}>Toque para abrir</p>
-          </div>
-          <div className="flex justify-center">
-            {passo === 1 && (
-              <ElementoClicavel onClick={() => handleCliqueCerto(2, () => setAppAberto(true))} posicao="bottom">
-                <div className="flex flex-col items-center gap-2">
-                  <div className="w-20 h-20 rounded-3xl flex items-center justify-center text-4xl shadow-lg" style={{ background: '#1E5A9C' }}>
-                    🗳️
-                  </div>
-                  <p className="text-gray-700 font-semibold" style={{ fontSize: '15px' }}>e-Título</p>
-                </div>
-              </ElementoClicavel>
-            )}
+        <div style={{ minHeight: '100%', display: 'flex', flexDirection: 'column' }}>
+          <div style={{ flex: 1, position: 'relative', minHeight: 0 }}>
+            <AndroidHomeScreen
+              appsCustom={[
+                { icon: '📷', label: 'Câmera', bg: '#1a1a2e', id: 'camera' },
+                { icon: '🗳️', label: 'e-Título', bg: '#1E5A9C', id: 'etitulo' },
+                { icon: '💬', label: 'WhatsApp', bg: '#25D366', id: 'whatsapp' },
+                { icon: '🌐', label: 'Chrome', bg: '#4285F4', id: 'chrome' },
+                { icon: '⚙️', label: 'Config.', bg: '#607D8B', id: 'settings' },
+                { icon: '📸', label: 'Fotos', bg: '#FF5722', id: 'photos' },
+                { icon: '🔍', label: 'Google', bg: '#4285F4', id: 'google' },
+                { icon: '🎵', label: 'Música', bg: '#E91E63', id: 'music' },
+              ]}
+              appDestacado="etitulo"
+              onAppClick={(id) => { if (id === 'etitulo') handleCliqueCerto(2, () => setAppAberto(true)); }}
+            />
           </div>
         </div>
       )}

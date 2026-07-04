@@ -6,7 +6,8 @@ export default function ElementoClicavel({
   onClick, 
   isCorrect, 
   posicao = "bottom",
-  className = "" 
+  className = "",
+  mostrarSeta = true
 }) {
   const arrowPositions = {
     top: "top-[-40px] left-1/2 -translate-x-1/2 rotate-180",
@@ -21,13 +22,15 @@ export default function ElementoClicavel({
       whileTap={{ scale: 0.95 }}
     >
       {/* Seta Animada */}
-      <motion.div
-        className={`absolute ${arrowPositions[posicao]} text-4xl pointer-events-none z-20`}
-        animate={{ y: [0, -10, 0] }}
-        transition={{ duration: 1, repeat: Infinity, ease: "easeInOut" }}
-      >
-        ↓
-      </motion.div>
+      {mostrarSeta && (
+        <motion.div
+          className={`absolute ${arrowPositions[posicao]} text-4xl pointer-events-none z-20`}
+          animate={{ y: [0, -10, 0] }}
+          transition={{ duration: 1, repeat: Infinity, ease: "easeInOut" }}
+        >
+          ↓
+        </motion.div>
+      )}
 
       {/* Elemento com Pulse - área clicável expandida */}
       <div

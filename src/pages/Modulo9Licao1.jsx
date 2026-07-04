@@ -5,6 +5,7 @@ import { createPageUrl } from "@/utils";
 import { base44 } from "@/api/base44Client";
 import SimuladorImersivo from "@/components/simulador/SimuladorImersivo";
 import ElementoClicavel from "@/components/simulador/ElementoClicavel";
+import AndroidHomeScreen from "@/components/simulador/AndroidHomeScreen";
 import ValidacaoQuiz from "@/components/simulador/ValidacaoQuiz";
 
 const SOM_CLIQUE = 'data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2/LDciUFLIHO8tiJNwgZaLvt559NEAxQp+PwtmMcBjiR1/LMeSwFJHfH8N2QQAoUXrTp66hVFApGn+DyvmwhBSuBzvLZiTYIGGi77eeeTRALUKjo77RgGgU7k9jxzHkrBSh+zPHajkILElyx6OyrWBUIRp/h8rBsGwU2idXx0n8qBSl5yO/bj0QKElqx5+iwWRQJP5jb8L90IAU2jdrzzoErByh1xe/akUALD1ap5earWRULRp7h8bJuHQU0hdLu0IEtBSh2yPDamT4JFlux6OanVxYLPJPY78p2KQUodMju2phACRZYr+XmqlgVCz2V2/DLdioFKHLG7tqZPwkWWLDn56lXFgk9ldrvy3cqBSl0yO/amkEJFVew5+aoVxYIPZXb78p3KgUqdsrw2plACBVWsOjnp1cWCT2V2+/KdioFKXbH79qZQAgVV7Dn56hYFQk9lNvvy3cqBSl2ye/amUAIFVew5+eoVxYJPJTa78t3KgUpdsjv2plACBVYsOjnqFgVCTyU2u/LdioFKXbJ79qZQQgVWLDo56hYFQk8lNrvy3cqBSl2yO/amUEIFVew6OeoWBUJPJPa78x4KgUpdsnu25lBCBVXsefnqFgVCTyU2u/MdyoFKXbI79uZQQgVWLHn56hYFQk8lNrvy3cqBSl2yO/bmUEIFVix5+eoWRUJPJPa78x3KgUpdsjv25lBCBVYsefnqFgVCTyT2u/MdyoFKXXI79uZQQgVWLHn56hZFQk8k9rvzHcqBSl1yO/bmUEIFVmx5+epWRUJO5Pa78x3KwUpdcjv25lBCBVYsejnqFgVCTuT2u/NdyoFKXXI79qZQQgVWLHn56hZFQk7k9rvzHcqBSl1yO/bmUEIFVmx6OeoWRUJO5Pa78x3KgUpdcjv25lBCBVZsejnqFkVCTuT2u/MdyoFKXXI79uZQQgVWbHo56hZFQk7k9rvzHcqBSl1yO/bmUEIFVmx6OeoWRUJO5Pa78x3KgUpdcjv25lBCBVZsejnqFkVCTuT2u/MdyoFKXXI79uZQQgVWbHo56hZFQk7k9rvzHcqBSl1yO/bmUEIFVmx6OeoWRUJO5Pa78x3KgUpdcjv25lBCBVZsejnqFkVCTuT2u/MdyoFKXXI79uZQQgVWbHo56hZFQk7k9rvzHcqBSl1yO/bmUEIFVmx6OeoWRUJO5Pa78x3KgUp';
@@ -74,35 +75,34 @@ export default function Modulo9Licao1() {
     >
       {/* Passo 1: Home Android com Play Store */}
       {!playStoreAberta && (
-        <div className="w-full h-full bg-gradient-to-b from-blue-50 to-blue-100 p-6 pt-12">
-          <div className="grid grid-cols-4 gap-6 mt-8">
-            {passo === 1 && (
-              <ElementoClicavel onClick={() => handleCliqueCerto(2, () => setPlayStoreAberta(true))} posicao="bottom">
-                <div className="flex flex-col items-center gap-2">
-                  <div className="w-14 h-14 bg-white rounded-2xl flex items-center justify-center shadow-md">
-                    <div className="text-3xl">▶️</div>
-                  </div>
-                  <p className="text-xs text-gray-600 font-semibold">Play Store</p>
-                </div>
-              </ElementoClicavel>
-            )}
-            {["📱", "💬", "📧", "🎵", "📷", "📍", "⚙️"].map((emoji, i) => (
-              <div key={i} className="flex flex-col items-center gap-2">
-                <div className="w-14 h-14 bg-white rounded-2xl flex items-center justify-center text-2xl shadow-md">{emoji}</div>
-              </div>
-            ))}
+        <div style={{ minHeight: '100%', display: 'flex', flexDirection: 'column' }}>
+          <div style={{ flex: 1, position: 'relative', minHeight: 0 }}>
+            <AndroidHomeScreen
+              appsCustom={[
+                { icon: '📷', label: 'Câmera', bg: '#1a1a2e', id: 'camera' },
+                { icon: '▶️', label: 'Play Store', bg: '#fff', id: 'playstore' },
+                { icon: '💬', label: 'WhatsApp', bg: '#25D366', id: 'whatsapp' },
+                { icon: '🌐', label: 'Chrome', bg: '#4285F4', id: 'chrome' },
+                { icon: '⚙️', label: 'Config.', bg: '#607D8B', id: 'settings' },
+                { icon: '📸', label: 'Fotos', bg: '#FF5722', id: 'photos' },
+                { icon: '🔍', label: 'Google', bg: '#4285F4', id: 'google' },
+                { icon: '🎵', label: 'Música', bg: '#E91E63', id: 'music' },
+              ]}
+              appDestacado="playstore"
+              onAppClick={(id) => { if (id === 'playstore') handleCliqueCerto(2, () => setPlayStoreAberta(true)); }}
+            />
           </div>
         </div>
       )}
 
       {/* Passos 2-3: Play Store — busca */}
       {playStoreAberta && !buscando && !resultadoBusca && (
-        <div className="w-full h-full bg-white pt-12">
-          <div className="px-4 py-3 border-b">
+        <div style={{ minHeight: '100%', display: 'flex', flexDirection: 'column', background: '#fff' }}>
+          <div className="px-4 py-3 border-b" style={{ flexShrink: 0 }}>
             <div className="flex items-center gap-3">
               <button onClick={() => setPlayStoreAberta(false)} className="text-xl">←</button>
               {passo === 2 && (
-                <ElementoClicavel onClick={() => { setBuscaDigitada(true); handleCliqueCerto(3, null); }} posicao="right">
+                <ElementoClicavel onClick={() => { setBuscaDigitada(true); handleCliqueCerto(3, null); }} mostrarSeta={false} posicao="right">
                   <div className="flex-1 bg-gray-100 rounded-full px-4 py-2 cursor-pointer">
                     <p className="text-gray-400">Pesquisar apps...</p>
                   </div>
@@ -112,7 +112,7 @@ export default function Modulo9Licao1() {
                 <ElementoClicavel onClick={() => {
                   setBuscando(true);
                   setTimeout(() => { setBuscando(false); setResultadoBusca(true); setPasso(4); }, 1500);
-                }} posicao="right">
+                }} mostrarSeta={false} posicao="right">
                   <div className="flex-1 bg-blue-100 rounded-full px-4 py-2 cursor-pointer flex items-center gap-2">
                     <p className="text-gray-800 font-semibold flex-1">e-Título</p>
                     <span className="text-gray-600 text-lg">🔍</span>
@@ -121,7 +121,7 @@ export default function Modulo9Licao1() {
               )}
             </div>
           </div>
-          <div className="p-4">
+          <div className="p-4 flex-1">
             <p className="text-lg font-bold text-gray-800 mb-4">Apps populares</p>
             <div className="space-y-3">
               {["WhatsApp", "Instagram", "TikTok"].map((app, i) => (
@@ -140,8 +140,8 @@ export default function Modulo9Licao1() {
 
       {/* Buscando */}
       {buscando && (
-        <div className="w-full h-full bg-white pt-12">
-          <div className="px-4 py-3 border-b">
+        <div style={{ minHeight: '100%', display: 'flex', flexDirection: 'column', background: '#fff' }}>
+          <div className="px-4 py-3 border-b" style={{ flexShrink: 0 }}>
             <div className="flex items-center gap-3">
               <button className="text-xl">←</button>
               <div className="flex-1 bg-blue-100 rounded-full px-4 py-2">
@@ -149,7 +149,7 @@ export default function Modulo9Licao1() {
               </div>
             </div>
           </div>
-          <div className="flex items-center justify-center h-64">
+          <div className="flex-1 flex items-center justify-center">
             <motion.div animate={{ rotate: 360 }} transition={{ duration: 1, repeat: Infinity, ease: "linear" }} className="w-12 h-12 border-4 rounded-full" style={{ borderColor: '#1E5A9C', borderTopColor: 'transparent' }} />
           </div>
         </div>
@@ -157,8 +157,8 @@ export default function Modulo9Licao1() {
 
       {/* Passo 4: Resultado da busca */}
       {resultadoBusca && !appDetalhe && (
-        <div className="w-full h-full bg-white pt-12">
-          <div className="px-4 py-3 border-b">
+        <div style={{ minHeight: '100%', display: 'flex', flexDirection: 'column', background: '#fff' }}>
+          <div className="px-4 py-3 border-b" style={{ flexShrink: 0 }}>
             <div className="flex items-center gap-3">
               <button onClick={() => setResultadoBusca(false)} className="text-xl">←</button>
               <div className="flex-1 bg-blue-100 rounded-full px-4 py-2">
@@ -166,9 +166,9 @@ export default function Modulo9Licao1() {
               </div>
             </div>
           </div>
-          <div className="p-4">
+          <div className="p-4 flex-1">
             {passo === 4 && (
-              <ElementoClicavel onClick={() => handleCliqueCerto(5, () => setAppDetalhe(true))} posicao="right">
+              <ElementoClicavel onClick={() => handleCliqueCerto(5, () => setAppDetalhe(true))} mostrarSeta={false} posicao="right">
                 <div className="flex items-start gap-4 p-4 bg-blue-50 border-2 border-blue-300 rounded-2xl cursor-pointer">
                   <div className="w-16 h-16 rounded-2xl flex items-center justify-center text-3xl" style={{ background: '#1E5A9C' }}>
                     🗳️
@@ -188,11 +188,11 @@ export default function Modulo9Licao1() {
 
       {/* Passo 5: Detalhe do app — INSTALAR */}
       {appDetalhe && (
-        <div className="w-full h-full bg-white pt-12">
-          <div className="px-4 py-3 border-b">
+        <div style={{ minHeight: '100%', display: 'flex', flexDirection: 'column', background: '#fff' }}>
+          <div className="px-4 py-3 border-b" style={{ flexShrink: 0 }}>
             <button onClick={() => setAppDetalhe(false)} className="text-xl">←</button>
           </div>
-          <div className="p-6 text-center">
+          <div className="p-6 text-center flex-1 flex flex-col justify-center">
             <div className="w-24 h-24 rounded-3xl flex items-center justify-center text-5xl mx-auto mb-4" style={{ background: '#1E5A9C' }}>
               🗳️
             </div>
@@ -202,7 +202,7 @@ export default function Modulo9Licao1() {
             <span className="inline-block text-sm font-bold px-3 py-1 rounded mb-6" style={{ background: '#E8F5E9', color: '#2E7D32' }}>GRATUITO</span>
 
             {passo === 5 && (
-              <ElementoClicavel onClick={() => setMostrarValidacao(true)} posicao="top">
+              <ElementoClicavel onClick={() => setMostrarValidacao(true)} mostrarSeta={false} posicao="top">
                 <button className="w-full py-4 rounded-xl font-bold text-lg text-white" style={{ background: '#2E7D32', minHeight: '48px' }}>
                   INSTALAR
                 </button>

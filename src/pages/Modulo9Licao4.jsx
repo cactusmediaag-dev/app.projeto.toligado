@@ -69,8 +69,9 @@ export default function Modulo9Licao4() {
       totalPassos={4}
       onVoltar={() => navigate(createPageUrl("Modulos"))}
     >
+      <div style={{ minHeight: '100%', display: 'flex', flexDirection: 'column' }}>
       {/* Header e-Título com botão de menu */}
-      <div style={{ background: '#1E5A9C', padding: '16px 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+      <div style={{ background: '#1E5A9C', padding: '16px 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexShrink: 0 }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
           <span style={{ fontSize: '28px' }}>🗳️</span>
           <div>
@@ -79,7 +80,7 @@ export default function Modulo9Licao4() {
           </div>
         </div>
         {passo === 1 && !menuAberto && (
-          <ElementoClicavel onClick={() => handleCliqueCerto(2, () => setMenuAberto(true))} posicao="bottom">
+          <ElementoClicavel onClick={() => handleCliqueCerto(2, () => setMenuAberto(true))} mostrarSeta={false} posicao="bottom">
             <span style={{ color: '#fff', fontSize: '28px' }}>☰</span>
           </ElementoClicavel>
         )}
@@ -113,7 +114,7 @@ export default function Modulo9Licao4() {
             <p className="font-bold text-gray-800 mb-4" style={{ fontSize: '18px' }}>Menu</p>
             <div className="space-y-2">
               {passo === 2 && (
-                <ElementoClicavel onClick={() => handleCliqueCerto(3, () => setOndeVotarAberto(true))} posicao="right">
+                <ElementoClicavel onClick={() => handleCliqueCerto(3, () => setOndeVotarAberto(true))} mostrarSeta={false} posicao="right">
                   <div className="flex items-center gap-3 p-3 rounded-xl cursor-pointer" style={{ background: '#E3F2FD', border: '2px solid #1E5A9C' }}>
                     <span style={{ fontSize: '24px' }}>📍</span>
                     <p className="font-bold" style={{ fontSize: '18px', color: '#1E5A9C' }}>Onde Votar</p>
@@ -145,7 +146,7 @@ export default function Modulo9Licao4() {
 
             {/* Card de endereço */}
             {passo === 3 && !enderecoTocado && (
-              <ElementoClicavel onClick={() => { setEnderecoTocado(true); handleCliqueCerto(4, null); }} posicao="bottom">
+              <ElementoClicavel onClick={() => { setEnderecoTocado(true); handleCliqueCerto(4, null); }} mostrarSeta={false} posicao="bottom">
                 <div className="rounded-2xl p-5 mb-4" style={{ background: '#E3F2FD', border: '2px solid #1E5A9C' }}>
                   <div className="flex items-start gap-3 mb-3">
                     <span style={{ fontSize: '32px' }}>🏫</span>
@@ -202,7 +203,7 @@ export default function Modulo9Licao4() {
                     <p style={{ fontSize: '15px', color: '#555' }}>Seu título está em dia!</p>
                   </div>
                 </div>
-                <ElementoClicavel onClick={() => setMostrarValidacao(true)} posicao="top">
+                <ElementoClicavel onClick={() => setMostrarValidacao(true)} mostrarSeta={false} posicao="top">
                   <button className="w-full py-4 rounded-xl font-bold text-white" style={{ background: '#2E7D32', minHeight: '48px', fontSize: '18px' }}>
                     ✅ Tudo certo!
                   </button>
@@ -212,6 +213,7 @@ export default function Modulo9Licao4() {
           </div>
         </div>
       )}
+      </div>
     </SimuladorImersivo>
   );
 }

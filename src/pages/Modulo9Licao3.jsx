@@ -71,8 +71,9 @@ export default function Modulo9Licao3() {
       totalPassos={5}
       onVoltar={() => navigate(createPageUrl("Modulos"))}
     >
+      <div style={{ minHeight: '100%', display: 'flex', flexDirection: 'column' }}>
       {/* Header e-Título */}
-      <div style={{ background: '#1E5A9C', padding: '16px 20px', display: 'flex', alignItems: 'center', gap: '12px' }}>
+      <div style={{ background: '#1E5A9C', padding: '16px 20px', display: 'flex', alignItems: 'center', gap: '12px', flexShrink: 0 }}>
         <span style={{ fontSize: '28px' }}>🗳️</span>
         <div>
           <h2 style={{ color: '#fff', margin: 0, fontWeight: '800', fontSize: '20px' }}>e-Título</h2>
@@ -84,7 +85,7 @@ export default function Modulo9Licao3() {
       {!tituloAberto && (
         <div className="flex-1 bg-gray-50 p-6 flex items-center justify-center">
           {passo === 1 && (
-            <ElementoClicavel onClick={() => handleCliqueCerto(2, () => setTituloAberto(true))} posicao="bottom">
+            <ElementoClicavel onClick={() => handleCliqueCerto(2, () => setTituloAberto(true))} mostrarSeta={false} posicao="bottom">
               <div className="bg-white rounded-2xl shadow-lg p-6" style={{ width: '280px', border: '2px solid #1E5A9C' }}>
                 <div className="text-center mb-4">
                   <div className="text-5xl mb-2">🗳️</div>
@@ -114,7 +115,7 @@ export default function Modulo9Licao3() {
                 {/* Foto */}
                 <div style={{ width: '80px', height: '100px', flexShrink: 0 }}>
                   {passo === 2 && !fotoTocada && (
-                    <ElementoClicavel onClick={() => { setFotoTocada(true); handleCliqueCerto(3, null); }} posicao="right">
+                    <ElementoClicavel onClick={() => { setFotoTocada(true); handleCliqueCerto(3, null); }} mostrarSeta={false} posicao="right">
                       <div className="w-full h-full rounded-lg flex items-center justify-center" style={{ background: '#E3F2FD', border: '2px dashed #1E5A9C' }}>
                         <span className="text-3xl">👤</span>
                       </div>
@@ -144,7 +145,7 @@ export default function Modulo9Licao3() {
                 </div>
                 <div>
                   {passo === 3 && !zonaSecaoTocada && (
-                    <ElementoClicavel onClick={() => { setZonaSecaoTocada(true); handleCliqueCerto(4, null); }} posicao="bottom">
+                    <ElementoClicavel onClick={() => { setZonaSecaoTocada(true); handleCliqueCerto(4, null); }} mostrarSeta={false} posicao="bottom">
                       <div>
                         <p className="text-gray-500" style={{ fontSize: '13px' }}>Zona:</p>
                         <p className="font-bold" style={{ fontSize: '16px', color: '#1E5A9C' }}>0001</p>
@@ -172,7 +173,7 @@ export default function Modulo9Licao3() {
 
           {/* Botão BAIXAR PDF */}
           {passo === 4 && !pdfBaixado && (
-            <ElementoClicavel onClick={() => { setPdfBaixado(true); handleCliqueCerto(5, null); }} posicao="top">
+            <ElementoClicavel onClick={() => { setPdfBaixado(true); handleCliqueCerto(5, null); }} mostrarSeta={false} posicao="top">
               <button className="w-full py-4 rounded-xl font-bold text-white flex items-center justify-center gap-2" style={{ background: '#F9A825', minHeight: '48px', fontSize: '18px' }}>
                 📄 BAIXAR PDF
               </button>
@@ -188,7 +189,7 @@ export default function Modulo9Licao3() {
 
           {/* Botão ENTENDI */}
           {passo === 5 && (
-            <ElementoClicavel onClick={() => setMostrarValidacao(true)} posicao="top">
+            <ElementoClicavel onClick={() => setMostrarValidacao(true)} mostrarSeta={false} posicao="top">
               <button className="w-full py-4 rounded-xl font-bold text-white" style={{ background: '#2E7D32', minHeight: '48px', fontSize: '18px' }}>
                 ✅ ENTENDI
               </button>
@@ -203,6 +204,7 @@ export default function Modulo9Licao3() {
           </div>
         </div>
       )}
+      </div>
     </SimuladorImersivo>
   );
 }

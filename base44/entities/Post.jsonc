@@ -1,0 +1,33 @@
+{
+  "name": "Post",
+  "type": "object",
+  "properties": {
+    "autor_id": {
+      "type": "string",
+      "description": "ID do usu\u00e1rio autor"
+    },
+    "autor_nome": {
+      "type": "string",
+      "description": "Nome do autor (para exibi\u00e7\u00e3o sem buscar celular)"
+    },
+    "tipo": {
+      "type": "string",
+      "enum": [
+        "texto",
+        "dica"
+      ],
+      "description": "Tipo do post: pensamento ou dica"
+    },
+    "conteudo": {
+      "type": "string",
+      "maxLength": 280,
+      "description": "Conte\u00fado do post, m\u00e1x 280 caracteres"
+    }
+  },
+  "required": [
+    "autor_id",
+    "autor_nome",
+    "tipo",
+    "conteudo"
+  ]
+}

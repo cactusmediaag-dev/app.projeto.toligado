@@ -1,11 +1,12 @@
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Home, BookOpen, Trophy, User } from "lucide-react";
+import { Home, BookOpen, Users, Trophy, User } from "lucide-react";
 import { createPageUrl } from "@/utils";
 
 const navItems = [
   { icon: Home, label: "Início", page: "Home" },
   { icon: BookOpen, label: "Módulos", page: "Modulos" },
+  { icon: Users, label: "Turma", page: "Turma" },
   { icon: Trophy, label: "Ranking", page: "Ranking" },
   { icon: User, label: "Perfil", page: "Perfil" },
 ];

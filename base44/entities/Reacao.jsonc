@@ -1,0 +1,29 @@
+{
+  "name": "Reacao",
+  "type": "object",
+  "properties": {
+    "alvo": {
+      "type": "string",
+      "description": "ID de um Post OU chave de progresso (ex: userId:modN)"
+    },
+    "usuario_id": {
+      "type": "string",
+      "description": "ID do usu\u00e1rio que reagiu"
+    },
+    "tipo": {
+      "type": "string",
+      "enum": [
+        "aplauso",
+        "coracao",
+        "forca",
+        "denuncia"
+      ],
+      "description": "Tipo de rea\u00e7\u00e3o"
+    }
+  },
+  "required": [
+    "alvo",
+    "usuario_id",
+    "tipo"
+  ]
+}

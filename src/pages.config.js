@@ -108,6 +108,7 @@ import Modulos from './pages/Modulos';
 import Perfil from './pages/Perfil';
 import Ranking from './pages/Ranking';
 import Splash from './pages/Splash';
+import Turma from './pages/Turma';
 
 
 export const PAGES = {
@@ -172,6 +173,7 @@ export const PAGES = {
     "Perfil": Perfil,
     "Ranking": Ranking,
     "Splash": Splash,
+    "Turma": Turma,
 }
 
 export const pagesConfig = {

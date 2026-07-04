@@ -7,6 +7,8 @@ import SimuladorImersivo from "@/components/simulador/SimuladorImersivo";
 import ElementoClicavel from "@/components/simulador/ElementoClicavel";
 import ValidacaoQuiz from "@/components/simulador/ValidacaoQuiz";
 import { Sons, MoedasAnimadas, FeedbackAcerto, FeedbackErro } from "@/components/shared/GameFeedback";
+import { Search, ChevronRight, ArrowLeft, AlertTriangle, Ban, CheckCircle, Shield } from 'lucide-react';
+import AppIcon from "@/components/simulador/AppIcon";
 
 export default function Modulo3Licao4() {
   const navigate = useNavigate();
@@ -143,43 +145,49 @@ export default function Modulo3Licao4() {
       )}
 
       {segurancaAberta && !appSelecionado && (
-        <div className="w-full h-full bg-white pt-12">
-          <div className="px-4 mb-4">
-            <button onClick={() => setSegurancaAberta(false)} className="text-blue-600 font-bold mb-4">← Voltar</button>
-            <h2 className="text-2xl font-black text-gray-800 mb-2">Apps com acesso</h2>
-            <p className="text-sm text-gray-500">Revise periodicamente</p>
+        <div style={{ height: '100%', background: '#F8F9FA', display: 'flex', flexDirection: 'column' }}>
+          <div style={{ padding: '12px 16px', flexShrink: 0 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '8px' }}>
+              <button onClick={() => setSegurancaAberta(false)} style={{ width: '44px', height: '44px', background: 'none', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                <ArrowLeft size={24} color="#4285F4" />
+              </button>
+              <h2 style={{ fontSize: '22px', fontWeight: '800', color: '#1a1a1a', margin: 0 }}>Apps com acesso</h2>
+            </div>
+            <p style={{ fontSize: '14px', color: '#666', margin: 0, paddingLeft: '56px' }}>Revise periodicamente</p>
           </div>
-          <div className="px-4 space-y-3">
-            <div className="p-4 bg-green-50 border-2 border-green-200 rounded-2xl flex items-center gap-3">
-              <div className="text-3xl">📸</div>
-              <div className="flex-1">
-                <p className="font-bold text-gray-800">Google Fotos</p>
-                <p className="text-xs text-gray-500">Acesso desde 2024</p>
+          <div style={{ padding: '8px 12px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
+            <div style={{ padding: '16px', background: '#E8F5E9', border: '2px solid #A5D6A7', borderRadius: '16px', display: 'flex', alignItems: 'center', gap: '14px' }}>
+              <AppIcon nome="fotos" cor="#FF7043" tamanho={40} />
+              <div style={{ flex: 1 }}>
+                <p style={{ fontWeight: '700', color: '#1a1a1a', fontSize: '16px', margin: 0 }}>Google Fotos</p>
+                <p style={{ fontSize: '12px', color: '#666', margin: 0 }}>Acesso desde 2024</p>
               </div>
-              <div className="text-green-600 text-xl">✅</div>
+              <CheckCircle size={24} color="#34A853" />
             </div>
 
-            <div className="p-4 bg-green-50 border-2 border-green-200 rounded-2xl flex items-center gap-3">
-              <div className="text-3xl">📧</div>
-              <div className="flex-1">
-                <p className="font-bold text-gray-800">Gmail</p>
-                <p className="text-xs text-gray-500">Acesso desde 2024</p>
+            <div style={{ padding: '16px', background: '#E8F5E9', border: '2px solid #A5D6A7', borderRadius: '16px', display: 'flex', alignItems: 'center', gap: '14px' }}>
+              <AppIcon nome="email" cor="#EA4335" tamanho={40} />
+              <div style={{ flex: 1 }}>
+                <p style={{ fontWeight: '700', color: '#1a1a1a', fontSize: '16px', margin: 0 }}>Gmail</p>
+                <p style={{ fontSize: '12px', color: '#666', margin: 0 }}>Acesso desde 2024</p>
               </div>
-              <div className="text-green-600 text-xl">✅</div>
+              <CheckCircle size={24} color="#34A853" />
             </div>
 
             {passo === 3 && (
               <ElementoClicavel
                 onClick={() => handleCliqueCerto(4, () => setAppSelecionado(true))}
-                posicao="right"
+                mostrarSeta={false}
               >
-                <div className="p-4 bg-red-50 border-2 border-red-300 rounded-2xl flex items-center gap-3 cursor-pointer animate-pulse">
-                  <div className="text-3xl">⚠️</div>
-                  <div className="flex-1">
-                    <p className="font-bold text-red-700">App Desconhecido</p>
-                    <p className="text-xs text-red-500">Acesso suspeito</p>
+                <div style={{ padding: '16px', background: '#FEF2F2', border: '2px solid #FCA5A5', borderRadius: '16px', display: 'flex', alignItems: 'center', gap: '14px', cursor: 'pointer' }}>
+                  <div style={{ width: '40px', height: '40px', borderRadius: '10px', background: '#EF4444', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                    <AlertTriangle size={20} color="#fff" />
                   </div>
-                  <div className="text-red-600 text-xl">⚠️</div>
+                  <div style={{ flex: 1 }}>
+                    <p style={{ fontWeight: '700', color: '#B91C1C', fontSize: '16px', margin: 0 }}>App Desconhecido</p>
+                    <p style={{ fontSize: '12px', color: '#DC2626', margin: 0 }}>Acesso suspeito</p>
+                  </div>
+                  <AlertTriangle size={24} color="#EF4444" />
                 </div>
               </ElementoClicavel>
             )}
@@ -188,24 +196,30 @@ export default function Modulo3Licao4() {
       )}
 
       {appSelecionado && (
-        <div className="w-full h-full bg-white pt-12 p-6">
-          <button onClick={() => setAppSelecionado(false)} className="text-blue-600 font-bold mb-6">← Voltar</button>
-          
+        <div style={{ height: '100%', background: '#F8F9FA', display: 'flex', flexDirection: 'column' }}>
+          <div style={{ padding: '12px 16px', display: 'flex', alignItems: 'center', gap: '12px', flexShrink: 0 }}>
+            <button onClick={() => setAppSelecionado(false)} style={{ width: '44px', height: '44px', background: 'none', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+              <ArrowLeft size={24} color="#4285F4" />
+            </button>
+          </div>
+
           {!removido ? (
-            <>
-              <div className="text-center mb-6">
-                <div className="text-7xl mb-4">⚠️</div>
-                <h2 className="text-2xl font-black text-gray-800 mb-2">App Desconhecido</h2>
-                <p className="text-red-600 font-semibold">Acesso suspeito detectado</p>
+            <div style={{ flex: 1, padding: '24px', overflowY: 'auto' }}>
+              <div style={{ textAlign: 'center', marginBottom: '24px' }}>
+                <div style={{ width: '64px', height: '64px', borderRadius: '16px', background: '#EF4444', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px' }}>
+                  <AlertTriangle size={36} color="#fff" />
+                </div>
+                <h2 style={{ fontSize: '24px', fontWeight: '800', color: '#1a1a1a', marginBottom: '8px', margin: '0 0 8px' }}>App Desconhecido</h2>
+                <p style={{ color: '#EF4444', fontWeight: '600', fontSize: '16px' }}>Acesso suspeito detectado</p>
               </div>
 
-              <div className="bg-red-50 border-2 border-red-200 rounded-2xl p-6 mb-6">
-                <p className="text-sm font-bold text-red-700 mb-3">Este app tem acesso a:</p>
-                <ul className="space-y-2 text-sm text-red-600">
-                  <li>🔴 Ler seus e-mails</li>
-                  <li>🔴 Ver seus contatos</li>
-                  <li>🔴 Acessar suas fotos</li>
-                  <li>🔴 Ver sua localização</li>
+              <div style={{ background: '#FEF2F2', border: '2px solid #FECACA', borderRadius: '16px', padding: '20px', marginBottom: '24px' }}>
+                <p style={{ fontSize: '15px', fontWeight: '700', color: '#B91C1C', marginBottom: '12px' }}>Este app tem acesso a:</p>
+                <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '8px', fontSize: '15px', color: '#DC2626' }}>
+                  <li>• Ler seus e-mails</li>
+                  <li>• Ver seus contatos</li>
+                  <li>• Acessar suas fotos</li>
+                  <li>• Ver sua localização</li>
                 </ul>
               </div>
 
@@ -215,23 +229,23 @@ export default function Modulo3Licao4() {
                     setRemovido(true);
                     setTimeout(() => setMostrarValidacao(true), 2000);
                   }}
-                  posicao="top"
+                  mostrarSeta={false}
                 >
-                  <button className="w-full bg-red-500 text-white py-4 rounded-2xl font-bold text-lg">
-                    🚫 Remover Acesso
+                  <button style={{ width: '100%', background: '#EF4444', color: '#fff', border: 'none', padding: '18px', borderRadius: '16px', fontWeight: '700', fontSize: '18px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
+                    <Ban size={20} color="#fff" /> Remover Acesso
                   </button>
                 </ElementoClicavel>
               )}
-            </>
+            </div>
           ) : (
             <motion.div
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
-              className="text-center flex flex-col items-center justify-center h-full"
+              style={{ flex: 1, textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '16px', padding: '24px' }}
             >
-              <div className="text-8xl mb-6">✅</div>
-              <h3 className="text-2xl font-bold text-green-600 mb-4">Acesso removido com sucesso!</h3>
-              <p className="text-gray-600 font-semibold">Sua conta está limpa e segura</p>
+              <CheckCircle size={72} color="#34A853" />
+              <h3 style={{ fontSize: '24px', fontWeight: '800', color: '#34A853', margin: 0 }}>Acesso removido com sucesso!</h3>
+              <p style={{ color: '#666', fontWeight: '600', fontSize: '16px' }}>Sua conta está limpa e segura</p>
             </motion.div>
           )}
         </div>

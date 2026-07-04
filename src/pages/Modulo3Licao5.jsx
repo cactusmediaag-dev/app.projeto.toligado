@@ -6,6 +6,7 @@ import { base44 } from "@/api/base44Client";
 import SimuladorImersivo from "@/components/simulador/SimuladorImersivo";
 import ElementoClicavel from "@/components/simulador/ElementoClicavel";
 import ValidacaoQuiz from "@/components/simulador/ValidacaoQuiz";
+import { MessageCircle, AlertTriangle, Ban, Shield, Lock, ArrowLeft, CheckCircle } from 'lucide-react';
 
 export default function Modulo3Licao5() {
   const navigate = useNavigate();
@@ -84,28 +85,31 @@ export default function Modulo3Licao5() {
       totalPassos={4}
       onVoltar={() => navigate(createPageUrl("Modulos"))}
     >
-      <div className="w-full h-full bg-gradient-to-b from-green-50 to-white pt-12 overflow-y-auto">
-        <div className="bg-green-600 px-4 py-3 flex items-center gap-3">
-          <div className="w-10 h-10 bg-gray-300 rounded-full" />
-          <span className="text-white font-bold">+55 11 99999-9999</span>
+      <div style={{ height: '100%', background: '#ECE5DD', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+        {/* SMS header */}
+        <div style={{ background: '#0B57D0', padding: '16px', display: 'flex', alignItems: 'center', gap: '12px', flexShrink: 0 }}>
+          <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+            <MessageCircle size={22} color="#0B57D0" />
+          </div>
+          <span style={{ color: '#fff', fontWeight: '700', fontSize: '18px' }}>+55 11 99999-9999</span>
         </div>
 
-        <div className="p-4">
-          <div className={`bg-white rounded-2xl p-4 shadow-md ${analisado ? "border-2 border-red-400" : ""}`}>
-            <p className="text-gray-800 font-semibold leading-relaxed mb-3">
-              Olá! Sou do <span className={analisado ? "bg-red-100" : ""}>suporte do banco</span>. Precisamos confirmar sua <span className={analisado ? "bg-red-100" : ""}>senha</span> para liberar seu acesso. Qual é sua senha?
+        <div style={{ flex: 1, overflowY: 'auto', padding: '16px' }}>
+          <div style={{ background: '#fff', borderRadius: '16px', padding: '16px', boxShadow: '0 1px 4px rgba(0,0,0,0.1)', border: analisado ? '2px solid #EF4444' : 'none' }}>
+            <p style={{ color: '#1a1a1a', fontWeight: '600', lineHeight: 1.5, marginBottom: '12px', fontSize: '16px' }}>
+              Olá! Sou do <span style={{ background: analisado ? '#FEE2E2' : 'transparent' }}>suporte do banco</span>. Precisamos confirmar sua <span style={{ background: analisado ? '#FEE2E2' : 'transparent' }}>senha</span> para liberar seu acesso. Qual é sua senha?
             </p>
-            <p className="text-xs text-gray-400">Recebida agora</p>
+            <p style={{ fontSize: '12px', color: '#9CA3AF' }}>Recebida agora</p>
           </div>
 
           {passo === 1 && !analisado && (
-            <div className="mt-4">
+            <div style={{ marginTop: '16px' }}>
               <ElementoClicavel
                 onClick={() => handleCliqueCerto(2, () => setAnalisado(true))}
-                posicao="top"
+                mostrarSeta={false}
               >
-                <button className="w-full bg-orange-500 text-white py-3 rounded-2xl font-bold text-lg">
-                  ⚠️ Entender o golpe
+                <button style={{ width: '100%', background: '#F3984B', color: '#fff', border: 'none', padding: '16px', borderRadius: '16px', fontWeight: '700', fontSize: '18px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
+                  <AlertTriangle size={20} color="#fff" /> Entender o golpe
                 </button>
               </ElementoClicavel>
             </div>
@@ -115,24 +119,26 @@ export default function Modulo3Licao5() {
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              className="mt-4"
+              style={{ marginTop: '16px' }}
             >
-              <div className="bg-red-50 border-2 border-red-200 rounded-2xl p-4 mb-4">
-                <p className="text-sm font-bold text-red-700 mb-3">🚨 Sinais de Alerta:</p>
-                <ul className="space-y-2 text-sm text-red-600">
-                  <li>🔴 Banco NUNCA pede senha por mensagem</li>
-                  <li>🔴 Número desconhecido — não é do banco</li>
-                  <li>🔴 Pressão para responder rápido = golpe</li>
+              <div style={{ background: '#FEF2F2', border: '2px solid #FECACA', borderRadius: '16px', padding: '16px', marginBottom: '16px' }}>
+                <p style={{ fontSize: '14px', fontWeight: '700', color: '#B91C1C', marginBottom: '8px', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                  <AlertTriangle size={16} color="#EF4444" /> Sinais de Alerta:
+                </p>
+                <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '8px', fontSize: '14px', color: '#DC2626' }}>
+                  <li>• Banco NUNCA pede senha por mensagem</li>
+                  <li>• Número desconhecido — não é do banco</li>
+                  <li>• Pressão para responder rápido = golpe</li>
                 </ul>
               </div>
 
               {passo === 2 && !confirmacao && (
                 <ElementoClicavel
                   onClick={() => handleCliqueCerto(3, () => setConfirmacao(true))}
-                  posicao="top"
+                  mostrarSeta={false}
                 >
-                  <button className="w-full bg-red-500 text-white py-4 rounded-2xl font-bold text-lg flex items-center justify-center gap-2">
-                    🚫 Bloquear e Denunciar
+                  <button style={{ width: '100%', background: '#EF4444', color: '#fff', border: 'none', padding: '18px', borderRadius: '16px', fontWeight: '700', fontSize: '18px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
+                    <Ban size={20} color="#fff" /> Bloquear e Denunciar
                   </button>
                 </ElementoClicavel>
               )}
@@ -143,15 +149,15 @@ export default function Modulo3Licao5() {
             <motion.div
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
-              className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-6"
+              style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 50, padding: '24px' }}
             >
-              <div className="bg-white rounded-3xl p-6 max-w-sm w-full">
-                <h3 className="text-xl font-bold text-gray-800 mb-4">Deseja bloquear este contato?</h3>
-                <p className="text-gray-600 mb-6">Este número será bloqueado e denunciado como spam</p>
-                <div className="flex gap-3">
+              <div style={{ background: '#fff', borderRadius: '24px', padding: '24px', maxWidth: '320px', width: '100%' }}>
+                <h3 style={{ fontSize: '20px', fontWeight: '700', color: '#1a1a1a', marginBottom: '16px' }}>Deseja bloquear este contato?</h3>
+                <p style={{ color: '#666', fontSize: '15px', marginBottom: '24px' }}>Este número será bloqueado e denunciado como spam</p>
+                <div style={{ display: 'flex', gap: '12px' }}>
                   <button
                     onClick={() => setConfirmacao(false)}
-                    className="flex-1 py-3 bg-gray-200 rounded-xl font-bold text-gray-700"
+                    style={{ flex: 1, padding: '14px', background: '#e0e0e0', borderRadius: '12px', border: 'none', fontWeight: '700', color: '#666', fontSize: '15px', cursor: 'pointer' }}
                   >
                     Cancelar
                   </button>
@@ -161,9 +167,9 @@ export default function Modulo3Licao5() {
                         setBloqueado(true);
                         setPasso(4);
                       }}
-                      posicao="top"
+                      mostrarSeta={false}
                     >
-                      <button className="flex-1 py-3 bg-red-500 text-white rounded-xl font-bold cursor-pointer">
+                      <button style={{ flex: 1, padding: '14px', background: '#EF4444', color: '#fff', borderRadius: '12px', border: 'none', fontWeight: '700', fontSize: '15px', cursor: 'pointer' }}>
                         Bloquear
                       </button>
                     </ElementoClicavel>
@@ -177,19 +183,19 @@ export default function Modulo3Licao5() {
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              className="mt-4"
+              style={{ marginTop: '16px' }}
             >
-              <div className="bg-green-100 border-2 border-green-400 rounded-2xl p-6 mb-4">
-                <div className="text-center">
-                  <div className="text-6xl mb-3">🛡️</div>
-                  <p className="text-xl font-bold text-green-700 mb-2">✅ Contato bloqueado!</p>
-                  <p className="text-sm text-green-600">Você está seguro</p>
+              <div style={{ background: '#E8F5E9', border: '2px solid #4CAF50', borderRadius: '16px', padding: '24px', marginBottom: '16px' }}>
+                <div style={{ textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px' }}>
+                  <Shield size={48} color="#34A853" />
+                  <p style={{ fontSize: '20px', fontWeight: '800', color: '#2E7D32', margin: 0 }}>Contato bloqueado!</p>
+                  <p style={{ fontSize: '14px', color: '#34A853' }}>Você está seguro</p>
                 </div>
               </div>
 
-              <div className="bg-blue-50 border-2 border-blue-200 rounded-2xl p-4 mb-4">
-                <p className="text-sm font-bold text-blue-700 mb-2">💡 Dica importante:</p>
-                <p className="text-sm text-blue-600">
+              <div style={{ background: '#E3F2FD', border: '2px solid #90CAF9', borderRadius: '16px', padding: '16px', marginBottom: '16px' }}>
+                <p style={{ fontSize: '14px', fontWeight: '700', color: '#1565C0', marginBottom: '8px' }}>💡 Dica importante:</p>
+                <p style={{ fontSize: '14px', color: '#1565C0' }}>
                   Em caso de dúvida, ligue para o número oficial do seu banco no verso do cartão 📞
                 </p>
               </div>
@@ -197,10 +203,10 @@ export default function Modulo3Licao5() {
               {passo === 4 && (
                 <ElementoClicavel
                   onClick={() => setMostrarValidacao(true)}
-                  posicao="top"
+                  mostrarSeta={false}
                 >
-                  <button className="w-full bg-green-500 text-white py-4 rounded-2xl font-bold text-lg">
-                    ✅ Entendi!
+                  <button style={{ width: '100%', background: '#34A853', color: '#fff', border: 'none', padding: '18px', borderRadius: '16px', fontWeight: '700', fontSize: '18px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
+                    <CheckCircle size={20} color="#fff" /> Entendi!
                   </button>
                 </ElementoClicavel>
               )}

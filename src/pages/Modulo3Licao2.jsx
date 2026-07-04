@@ -6,6 +6,7 @@ import { base44 } from "@/api/base44Client";
 import SimuladorImersivo from "@/components/simulador/SimuladorImersivo";
 import ElementoClicavel from "@/components/simulador/ElementoClicavel";
 import ValidacaoQuiz from "@/components/simulador/ValidacaoQuiz";
+import { Fingerprint, ScanFace, Lock, ChevronRight, CheckCircle } from 'lucide-react';
 
 export default function Modulo3Licao2() {
   const navigate = useNavigate();
@@ -81,62 +82,51 @@ export default function Modulo3Licao2() {
       onVoltar={() => navigate(createPageUrl("Modulos"))}
     >
       {!digitalAberta && (
-        <div className="w-full h-full bg-white pt-12">
-          <div className="px-4 mb-4">
-            <h2 className="text-2xl font-black text-gray-800">Segurança</h2>
+        <div style={{ height: '100%', background: '#F8F9FA', display: 'flex', flexDirection: 'column' }}>
+          <div style={{ padding: '16px', flexShrink: 0 }}>
+            <h2 style={{ fontSize: '24px', fontWeight: '800', color: '#1a1a1a', margin: 0 }}>Segurança</h2>
           </div>
-          <div className="space-y-2">
+          <div style={{ padding: '8px 12px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
             {passo === 1 && (
               <ElementoClicavel
                 onClick={() => handleCliqueCerto(2, () => setDigitalAberta(true))}
-                posicao="right"
+                mostrarSeta={false}
               >
-                <div className="px-4 py-4 flex items-center gap-3 hover:bg-gray-50 cursor-pointer">
-                  <div className="text-3xl">👆</div>
-                  <span className="text-lg font-bold text-gray-700">Impressão Digital</span>
+                <div style={{ background: '#fff', borderRadius: '16px', padding: '16px', display: 'flex', alignItems: 'center', gap: '14px', cursor: 'pointer' }}>
+                  <div style={{ width: '36px', height: '36px', borderRadius: '50%', background: '#34A853', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                    <Fingerprint size={20} color="#fff" />
+                  </div>
+                  <span style={{ fontSize: '18px', fontWeight: '600', color: '#1a1a1a', flex: 1 }}>Impressão Digital</span>
+                  <ChevronRight size={20} color="#bbb" />
                 </div>
               </ElementoClicavel>
             )}
             {[
-              { emoji: "😊", nome: "Reconhecimento Facial" },
-              { emoji: "🔒", nome: "Bloqueio de Tela" },
-            ].map((item, i) => (
-              <div key={i} className="px-4 py-4 flex items-center gap-3">
-                <div className="text-3xl">{item.emoji}</div>
-                <span className="text-lg font-bold text-gray-700">{item.nome}</span>
-              </div>
-            ))}
+              { Icon: ScanFace, nome: "Reconhecimento Facial", cor: '#4285F4' },
+              { Icon: Lock, nome: "Bloqueio de Tela", cor: '#FF9800' },
+            ].map((item, i) => {
+              const Ic = item.Icon;
+              return (
+                <div key={i} style={{ background:! '#fff', borderRadius: '16px', padding: '16px', display: 'flex', alignItems: 'center', gap: '14px' }}>
+                  <div style={{ width: '36px', height: '36px', borderRadius: '50%', background: item.cor, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                    <Ic size={20} color="#fff" />
+                  </div>
+                  <span style={{ fontSize: '18px', fontWeight: '600', color: '#1a1a1a', flex: 1 }}>{item.nome}</span>
+                  <ChevronRight size={20} color="#bbb" />
+                </div>
+              );
+            })}
           </div>
         </div>
       )}
 
       {digitalAberta && !concluido && (
-        <div className="w-full h-full bg-gradient-to-b from-blue-50 to-blue-100 pt-12 p-6 flex flex-col items-center justify-center">
-          <h2 className="text-2xl font-black text-gray-800 mb-8 text-center">
+        <div style={{ height: '100%', background: '#F8F9FA', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '24px' }}>
+          <h2 style={{ fontSize: '22px', fontWeight: '800', color: '#1a1a1a', marginBottom: '24px', textAlign: 'center', margin: '0 0 24px' }}>
             {progresso === 0 ? "Cadastrar Impressão Digital" : "Leitura em andamento..."}
           </h2>
 
-          <div className="text-center mb-8">
-            <p className="text-gray-600 font-semibold mb-6">Toque no sensor com o dedo indicador</p>
-            <div className="text-9xl mb-6">👆</div>
-          </div>
-
-          {progresso > 0 && (
-            <div className="w-full max-w-sm mb-6">
-              <div className="bg-white rounded-full h-4 overflow-hidden mb-3">
-                <motion.div
-                  className="h-full bg-gradient-to-r from-blue-400 to-blue-600"
-                  initial={{ width: 0 }}
-                  animate={{ width: `${progresso}%` }}
-                  transition={{ duration: 0.3 }}
-                />
-              </div>
-              <p className="text-center text-lg font-bold text-blue-600">{progresso}%</p>
-              {progresso < 100 && (
-                <p className="text-center text-sm text-gray-600 mt-2">Levante e reposicione o dedo</p>
-              )}
-            </div>
-          )}
+          <p style={{ color: '#666', fontWeight: '600', marginBottom: '32px', fontSize: '16px' }}>Toque no sensor com o dedo indicador</p>
 
           {passo === 2 && progresso === 0 && (
             <ElementoClicavel
@@ -145,10 +135,10 @@ export default function Modulo3Licao2() {
                 setProgresso(40);
                 handleCliqueCerto(3, null);
               }}
-              posicao="top"
+              mostrarSeta={false}
             >
-              <div className="w-24 h-24 rounded-full bg-blue-500/20 border-4 border-blue-500 flex items-center justify-center cursor-pointer animate-pulse">
-                <div className="w-16 h-16 rounded-full bg-blue-500" />
+              <div style={{ width: '96px', height: '96px', borderRadius: '50%', background: '#E3F2FD', border: '4px solid #4285F4', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
+                <Fingerprint size={48} color="#4285F4" />
               </div>
             </ElementoClicavel>
           )}
@@ -162,36 +152,51 @@ export default function Modulo3Licao2() {
                   setPasso(4);
                 }, 800);
               }}
-              posicao="top"
+              mostrarSeta={false}
             >
-              <div className="w-24 h-24 rounded-full bg-blue-500/20 border-4 border-blue-500 flex items-center justify-center cursor-pointer">
-                <motion.div
-                  className="w-16 h-16 rounded-full bg-blue-500"
-                  animate={{ scale: [1, 1.2, 1] }}
-                  transition={{ duration: 1, repeat: Infinity }}
-                />
+              <div style={{ width: '96px', height: '96px', borderRadius: '50%', background: '#E3F2FD', border: '4px solid #4285F4', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
+                <motion.div animate={{ scale: [1, 1.2, 1] }} transition={{ duration: 1, repeat: Infinity }}>
+                  <Fingerprint size={48} color="#4285F4" />
+                </motion.div>
               </div>
             </ElementoClicavel>
+          )}
+
+          {progresso > 0 && (
+            <div style={{ width: '100%', maxWidth: '280px', marginTop: '32px' }}>
+              <div style={{ background: '#fff', borderRadius: '4px', height: '16px', overflow: 'hidden', marginBottom: '12px' }}>
+                <motion.div
+                  style={{ height: '100%', background: 'linear-gradient(90deg, #4285F4, #1a73e8)' }}
+                  initial={{ width: 0 }}
+                  animate={{ width: `${progresso}%` }}
+                  transition={{ duration: 0.3 }}
+                />
+              </div>
+              <p style={{ textAlign: 'center', fontSize: '18px', fontWeight: '700', color: '#4285F4', margin: 0 }}>{progresso}%</p>
+              {progresso < 100 && (
+                <p style={{ textAlign: 'center', fontSize: '14px', color: '#666', marginTop: '8px' }}>Levante e reposicione o dedo</p>
+              )}
+            </div>
           )}
         </div>
       )}
 
       {concluido && (
-        <div className="w-full h-full bg-white pt-12 p-6 flex flex-col items-center justify-center">
+        <div style={{ height: '100%', background: '#fff', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '24px' }}>
           <motion.div
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
-            className="text-center"
+            style={{ textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '16px' }}
           >
-            <div className="text-8xl mb-6">✅</div>
-            <h3 className="text-2xl font-bold text-gray-800 mb-4">Impressão digital cadastrada!</h3>
-            <p className="text-gray-600 mb-8">Sua digital é única no mundo inteiro</p>
+            <CheckCircle size={72} color="#34A853" />
+            <h3 style={{ fontSize: '24px', fontWeight: '800', color: '#1a1a1a', margin: 0 }}>Impressão digital cadastrada!</h3>
+            <p style={{ color: '#666', fontSize: '16px' }}>Sua digital é única no mundo inteiro</p>
             {passo === 4 && (
               <ElementoClicavel
                 onClick={() => setMostrarValidacao(true)}
-                posicao="top"
+                mostrarSeta={false}
               >
-                <button className="px-8 py-4 bg-green-500 text-white rounded-2xl font-bold text-lg">
+                <button style={{ padding: '16px 32px', borderRadius: '16px', border: 'none', background: '#34A853', color: '#fff', fontSize: '18px', fontWeight: '700', cursor: 'pointer' }}>
                   Concluir 🎉
                 </button>
               </ElementoClicavel>

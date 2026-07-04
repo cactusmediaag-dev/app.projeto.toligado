@@ -7,6 +7,7 @@ import SimuladorImersivo from "@/components/simulador/SimuladorImersivo";
 import ElementoClicavel from "@/components/simulador/ElementoClicavel";
 import ValidacaoQuiz from "@/components/simulador/ValidacaoQuiz";
 import { Sons, MoedasAnimadas, FeedbackAcerto, FeedbackErro } from "@/components/shared/GameFeedback";
+import { Search, ChevronRight, ArrowLeft, Mic, CheckCircle, Bell, Settings } from 'lucide-react';
 
 export default function Modulo3Licao3() {
   const navigate = useNavigate();
@@ -91,113 +92,140 @@ export default function Modulo3Licao3() {
       onVoltar={() => navigate(createPageUrl("Modulos"))}
     >
       {!googleAberto && !assistenteAberto && !voiceMatchAberto && (
-        <div className="w-full h-full bg-white pt-12">
-          <div className="px-4 mb-4">
-            <h2 className="text-2xl font-black text-gray-800">Configurações</h2>
+        <div style={{ height: '100%', background: '#F8F9FA', display: 'flex', flexDirection: 'column' }}>
+          <div style={{ padding: '16px', flexShrink: 0 }}>
+           ! <h2 style={{ fontSize: '24px', fontWeight: '800', color: '#1a1a1a', margin: 0 }}>Configurações</h2>
           </div>
-          <div className="space-y-2">
+          <div style={{ padding: '8px 12px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
             {passo === 1 && (
               <ElementoClicavel
                 onClick={() => handleCliqueCerto(2, () => setGoogleAberto(true))}
-                posicao="right"
+                mostrarSeta={false}
               >
-                <div className="px-4 py-4 flex items-center gap-3 hover:bg-gray-50 cursor-pointer">
-                  <div className="text-3xl">G</div>
-                  <span className="text-lg font-bold text-gray-700">Google</span>
+                <div style={{ background: '#fff', borderRadius: '16px', padding: '16px', display: 'flex', alignItems: 'center', gap: '14px', cursor: 'pointer' }}>
+                  <div style={{ width: '36px', height: '36px', borderRadius: '50%', background: '#fff', border: '2px solid #4285F4', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                    <Search size={20} color="#4285F4" />
+                  </div>
+                  <span style={{ fontSize: '18px', fontWeight: '600', color: '#1a1a1a', flex: 1 }}>Google</span>
+                  <ChevronRight size={20} color="#bbb" />
                 </div>
               </ElementoClicavel>
             )}
             {[
-              { emoji: "📶", nome: "Wi-Fi" },
-              { emoji: "🔐", nome: "Segurança" },
-              { emoji: "🔋", nome: "Bateria" },
-            ].map((item, i) => (
-              <div key={i} className="px-4 py-4 flex items-center gap-3">
-                <div className="text-3xl">{item.emoji}</div>
-                <span className="text-lg font-bold text-gray-700">{item.nome}</span>
-              </div>
-            ))}
+              { Icon: Settings, nome: "Wi-Fi", cor: '#4285F4' },
+              { Icon: Settings, nome: "Segurança", cor: '#5C2E7F' },
+              { Icon: Settings, nome: "Bateria", cor: '#34A853' },
+            ].map((item, i) => {
+              const Ic = item.Icon;
+              return (
+                <div key={i} style={{ background: '#fff', borderRadius: '16px', padding: '16px', display: 'flex', alignItems: 'center', gap: '14px' }}>
+                  <div style={{ width: '36px', height: '36px', borderRadius: '50%', background: item.cor, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                    <Ic size={20} color="#fff" />
+                  </div>
+                  <span style={{ fontSize: '18px', fontWeight: '600', color: '#1a1a1a', flex: 1 }}>{item.nome}</span>
+                  <ChevronRight size={20} color="#bbb" />
+                </div>
+              );
+            })}
           </div>
         </div>
       )}
 
       {googleAberto && !assistenteAberto && (
-        <div className="w-full h-full bg-white pt-12">
-          <div className="px-4 mb-4">
-            <button onClick={() => setGoogleAberto(false)} className="text-blue-600 font-bold mb-4">← Voltar</button>
-            <h2 className="text-2xl font-black text-gray-800">Google</h2>
+        <div style={{ height: '100%', background: '#F8F9FA', display: 'flex', flexDirection: 'column' }}>
+          <div style={{ padding: '12px 16px', display: 'flex', alignItems: 'center', gap: '12px', flexShrink: 0 }}>
+            <button onClick={() =>! setGoogleAberto(false)} style={{ width: '44px', height: '44px', background: 'none', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+              <ArrowLeft size={24} color="#4285F4" />
+            </button>
+            <h2 style={{ fontSize: '24px', fontWeight: '800', color: '#1a1a1a', margin: 0 }}>Google</h2>
           </div>
-          <div className="space-y-2">
+          <div style={{ padding: '8px 12px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
             {passo === 2 && (
               <ElementoClicavel
                 onClick={() => handleCliqueCerto(3, () => setAssistenteAberto(true))}
-                posicao="right"
+                mostrarSeta={false}
               >
-                <div className="px-4 py-4 flex items-center gap-3 hover:bg-gray-50 cursor-pointer">
-                  <div className="text-3xl">🤖</div>
-                  <span className="text-lg font-bold text-gray-700">Assistente</span>
+                <div style={{ background: '#fff', borderRadius: '16px', padding: '16px', display: 'flex', alignItems: 'center', gap: '14px', cursor: 'pointer' }}>
+                  <div style={{ width: '36px', height: '36px', borderRadius: '50%', background: '#4285F4', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                    <Mic size={20} color="#fff" />
+                  </div>
+                  <span style={{ fontSize: '18px', fontWeight: '600', color: '#1a1a1a', flex: 1 }}>Assistente</span>
+                  <ChevronRight size={20} color="#bbb" />
                 </div>
               </ElementoClicavel>
             )}
             {[
-              { emoji: "🔍", nome: "Pesquisa" },
-              { emoji: "☁️", nome: "Backup" },
-            ].map((item, i) => (
-              <div key={i} className="px-4 py-4 flex items-center gap-3">
-                <div className="text-3xl">{item.emoji}</div>
-                <span className="text-lg font-bold text-gray-700">{item.nome}</span>
-              </div>
-            ))}
+              { Icon: Search, nome: "Pesquisa", cor: '#34A853' },
+              { Icon: Bell, nome: "Backup", cor: '#FBBC05' },
+            ].map((item, i) => {
+              const Ic = item.Icon;
+              return (
+                <div key={i} style={{ background: '#fff', borderRadius: '16px', padding: '16px', display: 'flex', alignItems: 'center', gap: '14px' }}>
+                  <div style={{ width: '36px', height: '36px', borderRadius: '50%', background: item.cor, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                    <Ic size={20} color="#fff" />
+                  </div>
+                  <span style={{ fontSize: '18px', fontWeight: '600', color: '#1a1a1a', flex: 1 }}>{item.nome}</span>
+                  <ChevronRight size={20} color="#bbb" />
+                </div>
+              );
+            })}
           </div>
         </div>
       )}
 
       {assistenteAberto && !voiceMatchAberto && (
-        <div className="w-full h-full bg-white pt-12">
-          <div className="px-4 mb-4">
-            <button onClick={() => setAssistenteAberto(false)} className="text-blue-600 font-bold mb-4">← Voltar</button>
-            <h2 className="text-2xl font-black text-gray-800">Google Assistente</h2>
+        <div style={{ height: '100%', background: '#F8F9FA', display: 'flex', flexDirection: 'column' }}>
+          <div style={{ padding: '12px 16px', display: 'flex', alignItems: 'center', gap: '12px', flexShrink: 0 }}>
+            <button onClick={() => setAssistenteAberto(false)} style={{ width: '44px', height: '44px', background: 'none', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+              <ArrowLeft size={24} color="#4285F4" />
+            </button>
+            <h2 style={{ fontSize: '22px', fontWeight: '800', color: '#1a1a1a', margin: 0 }}>Google Assistente</h2>
           </div>
-          <div className="space-y-2">
+          <div style={{ padding: '8px 12px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
             {passo === 3 && (
               <ElementoClicavel
                 onClick={() => handleCliqueCerto(4, () => setVoiceMatchAberto(true))}
-                posicao="right"
+                mostrarSeta={false}
               >
-                <div className="px-4 py-4 flex items-center gap-3 hover:bg-gray-50 cursor-pointer">
-                  <div className="text-3xl">🗣️</div>
-                  <span className="text-lg font-bold text-gray-700">Hey Google e Voice Match</span>
+                <div style={{ background: '#fff', borderRadius: '16px', padding: '16px', display: 'flex', alignItems: 'center', gap: '14px', cursor: 'pointer' }}>
+                  <div style={{ width: '36px', height: '36px', borderRadius: '50%', background: '#4285F4', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                    <Mic size={20} color="#fff" />
+                  </div>
+                  <span style={{ fontSize: '18px', fontWeight: '600', color: '#1a1a1a', flex: 1 }}>Hey Google e Voice Match</span>
+                  <ChevronRight size={20} color="#bbb" />
                 </div>
               </ElementoClicavel>
             )}
             {[
-              { emoji: "⚙️", nome: "Configurações gerais" },
-              { emoji: "🔔", nome: "Notificações" },
-            ].map((item, i) => (
-              <div key={i} className="px-4 py-4 flex items-center gap-3">
-                <div className="text-3xl">{item.emoji}</div>
-                <span className="text-lg font-bold text-gray-700">{item.nome}</span>
-              </div>
-            ))}
+              { Icon: Settings, nome: "Configurações gerais", cor: '#607D8B' },
+              { Icon: Bell, nome: "Notificações", cor: '#EA4335' },
+            ].map((item, i) => {
+              const Ic = item.Icon;
+              return (
+                <div key={i} style={{ background: '#fff', borderRadius: '16px', padding: '16px', display: 'flex', alignItems: 'center', gap: '14px' }}>
+                  <div style={{ width: '36px', height: '36px', borderRadius: '50%', background: item.cor, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                    <Ic size={20} color="#fff" />
+                  </div>
+                  <span style={{ fontSize: '18px', fontWeight: '600', color: '#1a1a1a', flex: 1 }}>{item.nome}</span>
+                  <ChevronRight size={20} color="#bbb" />
+                </div>
+              );
+            })}
           </div>
         </div>
       )}
 
       {voiceMatchAberto && (
-        <div className="w-full h-full bg-gradient-to-b from-purple-50 to-purple-100 pt-12 p-6 flex flex-col items-center justify-center">
+        <div style={{ height: '100%', background: '#1a1a2e', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '24px' }}>
           {!gravando && !concluido && (
-            <div className="text-center">
-              <h2 className="text-2xl font-black text-gray-800 mb-6">Ensine sua voz</h2>
-              <p className="text-gray-600 font-semibold mb-8">Diga: "Ok Google"</p>
-              <div className="mb-8">
-                <motion.div
-                  className="text-9xl"
-                  animate={{ scale: [1, 1.1, 1] }}
-                  transition={{ duration: 2, repeat: Infinity }}
-                >
-                  🎤
-                </motion.div>
-              </div>
+            <div style={{ textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '24px' }}>
+              <h2 style={{ fontSize: '24px', fontWeight: '800', color: '#fff', margin: 0 }}>Ensine sua voz</h2>
+              <p style={{ color: 'rgba(255,255,255,0.7)', fontWeight: '600', fontSize: '18px' }}>Diga: "Ok Google"</p>
+              <motion.div animate={{ scale: [1, 1.1, 1] }} transition={{ duration: 2, repeat: Infinity }}>
+                <div style={{ width: '96px', height: '96px', borderRadius: '50%', background: '#4285F4', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <Mic size={48} color="#fff" />
+                </div>
+              </motion.div>
               {passo === 4 && (
                 <ElementoClicavel
                   onClick={() => {
@@ -208,9 +236,9 @@ export default function Modulo3Licao3() {
                       setPasso(5);
                     }, 3000);
                   }}
-                  posicao="top"
+                  mostrarSeta={false}
                 >
-                  <button className="px-8 py-4 bg-purple-500 text-white rounded-full font-bold text-lg">
+                  <button style={{ padding: '16px 32px', borderRadius: '24px', border: 'none', background: '#4285F4', color: '#fff', fontSize: '18px', fontWeight: '700', cursor: 'pointer' }}>
                     Iniciar Gravação
                   </button>
                 </ElementoClicavel>
@@ -219,26 +247,24 @@ export default function Modulo3Licao3() {
           )}
 
           {gravando && (
-            <div className="text-center">
-              <h3 className="text-xl font-bold text-gray-800 mb-8">Ouvindo...</h3>
-              <motion.div
-                className="text-9xl mb-6"
-                animate={{ scale: [1, 1.3, 1] }}
-                transition={{ duration: 0.5, repeat: Infinity }}
-              >
-                🎤
+            <div style={{ textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '24px' }}>
+              <h3 style={{ fontSize: '20px', fontWeight: '700', color: '#fff', margin: 0 }}>Ouvindo...</h3>
+              <motion.div animate={{ scale: [1, 1.3, 1] }} transition={{ duration: 0.5, repeat: Infinity }}>
+                <div style={{ width: '96px', height: '96px', borderRadius: '50%', background: '#EA4335', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <Mic size={48} color="#fff" />
+                </div>
               </motion.div>
-              <div className="flex gap-2 justify-center mb-4">
+              <div style={{ display: 'flex', gap: '4px', justifyContent: 'center', alignItems: 'center', height: '64px' }}>
                 {[1, 2, 3, 4, 5].map((i) => (
                   <motion.div
                     key={i}
-                    className="w-2 h-16 bg-purple-500 rounded-full"
+                    style={{ width: '8px', height: '64px', background: '#4285F4', borderRadius: '4px' }}
                     animate={{ scaleY: [1, 2, 1] }}
                     transition={{ duration: 0.5, repeat: Infinity, delay: i * 0.1 }}
                   />
                 ))}
               </div>
-              <p className="text-purple-600 font-bold">Falando: "Ok Google"</p>
+              <p style={{ color: '#4285F4', fontWeight: '700', fontSize: '16px' }}>Falando: "Ok Google"</p>
             </div>
           )}
 
@@ -246,17 +272,17 @@ export default function Modulo3Licao3() {
             <motion.div
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
-              className="text-center"
+              style={{ textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '16px' }}
             >
-              <div className="text-8xl mb-6">✅</div>
-              <h3 className="text-2xl font-bold text-gray-800 mb-4">Voz reconhecida e salva!</h3>
-              <p className="text-gray-600 mb-8">Só você pode ativar o assistente agora</p>
+              <CheckCircle size={72} color="#34A853" />
+              <h3 style={{ fontSize: '24px', fontWeight: '800', color: '#fff', margin: 0 }}>Voz reconhecida e salva!</h3>
+              <p style={{ color: 'rgba(255,255,255,0.7)', fontSize: '16px' }}>Só você pode ativar o assistente agora</p>
               {passo === 5 && (
                 <ElementoClicavel
                   onClick={() => setMostrarValidacao(true)}
-                  posicao="top"
+                  mostrarSeta={false}
                 >
-                  <button className="px-8 py-4 bg-green-500 text-white rounded-2xl font-bold text-lg">
+                  <button style={{ padding: '16px 32px', borderRadius: '16px', border: 'none', background: '#34A853', color: '#fff', fontSize: '18px', fontWeight: '700', cursor: 'pointer' }}>
                     Concluir 🎉
                   </button>
                 </ElementoClicavel>

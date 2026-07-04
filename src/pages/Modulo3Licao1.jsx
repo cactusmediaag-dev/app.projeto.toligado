@@ -7,6 +7,8 @@ import SimuladorImersivo from "@/components/simulador/SimuladorImersivo";
 import ElementoClicavel from "@/components/simulador/ElementoClicavel";
 import ValidacaoQuiz from "@/components/simulador/ValidacaoQuiz";
 import { Sons, MoedasAnimadas, FeedbackAcerto, FeedbackErro } from "@/components/shared/GameFeedback";
+import AndroidHomeScreen from "@/components/simulador/AndroidHomeScreen";
+import { Shield, ScanFace, ChevronRight, ArrowLeft, Wifi, Sun, Battery, Fingerprint, Lock, CheckCircle } from 'lucide-react';
 
 export default function Modulo3Licao1() {
   const navigate = useNavigate();
@@ -91,138 +93,148 @@ export default function Modulo3Licao1() {
       onVoltar={() => navigate(createPageUrl("Modulos"))}
     >
       {!configAberta && !segurancaAberta && !cameraAberta && (
-        <div className="w-full h-full bg-gradient-to-b from-blue-50 to-blue-100 p-6 pt-12">
-          <div className="grid grid-cols-4 gap-6 mt-8">
-            {passo === 1 && (
-              <ElementoClicavel
-                onClick={() => handleCliqueCerto(2, () => setConfigAberta(true))}
-                posicao="bottom"
-              >
-                <div className="flex flex-col items-center gap-2">
-                  <div className="w-14 h-14 bg-white rounded-2xl flex items-center justify-center text-2xl shadow-md">
-                    ⚙️
-                  </div>
-                </div>
-              </ElementoClicavel>
-            )}
-            {["🔍", "📷", "📱", "📧", "🎵", "📍", "💬"].map((emoji, i) => (
-              <div key={i} className="flex flex-col items-center gap-2">
-                <div className="w-14 h-14 bg-white rounded-2xl flex items-center justify-center text-2xl shadow-md">
-                  {emoji}
-                </div>
-              </div>
-            ))}
-          </div>
+        <div style={{ height: '100%', position: 'relative' }}>
+          <AndroidHomeScreen
+            appsCustom={[
+              { nome: 'camera', label: 'Câmera', bg: '#37474F', id: 'camera' },
+              { nome: 'mensagem', label: 'WhatsApp', bg: '#25D366', id: 'whatsapp' },
+              { nome: 'chrome', label: 'Chrome', bg: '#4285F4', id: 'chrome' },
+              { nome: 'config', label: 'Config.', bg: '#607D8B', id: 'settings' },
+              { nome: 'fotos', label: 'Fotos', bg: '#FF7043', id: 'photos' },
+              { nome: 'busca', label: 'Google', bg: '#fff', corIcone: '#4285F4', id: 'google' },
+              { nome: 'musica', label: 'Música', bg: '#E91E63', id: 'music' },
+              { nome: 'email', label: 'Email', bg: '#EA4335', id: 'email' },
+            ]}
+            appDestacado={passo === 1 ? 'settings' : null}
+            onAppClick={(id) => {
+              if (passo === 1 && id === 'settings') handleCliqueCerto(2, () => setConfigAberta(true));
+            }}
+          />
         </div>
       )}
 
       {configAberta && !segurancaAberta && (
-        <div className="w-full h-full bg-white pt-12">
-          <div className="px-4 mb-4">
-            <h2 className="text-2xl font-black text-gray-800">Configurações</h2>
+        <div style={{ height: '100%', background: '#F8F9FA', display: 'flex', flexDirection: 'column' }}>
+          <div style={{ padding: '16px', flexShrink: 0 }}>
+            <h2 style={{ fontSize: '24px', fontWeight: '800', color: '#1a1a1a', margin: 0 }}>Configurações</h2>
           </div>
-          <div className="space-y-2">
+          <div style={{ padding: '8px 12px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
             {passo === 2 && (
               <ElementoClicavel
                 onClick={() => handleCliqueCerto(3, () => setSegurancaAberta(true))}
-                posicao="right"
+                mostrarSeta={false}
               >
-                <div className="px-4 py-4 flex items-center gap-3 hover:bg-gray-50 cursor-pointer">
-                  <div className="text-3xl">🔐</div>
-                  <span className="text-lg font-bold text-gray-700">Segurança e Privacidade</span>
+                <div style={{ background: '#fff', borderRadius: '16px', padding: '16px', display: 'flex', alignItems: 'center', gap: '14px', cursor: 'pointer' }}>
+                  <div style={{ width: '36px', height: '36px', borderRadius: '50%', background: '#5C2E7F', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                    <Shield size={20} color="#fff" />
+                  </div>
+                  <span style={{ fontSize: '18px', fontWeight: '600', color: '#1a1a1a', flex: 1 }}>Segurança e Privacidade</span>
+                  <ChevronRight size={20} color="#bbb" />
                 </div>
               </ElementoClicavel>
             )}
             {[
-              { emoji: "📶", nome: "Wi-Fi" },
-              { emoji: "🔆", nome: "Tela" },
-              { emoji: "🔋", nome: "Bateria" },
-            ].map((item, i) => (
-              <div key={i} className="px-4 py-4 flex items-center gap-3">
-                <div className="text-3xl">{item.emoji}</div>
-                <span className="text-lg font-bold text-gray-700">{item.nome}</span>
-              </div>
-            ))}
+              { Icon: Wifi, nome: "Wi-Fi", cor: '#4285F4' },
+              { Icon: Sun, nome: "Tela", cor: '#FF9800' },
+              { Icon: Battery, nome: "Bateria", cor: '#34A853' },
+            ].map((item, i) => {
+              const Ic = item.Icon;
+              return (
+                <div key={i} style={{ background: '#fff', borderRadius: '16px', padding: '16px', display: 'flex', alignItems: 'center', gap: '14px' }}>
+                  <div style={{ width: '36px', height: '36px', borderRadius: '50%', background: item.cor, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                    <Ic size={20} color="#fff" />
+                  </div>
+                  <span style={{ fontSize: '18px', fontWeight: '600', color: '#1a1a1a', flex: 1 }}>{item.nome}</span>
+                  <ChevronRight size={20} color="#bbb" />
+                </div>
+              );
+            })}
           </div>
         </div>
       )}
 
       {segurancaAberta && !cameraAberta && (
-        <div className="w-full h-full bg-white pt-12">
-          <div className="px-4 mb-4">
-            <button onClick={() => setSegurancaAberta(false)} className="text-blue-600 font-bold mb-4">← Voltar</button>
-            <h2 className="text-2xl font-black text-gray-800">Segurança e Privacidade</h2>
+        <div style={{ height: '100%', background: '#F8F9FA', display: 'flex', flexDirection: 'column' }}>
+          <div style={{ padding: '12px 16px', display: 'flex', alignItems: 'center', gap: '12px', flexShrink: 0 }}>
+            <button onClick={() => setSegurancaAberta(false)} style={{ width: '44px', height: '44px', background: 'none', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+              <ArrowLeft size={24} color="#4285F4" />
+            </button>
+            <h2 style={{ fontSize: '22px', fontWeight: '800', color: '#1a1a1a', margin: 0 }}>Segurança e Privacidade</h2>
           </div>
-          <div className="space-y-2">
+          <div style={{ padding: '8px 12px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
             {passo === 3 && (
               <ElementoClicavel
                 onClick={() => handleCliqueCerto(4, () => setCameraAberta(true))}
-                posicao="right"
+                mostrarSeta={false}
               >
-                <div className="px-4 py-4 flex items-center gap-3 hover:bg-gray-50 cursor-pointer">
-                  <div className="text-3xl">😊</div>
-                  <span className="text-lg font-bold text-gray-700">Reconhecimento Facial</span>
+                <div style={{ background: '#fff', borderRadius: '16px', padding: '16px', display: 'flex', alignItems: 'center', gap: '14px', cursor: 'pointer' }}>
+                  <div style={{ width: '36px', height: '36px', borderRadius: '50%', background: '#4285F4', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                    <ScanFace size={20} color="#fff" />
+                  </div>
+                  <span style={{ fontSize: '18px', fontWeight: '600', color: '#1a1a1a', flex: 1 }}>Reconhecimento Facial</span>
+                  <ChevronRight size={20} color="#bbb" />
                 </div>
               </ElementoClicavel>
             )}
             {[
-              { emoji: "👆", nome: "Impressão Digital" },
-              { emoji: "🔒", nome: "Bloqueio de Tela" },
-            ].map((item, i) => (
-              <div key={i} className="px-4 py-4 flex items-center gap-3">
-                <div className="text-3xl">{item.emoji}</div>
-                <span className="text-lg font-bold text-gray-700">{item.nome}</span>
-              </div>
-            ))}
+              { Icon: Fingerprint, nome: "Impressão Digital", cor: '#34A853' },
+              { Icon: Lock, nome: "Bloqueio de Tela", cor: '#FF9800' },
+            ].map((item, i) => {
+              const Ic = item.Icon;
+              return (
+                <div key={i} style={{ background: '#fff', borderRadius: '16px', padding: '16px', display: 'flex', alignItems: 'center', gap: '14px' }}>
+                  <div style={{ width: '36px', height: '36px', borderRadius: '50%', background: item.cor, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                    <Ic size={20} color="#fff" />
+                  </div>
+                  <span style={{ fontSize: '18px', fontWeight: '600', color: '#1a1a1a', flex: 1 }}>{item.nome}</span>
+                  <ChevronRight size={20} color="#bbb" />
+                </div>
+              );
+            })}
           </div>
         </div>
       )}
 
       {cameraAberta && (
-        <div className="w-full h-full bg-gradient-to-b from-gray-900 to-gray-800 pt-12 relative">
-          <div className="absolute top-16 left-0 right-0 text-center">
-            <p className="text-white font-bold text-lg px-4">Posicione seu rosto no círculo</p>
+        <div style={{ height: '100%', background: '#1a1a2e', display: 'flex', flexDirection: 'column', position: 'relative' }}>
+          <div style={{ padding: '24px 16px', textAlign: 'center', flexShrink: 0 }}>
+            <p style={{ color: '#fff', fontWeight: '700', fontSize: '18px', margin: 0 }}>Posicione seu rosto no círculo</p>
           </div>
 
-          <div className="flex items-center justify-center h-full">
+          <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '24px' }}>
             {!scanning && !scanCompleto && (
-              <div className="relative">
-                <div className="w-64 h-64 rounded-full border-4 border-white/50 flex items-center justify-center">
-                  <div className="text-8xl">😊</div>
+              <div style={{ position: 'relative', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '24px' }}>
+                <div style={{ width: '200px', height: '200px', borderRadius: '50%', border: '4px dashed rgba(66,133,244,0.6)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <ScanFace size={96} color="rgba(255,255,255,0.8)" />
                 </div>
                 {passo === 4 && (
-                  <div className="absolute -bottom-20 left-1/2 -translate-x-1/2">
-                    <ElementoClicavel
-                      onClick={() => {
-                        setScanning(true);
-                        setTimeout(() => {
-                          setScanning(false);
-                          setScanCompleto(true);
-                          setPasso(5);
-                        }, 2500);
-                      }}
-                      posicao="top"
-                    >
-                      <button className="px-8 py-3 bg-blue-500 text-white rounded-2xl font-bold text-lg">
-                        Iniciar
-                      </button>
-                    </ElementoClicavel>
-                  </div>
+                  <ElementoClicavel
+                    onClick={() => {
+                      setScanning(true);
+                      setTimeout(() => {
+                        setScanning(false);
+                        setScanCompleto(true);
+                        setPasso(5);
+                      }, 2500);
+                    }}
+                    mostrarSeta={false}
+                  >
+                    <button style={{ padding: '14px 32px', borderRadius: '16px', border: 'none', background: '#4285F4', color: '#fff', fontSize: '18px', fontWeight: '700', cursor: 'pointer' }}>
+                      Iniciar
+                    </button>
+                  </ElementoClicavel>
                 )}
               </div>
             )}
 
             {scanning && (
-              <div className="relative">
-                <div className="w-64 h-64 rounded-full border-4 border-green-400 flex items-center justify-center">
-                  <div className="text-8xl">😊</div>
+              <div style={{ position: 'relative' }}>
+                <div style={{ width: '200px', height: '200px', borderRadius: '50%', border: '4px solid #4CAF50', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <ScanFace size={96} color="#4CAF50" />
                 </div>
                 <motion.div
-                  className="absolute inset-0 rounded-full"
-                  style={{
-                    background: "linear-gradient(180deg, transparent 0%, rgba(34,197,94,0.3) 50%, transparent 100%)",
-                  }}
-                  animate={{ y: [-120, 120] }}
+                  style={{ position: 'absolute', inset: 0, borderRadius: '50%', background: 'linear-gradient(180deg, transparent 0%, rgba(76,175,80,0.3) 50%, transparent 100%)' }}
+                  animate={{ y: [-100, 100] }}
                   transition={{ duration: 2, repeat: 1 }}
                 />
               </div>
@@ -232,16 +244,16 @@ export default function Modulo3Licao1() {
               <motion.div
                 initial={{ scale: 0 }}
                 animate={{ scale: 1 }}
-                className="text-center"
+                style={{ textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '16px' }}
               >
-                <div className="text-8xl mb-4">✅</div>
-                <p className="text-2xl font-bold text-white mb-6">Rosto cadastrado com sucesso!</p>
+                <CheckCircle size={80} color="#4CAF50" />
+                <p style={{ fontSize: '22px', fontWeight: '800', color: '#fff', margin: 0 }}>Rosto cadastrado com sucesso!</p>
                 {passo === 5 && (
                   <ElementoClicavel
                     onClick={() => setMostrarValidacao(true)}
-                    posicao="top"
+                    mostrarSeta={false}
                   >
-                    <button className="px-8 py-3 bg-green-500 text-white rounded-2xl font-bold text-lg">
+                    <button style={{ padding: '14px 32px', borderRadius: '16px', border: 'none', background: '#34A853', color: '#fff', fontSize: '18px', fontWeight: '700', cursor: 'pointer' }}>
                       Concluir 🎉
                     </button>
                   </ElementoClicavel>

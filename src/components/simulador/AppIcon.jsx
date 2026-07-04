@@ -3,7 +3,8 @@ import {
   Camera, Phone, MessageCircle, Globe, Settings, Image,
   Search, Music, Play, Vote, Mail, MapPin, Chrome as ChromeIcon,
   Mic, Home, Aperture, Clock, Video, Calculator,
-  Bluetooth, Lock, Shield, Bell, RefreshCw, KeyRound, Wifi, Cloud
+  Bluetooth, Lock, Shield, Bell, RefreshCw, KeyRound, Wifi, Cloud,
+  Fingerprint, ScanFace, Eye, AlertTriangle, Landmark
 } from 'lucide-react';
 
 const ICONES = {
@@ -34,6 +35,11 @@ const ICONES = {
   chave: KeyRound,
   wifi: Wifi,
   nuvem: Cloud,
+  digital: Fingerprint,
+  rosto: ScanFace,
+  olho: Eye,
+  alerta: AlertTriangle,
+  banco: Landmark,
 };
 
 export default function AppIcon({

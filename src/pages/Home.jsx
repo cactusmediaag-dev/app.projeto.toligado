@@ -14,6 +14,7 @@ const MODULOS = [
   { id: 'mod6', nome: 'Serviços Públicos', icone: '🏛️', rota: 'Modulo6Licao1' },
   { id: 'mod7', nome: 'Finanças I', icone: '💰', rota: 'Modulo7Licao1' },
   { id: 'mod8', nome: 'Finanças e Segurança', icone: '🔐', rota: 'Modulo8Licao1' },
+  { id: 'mod9', nome: 'e-Título Digital', icone: '🗳️', rota: 'Modulo9Licao1' },
 ];
 
 export default function Home() {
@@ -50,7 +51,7 @@ export default function Home() {
   const nivel = usuario.nivel_atual || 1;
   const moedas = usuario.moedas || 0;
   const modulosFeitos = (usuario.modulos_completos || []).length;
-  const progresso = Math.round((modulosFeitos / 8) * 100);
+  const progresso = Math.round((modulosFeitos / 9) * 100);
   const moduloAtivo = MODULOS.find(m => !(usuario.modulos_completos || []).includes(m.id));
 
   return (
@@ -89,7 +90,7 @@ export default function Home() {
             </div>
             <div style={{ textAlign: 'right' }}>
               <p style={{ color: 'rgba(255,255,255,0.7)', fontSize: '13px', margin: '0 0 2px', fontWeight: '600' }}>Jornada</p>
-              <p style={{ color: '#fff', fontSize: '22px', fontWeight: '900', margin: 0 }}>{modulosFeitos}/8</p>
+              <p style={{ color: '#fff', fontSize: '22px', fontWeight: '900', margin: 0 }}>{modulosFeitos}/9</p>
             </div>
           </div>
           <div>
@@ -148,7 +149,7 @@ export default function Home() {
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '12px' }}>
             {[
               { icon: '🪙', label: 'Moedas ganhas', valor: moedas },
-              { icon: '📚', label: 'Módulos feitos', valor: `${modulosFeitos} de 8` },
+              { icon: '📚', label: 'Módulos feitos', valor: `${modulosFeitos} de 9` },
               { icon: '⭐', label: 'Nível atual', valor: nivel },
               { icon: '🎯', label: 'Conclusão', valor: `${progresso}%` },
             ].map((stat, i) => (

@@ -74,7 +74,7 @@ export default function Modulo8Celebracao() {
               <p className="text-4xl font-black text-gray-900 mb-4">{usuario?.nome || "Usuário"}</p>
               
               <p className="text-base text-gray-700 mb-6 leading-relaxed">
-                Concluiu com êxito todos os <strong>8 módulos</strong> do programa<br/>
+                Concluiu com êxito os <strong>8 módulos principais</strong> do programa<br/>
                 <strong className="text-[#5C2E7F]">Tô Ligado — Educação Digital para Vida</strong><br/>
                 demonstrando domínio em:
               </p>
@@ -175,7 +175,7 @@ export default function Modulo8Celebracao() {
               <span className="text-5xl">🪙</span>
             </div>
             <div className="bg-white/10 rounded-2xl p-4">
-              <p className="text-white font-bold text-lg">8 Módulos Completos ✅</p>
+              <p className="text-white font-bold text-lg">8 Módulos Principais Completos ✅</p>
               <p className="text-white/80 text-sm mt-1">Nível Máximo Atingido!</p>
             </div>
           </div>
@@ -206,7 +206,7 @@ export default function Modulo8Celebracao() {
               if (navigator.share) {
                 navigator.share({
                   title: 'Completei o Tô Ligado!',
-                  text: 'Acabo de concluir todos os 8 módulos do programa Tô Ligado! 🎓🏆',
+                  text: 'Acabo de concluir os 8 módulos principais do Tô Ligado! E tem mais: agora você pode fazer o módulo extra do e-Título! 🎓🏆',
                 });
               }
             }}

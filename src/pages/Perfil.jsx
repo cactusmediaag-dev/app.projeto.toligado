@@ -250,10 +250,10 @@ export default function Perfil() {
           <div style={{ marginBottom: '12px' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px' }}>
               <span style={{ fontSize: '13px', color: '#666', fontWeight: '600' }}>Módulos concluídos</span>
-              <span style={{ fontSize: '13px', color: '#5C2E7F', fontWeight: '800' }}>{modulos}/8</span>
+              <span style={{ fontSize: '13px', color: '#5C2E7F', fontWeight: '800' }}>{modulos}/9</span>
             </div>
             <div style={{ height: '10px', background: '#f0f0f0', borderRadius: '5px', overflow: 'hidden' }}>
-              <div style={{ height: '100%', width: `${(modulos / 8) * 100}%`, background: 'linear-gradient(90deg, #5C2E7F, #F3984B)', borderRadius: '5px', transition: 'width 0.5s ease' }} />
+              <div style={{ height: '100%', width: `${(modulos / 9) * 100}%`, background: 'linear-gradient(90deg, #5C2E7F, #F3984B)', borderRadius: '5px', transition: 'width 0.5s ease' }} />
             </div>
           </div>
           {modulos === 0 && (

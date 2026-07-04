@@ -34,6 +34,7 @@ export default function Modulos() {
     { id: 'mod6', numero: 6, titulo: 'Aplicativos Públicos\ne Serviços', descricao: 'Gov.br, INSS e contas', aulas: 3, icone: '🏛️', gradiente: 'linear-gradient(135deg, #2E86C1, #85C1E9)', primeiraLicao: 'Modulo6Licao1' },
     { id: 'mod7', numero: 7, titulo: 'Operações\nFinanceiras I', descricao: 'PIX, boletos e QR Code', aulas: 4, icone: '💰', gradiente: 'linear-gradient(135deg, #27AE60, #82E0AA)', primeiraLicao: 'Modulo7Licao1' },
     { id: 'mod8', numero: 8, titulo: 'Operações Financeiras\nII e Segurança', descricao: 'Transferências e proteção', aulas: 6, icone: '🔐', gradiente: 'linear-gradient(135deg, #922B21, #E59866)', primeiraLicao: 'Modulo8Licao1' },
+    { id: 'mod9', numero: 9, titulo: 'e-Título\nSeu Título Digital', descricao: 'Título de eleitor no celular', aulas: 5, icone: '🗳️', gradiente: 'linear-gradient(135deg, #1E5A9C, #3B7DD8)', primeiraLicao: 'Modulo9Licao1' },
   ];
 
   const getStatus = (modulo, index) => {

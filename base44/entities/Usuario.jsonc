@@ -48,6 +48,14 @@
     "celular": {
       "type": "string",
       "description": "N\u00famero de celular usado como login (formato: 11999999999)"
+    },
+    "foto_url": {
+      "type": "string",
+      "description": "URL da foto de perfil enviada pelo usu\u00e1rio (opcional)"
+    },
+    "avatar": {
+      "type": "string",
+      "description": "ID do avatar pr\u00e9-definido escolhido pelo usu\u00e1rio (ex: avatar_3). Opcional."
     }
   },
   "required": [

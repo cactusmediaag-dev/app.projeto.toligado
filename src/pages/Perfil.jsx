@@ -1,8 +1,10 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { base44 } from '@/api/base44Client';
 import { createPageUrl } from '@/utils';
 import BottomNav from '@/components/shared/BottomNav';
+import AvatarUsuario, { AVATARES } from '@/components/shared/AvatarUsuario';
+import { Camera, Trash2, X, Check } from 'lucide-react';
 
 export default function Perfil() {
   const navigate = useNavigate();
@@ -12,6 +14,10 @@ export default function Perfil() {
   const [novoCelular, setNovoCelular] = useState('');
   const [salvandoCelular, setSalvandoCelular] = useState(false);
   const [celularPerfilErro, setCelularPerfilErro] = useState('');
+  const [modalFoto, setModalFoto] = useState(false);
+  const [uploading, setUploading] = useState(false);
+  const [uploadMsg, setUploadMsg] = useState('');
+  const fileInputRef = useRef(null);
 
   useEffect(() => {
     carregarPerfil();
@@ -100,6 +106,72 @@ export default function Perfil() {
     }
   };
 
+  const redimensionarImagem = (file) => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const img = new Image();
+        img.onload = () => {
+          const canvas = document.createElement('canvas');
+          canvas.width = 256;
+          canvas.height = 256;
+          const ctx = canvas.getContext('2d');
+          const minDim = Math.min(img.width, img.height);
+          const sx = (img.width - minDim) / 2;
+          const sy = (img.height - minDim) / 2;
+          ctx.drawImage(img, sx, sy, minDim, minDim, 0, 0, 256, 256);
+          canvas.toBlob(resolve, 'image/jpeg', 0.8);
+        };
+        img.onerror = reject;
+        img.src = e.target.result;
+      };
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    });
+  };
+
+  const handleFileSelect = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setUploading(true);
+    setUploadMsg('');
+    try {
+      const blob = await redimensionarImagem(file);
+      const resizedFile = new File([blob], 'foto.jpg', { type: 'image/jpeg' });
+      const { file_url } = await base44.integrations.Core.UploadFile({ file: resizedFile });
+      await base44.entities.Usuario.update(usuario.id, { foto_url: file_url, avatar: null });
+      setUsuario(prev => ({ ...prev, foto_url: file_url, avatar: null }));
+      setUploadMsg('✅ Foto salva com sucesso!');
+      setTimeout(() => { setModalFoto(false); setUploadMsg(''); }, 1200);
+    } catch (err) {
+      console.error('Erro upload:', err);
+      setUploadMsg('Não foi possível enviar a foto. Tente escolher um avatar!');
+    }
+    setUploading(false);
+    if (fileInputRef.current) fileInputRef.current.value = '';
+  };
+
+  const handleSalvarAvatar = async (avatarId) => {
+    try {
+      await base44.entities.Usuario.update(usuario.id, { avatar: avatarId, foto_url: null });
+      setUsuario(prev => ({ ...prev, avatar: avatarId, foto_url: null }));
+      setModalFoto(false);
+    } catch (err) {
+      console.error('Erro ao salvar avatar:', err);
+      setUploadMsg('Erro ao salvar avatar. Tente novamente.');
+    }
+  };
+
+  const handleRemoverFoto = async () => {
+    try {
+      await base44.entities.Usuario.update(usuario.id, { foto_url: null, avatar: null });
+      setUsuario(prev => ({ ...prev, foto_url: null, avatar: null }));
+      setModalFoto(false);
+    } catch (err) {
+      console.error('Erro ao remover foto:', err);
+    }
+  };
+
   if (loading) return (
     <div style={{ height: '100dvh', background: 'linear-gradient(160deg, #5C2E7F, #A67EC8)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', gap: '16px', color: '#fff' }}>
       <div style={{ width: '40px', height: '40px', border: '4px solid rgba(255,255,255,0.3)', borderTopColor: '#fff', borderRadius: '50%', animation: 'spin 0.8s linear infinite' }} />
@@ -111,7 +183,6 @@ export default function Perfil() {
 
   const idade = calcularIdade(usuario.data_nascimento);
   const diasAniv = calcularDiasAniversario(usuario.data_nascimento);
-  const avatar = usuario.sexo === 'Mulher' ? '👩' : '👨';
   const modulos = (usuario.modulos_completos || []).length;
   const anivHoje = diasAniv === 0 || diasAniv === 365;
 
@@ -120,9 +191,10 @@ export default function Perfil() {
 
       {/* HEADER com avatar */}
       <div style={{ padding: 'calc(env(safe-area-inset-top, 44px) + 12px) 24px 24px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '12px' }}>
-        <div style={{ width: '88px', height: '88px', borderRadius: '50%', background: 'rgba(255,255,255,0.2)', border: '3px solid rgba(255,255,255,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '52px', boxShadow: '0 4px 20px rgba(0,0,0,0.2)' }}>
-          {avatar}
-        </div>
+        <AvatarUsuario usuario={usuario} tamanho={112} style={{ border: '3px solid rgba(255,255,255,0.5)', boxShadow: '0 4px 20px rgba(0,0,0,0.2)' }} />
+        <button onClick={() => setModalFoto(true)} style={{ background: 'rgba(255,255,255,0.2)', border: '1.5px solid rgba(255,255,255,0.4)', borderRadius: '20px', padding: '8px 18px', color: '#fff', fontSize: '13px', fontWeight: '700', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px', minHeight: '44px' }}>
+          <Camera size={16} color="#fff" /> Mudar foto
+        </button>
         <div style={{ textAlign: 'center' }}>
           <h1 style={{ color: '#fff', fontSize: '22px', fontWeight: '800', margin: '0 0 4px', letterSpacing: '-0.3px' }}>
             {usuario.nome}
@@ -291,6 +363,79 @@ export default function Perfil() {
           )}
         </div>
       </div>
+
+      {/* Modal Mudar Foto */}
+      {modalFoto && (
+        <div onClick={() => !uploading && setModalFoto(false)} style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.6)', zIndex: 1000, display: 'flex', alignItems: 'flex-end', justifyContent: 'center' }}>
+          <div onClick={e => e.stopPropagation()} style={{ background: '#fff', borderRadius: '24px 24px 0 0', padding: '24px', width: '100%', maxWidth: '480px', maxHeight: '85dvh', overflowY: 'auto' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
+              <h3 style={{ margin: 0, fontSize: '18px', fontWeight: '800', color: '#5C2E7F' }}>Editar foto</h3>
+              <button onClick={() => setModalFoto(false)} style={{ background: '#f5f0ff', border: 'none', borderRadius: '50%', width: '36px', height: '36px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <X size={20} color="#5C2E7F" />
+              </button>
+            </div>
+
+            {/* Opção: Foto */}
+            <button onClick={() => fileInputRef.current?.click()} disabled={uploading} style={{ width: '100%', padding: '16px', borderRadius: '16px', border: '2px solid #f0e8ff', background: '#f9f5ff', color: '#5C2E7F', fontSize: '15px', fontWeight: '700', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '12px', minHeight: '56px' }}>
+              <div style={{ width: '44px', height: '44px', borderRadius: '12px', background: '#5C2E7F', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                <Camera size={22} color="#fff" />
+              </div>
+              <div style={{ textAlign: 'left' }}>
+                <p style={{ margin: 0, fontWeight: '800' }}>Tirar ou escolher foto</p>
+                <p style={{ margin: 0, fontSize: '12px', color: '#999' }}>Da câmera ou galeria</p>
+              </div>
+            </button>
+            <input ref={fileInputRef} type="file" accept="image/*" onChange={handleFileSelect} style={{ display: 'none' }} />
+
+            {uploading && (
+              <div style={{ textAlign: 'center', padding: '16px', color: '#5C2E7F', fontSize: '14px', fontWeight: '600' }}>
+                <div style={{ width: '32px', height: '32px', border: '3px solid #f0e8ff', borderTopColor: '#5C2E7F', borderRadius: '50%', animation: 'spin 0.8s linear infinite', margin: '0 auto 8px' }} />
+                Enviando foto...
+              </div>
+            )}
+            {uploadMsg && !uploading && (
+              <div style={{ textAlign: 'center', padding: '12px', fontSize: '14px', fontWeight: '700', color: uploadMsg.includes('sucesso') ? '#27AE60' : '#e74c3c' }}>
+                {uploadMsg}
+              </div>
+            )}
+
+            {!uploading && (
+              <>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '12px', margin: '16px 0' }}>
+                  <div style={{ flex: 1, height: '1px', background: '#f0e8ff' }} />
+                  <span style={{ fontSize: '13px', color: '#999', fontWeight: '600' }}>ou escolha um avatar</span>
+                  <div style={{ flex: 1, height: '1px', background: '#f0e8ff' }} />
+                </div>
+
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '12px', marginBottom: '16px' }}>
+                  {AVATARES.map(av => {
+                    const Icon = av.icon;
+                    const selecionado = usuario.avatar === av.id;
+                    return (
+                      <button key={av.id} onClick={() => handleSalvarAvatar(av.id)} style={{ position: 'relative', borderRadius: '50%', border: selecionado ? '3px solid #27AE60' : '3px solid transparent', padding: 0, cursor: 'pointer', background: 'none', display: 'flex', justifyContent: 'center' }}>
+                        <div style={{ width: '64px', height: '64px', borderRadius: '50%', background: av.gradient, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                          <Icon size={28} color="#fff" strokeWidth={2} />
+                        </div>
+                        {selecionado && (
+                          <div style={{ position: 'absolute', bottom: '-2px', right: 'calc(50% - 34px)', width: '22px', height: '22px', borderRadius: '50%', background: '#27AE60', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '2px solid #fff' }}>
+                            <Check size={12} color="#fff" strokeWidth={3} />
+                          </div>
+                        )}
+                      </button>
+                    );
+                  })}
+                </div>
+
+                {(usuario.foto_url || usuario.avatar) && (
+                  <button onClick={handleRemoverFoto} style={{ width: '100%', padding: '14px', borderRadius: '14px', border: '1.5px solid rgba(231,76,60,0.3)', background: 'rgba(231,76,60,0.08)', color: '#e74c3c', fontSize: '14px', fontWeight: '700', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
+                    <Trash2 size={18} color="#e74c3c" /> Remover foto
+                  </button>
+                )}
+              </>
+            )}
+          </div>
+        </div>
+      )}
 
       <BottomNav />
 

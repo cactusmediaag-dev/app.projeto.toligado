@@ -4,6 +4,7 @@ import { createPageUrl } from '@/utils';
 import PullToRefresh from '@/components/shared/PullToRefresh';
 import { base44 } from '@/api/base44Client';
 import BottomNav from '@/components/shared/BottomNav';
+import AvatarUsuario from '@/components/shared/AvatarUsuario';
 
 export default function Ranking() {
   const navigate = useNavigate();
@@ -31,6 +32,8 @@ export default function Ranking() {
           id: u.id,
           nome: u.nome || 'Participante',
           sexo: u.sexo || 'Homem',
+          foto_url: u.foto_url || null,
+          avatar: u.avatar || null,
           moedas: u.moedas || 0,
           nivel: u.nivel_atual || 1,
           modulos: (u.modulos_completos || []).length,
@@ -60,8 +63,6 @@ export default function Ranking() {
     if (filtro === 'nivel_atual') return `⭐ Nível ${j.nivel}`;
     return `📚 ${j.modulos}`;
   };
-
-  const avatar = (sexo) => sexo === 'Mulher' ? '👩' : '👨';
 
   const corPodio = (pos) => {
     if (pos === 1) return { bg: 'linear-gradient(135deg,#FFD700,#FFA500)', border: '#FFD700', glow: 'rgba(255,215,0,0.6)' };
@@ -171,17 +172,12 @@ export default function Ranking() {
                         animation: animando ? `slideUp 0.5s ease ${idx * 0.1}s both` : 'none'
                       }}>
                         <div style={{
-                          width: `${tamanhos[idx]}px`, height: `${tamanhos[idx]}px`,
-                          borderRadius: '50%',
-                          background: j.sou_eu ? 'linear-gradient(135deg,#F3984B,#e67e22)' : cor.bg,
-                          display: 'flex', alignItems: 'center', justifyContent: 'center',
+                          position: 'relative',
                           margin: '0 auto 6px',
-                          fontSize: `${tamanhos[idx] * 0.45}px`,
-                          border: `3px solid ${cor.border}`,
-                          boxShadow: `0 0 20px ${cor.glow}`,
-                          position: 'relative'
+                          width: `${tamanhos[idx]}px`,
+                          height: `${tamanhos[idx]}px`,
                         }}>
-                          {avatar(j.sexo)}
+                          <AvatarUsuario usuario={j} tamanho={tamanhos[idx]} style={{ border: `3px solid ${cor.border}`, boxShadow: `0 0 20px ${cor.glow}` }} />
                           <div style={{ position: 'absolute', top: '-8px', right: '-4px', fontSize: posReal === 1 ? '22px' : '18px' }}>
                             {medals[idx]}
                           </div>
@@ -216,14 +212,7 @@ export default function Ranking() {
                   <div style={{ fontSize: '20px', fontWeight: '900', color: '#FFD700', minWidth: '44px', textAlign: 'center' }}>
                     #{minhaPos.posicao}
                   </div>
-                  <div style={{
-                    width: '44px', height: '44px', borderRadius: '50%',
-                    background: 'linear-gradient(135deg,#F3984B,#e67e22)',
-                    display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    fontSize: '22px', flexShrink: 0, border: '2px solid #FFD700'
-                  }}>
-                    {avatar(minhaPos.sexo)}
-                  </div>
+                  <AvatarUsuario usuario={minhaPos} tamanho={44} style={{ border: '2px solid #FFD700', flexShrink: 0 }} />
                   <div style={{ flex: 1 }}>
                     <p style={{ color: '#fff', fontWeight: '800', fontSize: '15px', margin: '0 0 2px' }}>
                       {minhaPos.nome.split(' ')[0]} — Você! ⭐
@@ -268,16 +257,7 @@ export default function Ranking() {
                     }}>
                       {j.posicao <= 3 ? ['🥇','🥈','🥉'][j.posicao-1] : `#${j.posicao}`}
                     </div>
-                    <div style={{
-                      width: '40px', height: '40px', borderRadius: '50%', flexShrink: 0,
-                      background: j.sou_eu
-                        ? 'linear-gradient(135deg,#F3984B,#e67e22)'
-                        : 'linear-gradient(135deg,#5C2E7F,#9B59B6)',
-                      display: 'flex', alignItems: 'center', justifyContent: 'center',
-                      fontSize: '20px', border: j.sou_eu ? '2px solid #F3984B' : 'none'
-                    }}>
-                      {avatar(j.sexo)}
-                    </div>
+                    <AvatarUsuario usuario={j} tamanho={40} style={{ border: j.sou_eu ? '2px solid #F3984B' : 'none' }} />
                     <div style={{ flex: 1, minWidth: 0 }}>
                       <p style={{
                         fontWeight: '800', fontSize: '14px',

@@ -1,7 +1,8 @@
 import React from "react";
 import {
   Camera, Phone, MessageCircle, Globe, Settings, Image,
-  Search, Music, Play, Vote, Mail, MapPin, Chrome as ChromeIcon
+  Search, Music, Play, Vote, Mail, MapPin, Chrome as ChromeIcon,
+  Mic, Home, Aperture, Clock, Video, Calculator
 } from 'lucide-react';
 
 const ICONES = {
@@ -18,6 +19,12 @@ const ICONES = {
   email: Mail,
   mapa: MapPin,
   chrome: ChromeIcon,
+  mic: Mic,
+  casa: Home,
+  lente: Aperture,
+  relogio: Clock,
+  video: Video,
+  calculadora: Calculator,
 };
 
 export default function AppIcon({

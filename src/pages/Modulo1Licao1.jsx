@@ -165,7 +165,7 @@ export default function Modulo1Licao1() {
                 background: passo === 1 ? (mostrarDica ? '#F3984B' : '#666') : '#444',
                 borderRadius: '0 5px 5px 0',
                 transition: 'background 0.3s ease',
-                animation: mostrarDica && passo === 1 ? 'pulse-border 2s infinite' : 'none',
+                animation: passo === 1 ? 'pulse-border 2s infinite' : 'none',
               }} />
             </div>
 
@@ -194,7 +194,7 @@ export default function Modulo1Licao1() {
                 background: passo === 2 ? (mostrarDica ? '#F3984B' : '#666') : '#444',
                 borderRadius: '5px 0 0 5px',
                 transition: 'background 0.3s ease',
-                animation: mostrarDica && passo === 2 ? 'pulse-border 2s infinite' : 'none',
+                animation: passo === 2 ? 'pulse-border 2s infinite' : 'none',
               }} />
             </div>
 
@@ -259,7 +259,7 @@ export default function Modulo1Licao1() {
                         minWidth: '44px', minHeight: '44px',
                         display: 'flex', alignItems: 'center', justifyContent: 'center',
                         borderRadius: '10px',
-                        animation: mostrarDica && passo === 3 ? 'pulse-border 2s infinite' : 'none',
+                        animation: passo === 3 ? 'pulse-border 2s infinite' : 'none',
                         transition: 'all 0.3s ease', fontSize: '14px'
                       }}
                     >🔋</div>

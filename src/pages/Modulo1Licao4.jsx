@@ -7,6 +7,8 @@ import SimuladorImersivo from "@/components/simulador/SimuladorImersivo";
 import ElementoClicavel from "@/components/simulador/ElementoClicavel";
 import ValidacaoQuiz from "@/components/simulador/ValidacaoQuiz";
 import { Sons, MoedasAnimadas, FeedbackAcerto, FeedbackErro } from "@/components/shared/GameFeedback";
+import AndroidHomeScreen from "@/components/simulador/AndroidHomeScreen";
+import { Search, Globe } from 'lucide-react';
 
 const PesquisaReal = ({ onClose }) => {
   const [query, setQuery] = useState('remédio caseiro para dor de cabeça');
@@ -54,7 +56,7 @@ const PesquisaReal = ({ onClose }) => {
       <div style={{ padding:'10px 12px', borderBottom:'1px solid #e0e0e0', display:'flex', alignItems:'center', gap:'8px' }}>
         <button onClick={onClose} style={{ background:'#5C2E7F', color:'#fff', border:'none', borderRadius:'8px', padding:'6px 12px', fontSize:'12px', fontWeight:'700', cursor:'pointer' }}>← Voltar</button>
         <div style={{ flex:1, display:'flex', alignItems:'center', gap:'6px', background:'#f1f3f4', borderRadius:'22px', padding:'7px 14px', border:'1px solid #dfe1e5', minWidth:0, overflow:'hidden' }}>
-          <span>🔍</span>
+          <Search size={16} color="#5f6368" />
           <input value={query} onChange={e => setQuery(e.target.value)} onKeyDown={e => e.key === 'Enter' && search(query)} style={{ flex:1, border:'none', background:'transparent', fontSize:'13px', outline:'none', color:'#202124', minWidth:0, width:'100%' }}/>
           <button onClick={() => search(query)} style={{ background:'none', border:'none', color:'#4285F4', fontSize:'12px', fontWeight:'700', cursor:'pointer' }}>Buscar</button>
         </div>
@@ -76,7 +78,7 @@ const PesquisaReal = ({ onClose }) => {
           </div>
           {results.map((r, i) => (
             <div key={i} style={{ padding:'12px', borderBottom:'1px solid #f8f8f8' }}>
-              <div style={{ color:'#70757a', fontSize:'11px', marginBottom:'3px' }}>🌐 {r.source}</div>
+              <div style={{ color:'#70757a', fontSize:'11px', marginBottom:'3px', display:'flex', alignItems:'center', gap:'4px' }}><Globe size={12} color="#70757a" /> {r.source}</div>
               <div style={{ color:'#1a0dab', fontSize:'15px', fontWeight:'500', marginBottom:'4px', lineHeight:1.3 }}>{r.title}</div>
               <div style={{ color:'#4d5156', fontSize:'12px', lineHeight:1.5 }}>{r.snippet}</div>
             </div>
@@ -166,38 +168,29 @@ export default function Modulo1Licao4() {
       onVoltar={() => navigate(createPageUrl("Modulos"))}
     >
       {!chromeAberto && (
-        <div className="w-full h-full bg-gradient-to-b from-blue-50 to-blue-100 p-6 pt-12">
-          <div className="grid grid-cols-4 gap-6 mt-8">
-            {passo === 1 && (
-              <ElementoClicavel
-                onClick={() => handleCliqueCerto(2, () => setChromeAberto(true))}
-                posicao="bottom"
-              >
-                <div className="flex flex-col items-center gap-2">
-                  <div className="w-14 h-14 bg-white rounded-full flex items-center justify-center shadow-md relative">
-                    <div className="absolute inset-1 rounded-full" style={{
-                      background: "conic-gradient(from 0deg, #EA4335 0deg 90deg, #FBBC05 90deg 180deg, #34A853 180deg 270deg, #4285F4 270deg 360deg)",
-                    }} />
-                    <div className="absolute inset-3 bg-white rounded-full" />
-                  </div>
-                  <span className="text-xs text-gray-600 font-semibold">Chrome</span>
-                </div>
-              </ElementoClicavel>
-            )}
-            {["G", "📷", "📱", "⚙️", "📧", "🎵", "📍"].map((emoji, i) => (
-              <div key={i} className="flex flex-col items-center gap-2">
-                <div className="w-14 h-14 bg-white rounded-2xl flex items-center justify-center text-2xl shadow-md">
-                  {emoji}
-                </div>
-              </div>
-            ))}
-          </div>
+        <div style={{ height: '100%', position: 'relative' }}>
+          <AndroidHomeScreen
+            appsCustom={[
+              { nome: 'camera', label: 'Câmera', bg: '#37474F', id: 'camera' },
+              { nome: 'mensagem', label: 'WhatsApp', bg: '#25D366', id: 'whatsapp' },
+              { nome: 'chrome', label: 'Chrome', bg: '#4285F4', id: 'chrome' },
+              { nome: 'config', label: 'Config.', bg: '#607D8B', id: 'settings' },
+              { nome: 'fotos', label: 'Fotos', bg: '#FF7043', id: 'photos' },
+              { nome: 'busca', label: 'Google', bg: '#fff', corIcone: '#4285F4', id: 'google' },
+              { nome: 'musica', label: 'Música', bg: '#E91E63', id: 'music' },
+              { nome: 'email', label: 'Email', bg: '#EA4335', id: 'email' },
+            ]}
+            appDestacado={passo === 1 ? 'chrome' : null}
+            onAppClick={(id) => {
+              if (passo === 1 && id === 'chrome') handleCliqueCerto(2, () => setChromeAberto(true));
+            }}
+          />
         </div>
       )}
 
       {chromeAberto && !resultados && (
-        <div className="w-full h-full bg-white pt-12">
-          <div className="px-4 mb-6">
+        <div style={{ height: '100%', background: '#fff', display: 'flex', flexDirection: 'column' }}>
+          <div style={{ padding: '12px 16px', borderBottom: '1px solid #e8eaed', flexShrink: 0 }}>
             {passo === 2 && !digitando && (
               <ElementoClicavel
                 onClick={() => {
@@ -219,22 +212,22 @@ export default function Modulo1Licao4() {
                     }
                   }, 100);
                 }}
-                posicao="bottom"
+                mostrarSeta={false}
               >
-                <div className="bg-gray-100 rounded-full px-4 py-3 flex items-center gap-2 cursor-pointer">
-                  <span>🔍</span>
-                  <span className="text-gray-400 font-semibold">Digite sua pesquisa...</span>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', background: '#F1F3F4', borderRadius: '22px', padding: '10px 16px' }}>
+                  <Search size={18} color="#5f6368" />
+                  <span style={{ color: '#9aa0a6', fontWeight: '500', fontSize: '15px' }}>Digite sua pesquisa...</span>
                 </div>
               </ElementoClicavel>
             )}
             {digitando && (
-              <div className="bg-gray-100 rounded-full px-4 py-3 flex items-center gap-2">
-                <span>🔍</span>
-                <span className="text-gray-700 font-semibold">{textoBusca}</span>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', background: '#F1F3F4', borderRadius: '22px', padding: '10px 16px' }}>
+                <Search size={18} color="#5f6368" />
+                <span style={{ color: '#202124', fontWeight: '500', fontSize: '15px' }}>{textoBusca}</span>
                 <motion.span
                   animate={{ opacity: [1, 0, 1] }}
                   transition={{ duration: 1, repeat: Infinity }}
-                  className="text-gray-700"
+                  style={{ color: '#202124' }}
                 >
                   |
                 </motion.span>
@@ -242,11 +235,16 @@ export default function Modulo1Licao4() {
             )}
           </div>
           {!digitando && (
-            <div className="flex items-center justify-center h-64">
-              <div className="text-center text-gray-400">
-                <div className="text-8xl mb-4">G</div>
-                <p className="font-semibold">Google</p>
+            <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+              <div style={{ fontSize: '48px', fontWeight: '800', marginBottom: '8px' }}>
+                <span style={{ color: '#4285F4' }}>G</span>
+                <span style={{ color: '#EA4335' }}>o</span>
+                <span style={{ color: '#FBBC05' }}>o</span>
+                <span style={{ color: '#4285F4' }}>g</span>
+                <span style={{ color: '#34A853' }}>l</span>
+                <span style={{ color: '#EA4335' }}>e</span>
               </div>
+              <p style={{ color: '#9aa0a6', fontWeight: '600', fontSize: '14px' }}>Pesquisar</p>
             </div>
           )}
         </div>

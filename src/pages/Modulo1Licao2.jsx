@@ -7,6 +7,8 @@ import SimuladorImersivo from "@/components/simulador/SimuladorImersivo";
 import ElementoClicavel from "@/components/simulador/ElementoClicavel";
 import ValidacaoQuiz from "@/components/simulador/ValidacaoQuiz";
 import { Sons, MoedasAnimadas, FeedbackAcerto, FeedbackErro } from "@/components/shared/GameFeedback";
+import AndroidHomeScreen from "@/components/simulador/AndroidHomeScreen";
+import { Mic, ChevronLeft, Circle, Square, Search, CheckCircle, AlertCircle } from 'lucide-react';
 
 const AssistenteVoz = ({ onSuccess, onSkip }) => {
   const [status, setStatus] = useState('idle');
@@ -38,10 +40,10 @@ const AssistenteVoz = ({ onSuccess, onSkip }) => {
 
   if (status === 'notsupported' || status === 'error') return (
     <div style={{ height:'100%', background:'#1a1a2e', display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center', color:'#fff', padding:'24px', textAlign:'center', gap:'16px' }}>
-      <span style={{ fontSize:'52px' }}>{status === 'error' ? '😅' : '🎤'}</span>
+      <AlertCircle size={52} color="#fff" />
       <p style={{ fontSize:'16px' }}>{status === 'error' ? 'Não consegui ouvir. Fale mais alto! 🔊' : 'Microfone não disponível. Pode continuar! 😊'}</p>
       {status === 'error' && (
-        <button onClick={startListening} style={{ background:'#4285F4', color:'#fff', border:'none', borderRadius:'14px', padding:'14px 28px', fontSize:'16px', fontWeight:'700', cursor:'pointer' }}>🎤 Tentar de novo</button>
+        <button onClick={startListening} style={{ background:'#4285F4', color:'#fff', border:'none', borderRadius:'14px', padding:'14px 28px', fontSize:'16px', fontWeight:'700', cursor:'pointer', display:'flex', alignItems:'center', gap:'8px' }}><Mic size={20} color="#fff" /> Tentar de novo</button>
       )}
       <button onClick={onSkip} style={{ background: status === 'error' ? 'transparent' : '#F3984B', color: status === 'error' ? 'rgba(255,255,255,0.5)' : '#fff', border:'none', borderRadius:'14px', padding:'12px 24px', fontSize:'14px', cursor:'pointer' }}>{status === 'error' ? 'Pular →' : 'Continuar a lição ➜'}</button>
     </div>
@@ -50,7 +52,7 @@ const AssistenteVoz = ({ onSuccess, onSkip }) => {
   if (status === 'heard') return (
     <div style={{ height:'100%', background:'#1a1a2e', display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center', color:'#fff', padding:'24px', textAlign:'center', gap:'20px' }}>
       <div style={{ display:'flex', gap:'6px' }}>{['#4285F4','#EA4335','#FBBC05','#34A853'].map((c,i)=>(<div key={i} style={{ width:'14px', height:'14px', borderRadius:'50%', background:c }}/>))}</div>
-      <span style={{ fontSize:'52px' }}>✅</span>
+      <CheckCircle size={52} color="#34A853" />
       <div style={{ background:'rgba(255,255,255,0.1)', borderRadius:'16px', padding:'16px 24px' }}>
         <p style={{ fontSize:'13px', opacity:0.7, marginBottom:'6px' }}>Você disse:</p>
         <p style={{ fontSize:'18px', fontWeight:'700' }}>&#34;{transcript}&#34;</p>
@@ -72,7 +74,7 @@ const AssistenteVoz = ({ onSuccess, onSkip }) => {
         } else {
           startListening();
         }
-      }} style={{ width:'88px', height:'88px', borderRadius:'50%', border:'none', cursor:'pointer', background: status === 'listening' ? 'radial-gradient(circle, #EA4335, #c0392b)' : 'rgba(255,255,255,0.15)', fontSize:'36px', boxShadow: status === 'listening' ? '0 0 0 12px rgba(234,67,53,0.2)' : 'none', transition:'all 0.3s ease' }}>🎤</button>
+      }} style={{ width:'88px', height:'88px', borderRadius:'50%', border:'none', cursor:'pointer', background: status === 'listening' ? 'radial-gradient(circle, #EA4335, #c0392b)' : 'rgba(255,255,255,0.15)', boxShadow: status === 'listening' ? '0 0 0 12px rgba(234,67,53,0.2)' : 'none', transition:'all 0.3s ease', display:'flex', alignItems:'center', justifyContent:'center' }}><Mic size={36} color="#fff" /></button>
       {status === 'listening' && (
         <div style={{ display:'flex', gap:'4px', alignItems:'center', height:'36px' }}>{[1,2,3,4,5,4,3,2,1].map((h,i)=>(<div key={i} style={{ width:'4px', borderRadius:'2px', background:'#4285F4', height:`${h*6}px`, animation:`audioWave 0.5s ease ${i*0.06}s infinite alternate` }}/>))}</div>
       )}
@@ -161,76 +163,67 @@ export default function Modulo1Licao2() {
       onVoltar={() => navigate(createPageUrl("Modulos"))}
     >
       {!assistenteAberto && !buscaAberta && (
-        <div className="w-full h-full bg-gradient-to-b from-blue-50 to-blue-100 p-6 pt-12">
-          <div className="grid grid-cols-4 gap-6 mt-8">
-            {passo === 4 && (
-              <ElementoClicavel
-                onClick={() => handleCliqueCerto(4, () => setBuscaAberta(true))}
-                posicao="bottom"
-              >
-                <div className="flex flex-col items-center gap-2">
-                  <div className="w-14 h-14 bg-white rounded-2xl flex items-center justify-center text-2xl shadow-md" style={{ color: '#4285F4', fontWeight: '900', fontSize: '28px' }}>
-                    G
-                  </div>
-                  <span className="text-xs text-gray-600 font-semibold">Google</span>
+        <div style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+          <div style={{ flex: 1, position: 'relative' }}>
+            <AndroidHomeScreen
+              appsCustom={[
+                { nome: 'camera', label: 'Câmera', bg: '#37474F', id: 'camera' },
+                { nome: 'mensagem', label: 'WhatsApp', bg: '#25D366', id: 'whatsapp' },
+                { nome: 'chrome', label: 'Chrome', bg: '#4285F4', id: 'chrome' },
+                { nome: 'config', label: 'Config.', bg: '#607D8B', id: 'settings' },
+                { nome: 'fotos', label: 'Fotos', bg: '#FF7043', id: 'photos' },
+                { nome: 'busca', label: 'Google', bg: '#fff', corIcone: '#4285F4', id: 'google' },
+                { nome: 'musica', label: 'Música', bg: '#E91E63', id: 'music' },
+                { nome: 'email', label: 'Email', bg: '#EA4335', id: 'email' },
+              ]}
+              appDestacado={passo === 4 ? 'google' : null}
+              onAppClick={(id) => {
+                if (passo === 4 && id === 'google') handleCliqueCerto(4, () => setBuscaAberta(true));
+              }}
+            />
+          </div>
+          <div style={{ height: '48px', background: '#1a1a2e', display: 'flex', alignItems: 'center', justifyContent: 'space-around', flexShrink: 0 }}>
+            <div style={{ width: '48px', height: '48px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <ChevronLeft size={24} color="#fff" />
+            </div>
+            {passo === 1 ? (
+              <ElementoClicavel onClick={() => handleCliqueCerto(2, () => setAssistenteAberto(true))} mostrarSeta={false}>
+                <div style={{ width: '48px', height: '48px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <Circle size={22} color="#fff" strokeWidth={1.5} />
                 </div>
               </ElementoClicavel>
-            )}
-            {passo !== 4 && (
-              <div className="flex flex-col items-center gap-2">
-                <div className="w-14 h-14 bg-white rounded-2xl flex items-center justify-center shadow-md" style={{ color: '#4285F4', fontWeight: '900', fontSize: '28px' }}>
-                  G
-                </div>
-                <span className="text-xs text-gray-600 font-semibold">Google</span>
+            ) : (
+              <div style={{ width: '48px', height: '48px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <Circle size={22} color="#fff" strokeWidth={1.5} />
               </div>
             )}
-            {["📷", "📱", "⚙️", "📧", "🎵", "📍"].map((emoji, i) => (
-              <div key={i} className="flex flex-col items-center gap-2">
-                <div className="w-14 h-14 bg-white rounded-2xl flex items-center justify-center text-2xl shadow-md">
-                  {emoji}
-                </div>
-              </div>
-            ))}
+            <div style={{ width: '48px', height: '48px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <Square size={18} color="#fff" strokeWidth={2} />
+            </div>
           </div>
         </div>
       )}
 
       {assistenteAberto && !resposta && (
         <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          className="w-full h-full bg-gradient-to-b from-gray-900 to-gray-800 flex flex-col items-center justify-center p-6"
+          initial={{ y: 100, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          style={{ height: '100%', background: '#1a1a2e', display: 'flex', flexDirection: 'column' }}
         >
-          {passo === 1 && (
-            <motion.div
-              animate={{ scale: escutando ? [1, 1.2, 1] : 1 }}
-              transition={{ duration: 1, repeat: escutando ? Infinity : 0 }}
-              className="mb-8"
-            >
-              <div className="flex gap-1">
-                {['#EA4335', '#FBBC05', '#34A853', '#4285F4'].map((cor, i) => (
-                  <motion.div
-                    key={i}
-                    className="w-2 h-16 rounded-full"
-                    style={{ backgroundColor: cor }}
-                    animate={escutando ? { scaleY: [1, 1.5, 1] } : {}}
-                    transition={{ duration: 0.5, repeat: Infinity, delay: i * 0.1 }}
-                  />
-                ))}
-              </div>
-            </motion.div>
-          )}
           {passo === 2 && (
-            <div className="w-full h-full" style={{ margin:'-24px', width:'calc(100% + 48px)', height:'100%' }}>
+            <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
               <AssistenteVoz
                 onSuccess={() => { setPasso(3); setEscutando(true); setTimeout(() => setResposta(true), 800); }}
                 onSkip={() => { setPasso(3); setEscutando(true); setTimeout(() => setResposta(true), 800); }}
               />
             </div>
           )}
-          <p className="text-white text-center mt-6 font-semibold">
-            {escutando ? "Ouvindo..." : "Toque no microfone"}
-          </p>
+          {passo !== 2 && (
+            <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '16px' }}>
+              <div style={{ display: 'flex', gap: '6px' }}>{['#4285F4','#EA4335','#FBBC05','#34A853'].map((c,i) => (<div key={i} style={{ width:'14px', height:'14px', borderRadius:'50%', background:c }}/>))}</div>
+              <p style={{ color: '#fff', fontSize: '18px', fontWeight: '600' }}>Ouvindo...</p>
+            </div>
+          )}
         </motion.div>
       )}
 
@@ -238,21 +231,26 @@ export default function Modulo1Licao2() {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="w-full h-full bg-gradient-to-b from-gray-900 to-gray-800 p-6 pt-12"
+          style={{ height: '100%', background: '#1a1a2e', display: 'flex', flexDirection: 'column', justifyContent: 'flex-end', padding: '24px' }}
         >
-          <div className="bg-gray-700 rounded-3xl p-5 mb-4">
-            <p className="text-white text-lg font-semibold text-center">
-              São 14h30 de terça-feira, 15 de julho ☀️
-            </p>
+          <div style={{ background: '#fff', borderRadius: '24px 24px 0 0', padding: '24px', paddingBottom: '32px' }}>
+            <div style={{ display: 'flex', gap: '6px', justifyContent: 'center', marginBottom: '16px' }}>
+              {['#4285F4','#EA4335','#FBBC05','#34A853'].map((c,i) => (<div key={i} style={{ width:'10px', height:'10px', borderRadius:'50%', background:c }}/>))}
+            </div>
+            <div style={{ background: '#f8f9fa', borderRadius: '16px', padding: '20px', marginBottom: '20px' }}>
+              <p style={{ fontSize: '20px', fontWeight: '600', color: '#333', textAlign: 'center', margin: 0, lineHeight: 1.5 }}>
+                São 14h30 de terça-feira, 15 de julho ☀️
+              </p>
+            </div>
+            <ElementoClicavel
+              onClick={() => handleCliqueCerto(4, () => { setAssistenteAberto(false); setResposta(false); })}
+              mostrarSeta={false}
+            >
+              <button style={{ width: '100%', padding: '18px', borderRadius: '16px', border: 'none', background: '#4285F4', color: '#fff', fontSize: '18px', fontWeight: '800', cursor: 'pointer' }}>
+                OK
+              </button>
+            </ElementoClicavel>
           </div>
-          <ElementoClicavel
-            onClick={() => handleCliqueCerto(4, () => { setAssistenteAberto(false); setResposta(false); })}
-            posicao="top"
-          >
-            <button className="w-full bg-blue-500 text-white py-3 rounded-2xl font-bold text-lg">
-              OK
-            </button>
-          </ElementoClicavel>
         </motion.div>
       )}
 
@@ -260,42 +258,33 @@ export default function Modulo1Licao2() {
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          className="w-full h-full bg-white pt-12"
+          style={{ height: '100%', background: '#fff', display: 'flex', flexDirection: 'column' }}
         >
-          <div className="px-4">
-            <div className="bg-gray-100 rounded-full px-4 py-3 mb-6 flex items-center gap-2">
-              <span>🔍</span>
-              <span className="text-gray-600 font-semibold">Digite sua pesquisa...</span>
+          <div style={{ padding: '12px 16px', borderBottom: '1px solid #e8eaed', display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <div style={{ flex: 1, display: 'flex', alignItems: 'center', gap: '8px', background: '#F1F3F4', borderRadius: '22px', padding: '10px 16px' }}>
+              <Search size={18} color="#5f6368" />
+              <span style={{ color: '#5f6368', fontWeight: '500', fontSize: '15px' }}>Digite sua pesquisa...</span>
             </div>
           </div>
-          <button
-            onClick={() => setMostrarValidacao(true)}
-            className="mx-4 mt-8 w-[calc(100%-32px)] bg-[#F3984B] text-white py-3 rounded-2xl font-bold text-lg"
-          >
-            Continuar
-          </button>
+          <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '24px' }}>
+            <div style={{ fontSize: '48px', fontWeight: '800', marginBottom: '32px' }}>
+              <span style={{ color: '#4285F4' }}>G</span>
+              <span style={{ color: '#EA4335' }}>o</span>
+              <span style={{ color: '#FBBC05' }}>o</span>
+              <span style={{ color: '#4285F4' }}>g</span>
+              <span style={{ color: '#34A853' }}>l</span>
+              <span style={{ color: '#EA4335' }}>e</span>
+            </div>
+            <ElementoClicavel onClick={() => setMostrarValidacao(true)} mostrarSeta={false}>
+              <button style={{ padding: '14px 32px', borderRadius: '24px', border: '1px solid #dadce0', background: '#f8f9fa', color: '#3c4043', fontSize: '16px', fontWeight: '600', cursor: 'pointer' }}>
+                Continuar
+              </button>
+            </ElementoClicavel>
+          </div>
         </motion.div>
       )}
 
-      {passo === 1 && !assistenteAberto && (
-        <div className="absolute bottom-4 left-1/2 -translate-x-1/2">
-          <ElementoClicavel
-            onClick={() => handleCliqueCerto(2, () => setAssistenteAberto(true))}
-            posicao="top"
-          >
-            <div className="w-16 h-16 bg-white rounded-full shadow-xl flex items-center justify-center text-2xl cursor-pointer border-4 border-gray-200">
-              🏠
-            </div>
-          </ElementoClicavel>
-        </div>
-      )}
-      {passo > 1 && !assistenteAberto && !buscaAberta && (
-        <div className="absolute bottom-4 left-1/2 -translate-x-1/2">
-          <div className="w-16 h-16 bg-white rounded-full shadow-xl flex items-center justify-center text-2xl border-4 border-gray-200">
-            🏠
-          </div>
-        </div>
-      )}
+
 
       {mostrarMoedas && <MoedasAnimadas quantidade={10} onFim={() => setMostrarMoedas(false)} />}
       {feedbackAcerto && <FeedbackAcerto mensagem={mensagemFeedback} onContinuar={() => { setFeedbackAcerto(false); setMostrarMoedas(true); Sons.avancar(); }} />}

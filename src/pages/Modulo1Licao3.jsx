@@ -7,6 +7,8 @@ import SimuladorImersivo from "@/components/simulador/SimuladorImersivo";
 import ElementoClicavel from "@/components/simulador/ElementoClicavel";
 import ValidacaoQuiz from "@/components/simulador/ValidacaoQuiz";
 import { Sons, MoedasAnimadas, FeedbackAcerto, FeedbackErro } from "@/components/shared/GameFeedback";
+import AndroidHomeScreen from "@/components/simulador/AndroidHomeScreen";
+import { Camera, Aperture } from 'lucide-react';
 
 const LensCamera = ({ onCapture, onSkip }) => {
   const videoRef = useRef(null);
@@ -50,7 +52,7 @@ const LensCamera = ({ onCapture, onSkip }) => {
   if (denied) {
     return (
       <div style={{ height: "100%", background: "#111", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", color: "#fff", padding: "24px", textAlign: "center", gap: "16px" }}>
-        <span style={{ fontSize: "52px" }}>📷</span>
+        <Camera size={52} color="#fff" />
         <p style={{ fontSize: "15px", opacity: 0.8, lineHeight: 1.5 }}>Câmera não disponível neste dispositivo. Tudo bem, pode continuar! 😊</p>
         <button onClick={onSkip} style={{ background: "#F3984B", color: "#fff", border: "none", borderRadius: "14px", padding: "14px 28px", fontSize: "16px", fontWeight: "700", cursor: "pointer" }}>
           Continuar a lição ➜
@@ -65,7 +67,7 @@ const LensCamera = ({ onCapture, onSkip }) => {
         <img src={captured} style={{ width: "100%", height: "52%", objectFit: "cover" }} />
         <div style={{ flex: 1, padding: "16px", display: "flex", flexDirection: "column", gap: "12px" }}>
           <div style={{ background: "#e8f4fd", borderRadius: "14px", padding: "14px", display: "flex", alignItems: "center", gap: "12px" }}>
-            <span style={{ fontSize: "28px" }}>🔍</span>
+            <Aperture size={28} color="#1a73e8" />
             <div>
               <div style={{ fontWeight: "700", fontSize: "15px", color: "#1a73e8" }}>Google Lens identificou!</div>
               <div style={{ fontSize: "13px", color: "#555", marginTop: "3px" }}>Objeto capturado e analisado ✅</div>
@@ -84,7 +86,7 @@ const LensCamera = ({ onCapture, onSkip }) => {
 
   if (analyzing) {
     return (
-      <div style={{ height: "100%", background: "#000", position: "relative", display: "flex", alignItems: "center", justifyContent: "center" }}>
+      <div style={{ height: "100%", background: "#111", position: "relative", display: "flex", alignItems: "center", justifyContent: "center" }}>
         {captured && <img src={captured} style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", opacity: 0.5 }} />}
         <div style={{ position: "relative", zIndex: 1, textAlign: "center", color: "#fff" }}>
           <div style={{ width: "56px", height: "56px", border: "4px solid #4285F4", borderTopColor: "transparent", borderRadius: "50%", animation: "spin 0.8s linear infinite", margin: "0 auto 16px" }} />
@@ -95,7 +97,7 @@ const LensCamera = ({ onCapture, onSkip }) => {
   }
 
   return (
-    <div style={{ height: "100%", background: "#000", position: "relative", overflow: "hidden" }}>
+    <div style={{ height: "100%", background: "#111", position: "relative", overflow: "hidden" }}>
       <video ref={videoRef} autoPlay playsInline muted style={{ width: "100%", height: "100%", objectFit: "cover" }} />
       <div style={{ position: "absolute", inset: 0, background: "rgba(0,0,0,0.3)" }} />
       <div style={{ position: "absolute", inset: 0, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: "16px" }}>
@@ -112,7 +114,9 @@ const LensCamera = ({ onCapture, onSkip }) => {
         <p style={{ color: "#fff", fontSize: "14px", textShadow: "0 1px 4px rgba(0,0,0,0.9)", textAlign: "center" }}>Aponte para qualquer objeto 📷</p>
       </div>
       <div style={{ position: "absolute", bottom: "32px", left: 0, right: 0, display: "flex", flexDirection: "column", alignItems: "center", gap: "12px" }}>
-        <button onClick={capture} style={{ width: "72px", height: "72px", background: "#fff", borderRadius: "50%", border: "5px solid rgba(255,255,255,0.4)", cursor: "pointer", boxShadow: "0 4px 20px rgba(0,0,0,0.5)" }} />
+        <ElementoClicavel onClick={capture} mostrarSeta={false}>
+          <div style={{ width: "72px", height: "72px", background: "#fff", borderRadius: "50%", border: "5px solid rgba(255,255,255,0.4)", boxShadow: "0 4px 20px rgba(0,0,0,0.5)" }} />
+        </ElementoClicavel>
         <button onClick={onSkip} style={{ background: "rgba(0,0,0,0.4)", color: "rgba(255,255,255,0.7)", border: "1px solid rgba(255,255,255,0.2)", borderRadius: "20px", padding: "8px 20px", fontSize: "13px", cursor: "pointer" }}>
           Pular →
         </button>
@@ -206,36 +210,23 @@ export default function Modulo1Licao3() {
       onVoltar={() => navigate(createPageUrl("Modulos"))}
     >
       {!lensAberto && !resultado && (
-        <div className="w-full h-full bg-gradient-to-b from-blue-50 to-blue-100 p-6 pt-12">
-          <div className="grid grid-cols-4 gap-6 mt-8">
-            {passo === 1 ? (
-              <ElementoClicavel
-                onClick={() => handleCliqueCerto(2, () => setLensAberto(true))}
-                posicao="bottom"
-              >
-                <div className="flex flex-col items-center gap-2">
-                  <div className="w-14 h-14 bg-gradient-to-br from-blue-400 to-blue-600 rounded-2xl flex items-center justify-center text-2xl shadow-md">
-                    📷
-                  </div>
-                  <span className="text-xs text-gray-600 font-semibold">Lens</span>
-                </div>
-              </ElementoClicavel>
-            ) : (
-              <div className="flex flex-col items-center gap-2">
-                <div className="w-14 h-14 bg-gradient-to-br from-blue-400 to-blue-600 rounded-2xl flex items-center justify-center text-2xl shadow-md">
-                  📷
-                </div>
-                <span className="text-xs text-gray-600 font-semibold">Lens</span>
-              </div>
-            )}
-            {["G", "📱", "⚙️", "📧", "🎵", "📍"].map((emoji, i) => (
-              <div key={i} className="flex flex-col items-center gap-2">
-                <div className="w-14 h-14 bg-white rounded-2xl flex items-center justify-center text-2xl shadow-md">
-                  {emoji}
-                </div>
-              </div>
-            ))}
-          </div>
+        <div style={{ height: '100%', position: 'relative' }}>
+          <AndroidHomeScreen
+            appsCustom={[
+              { nome: 'camera', label: 'Câmera', bg: '#37474F', id: 'camera' },
+              { nome: 'lente', label: 'Lens', bg: '#4285F4', id: 'lens' },
+              { nome: 'mensagem', label: 'WhatsApp', bg: '#25D366', id: 'whatsapp' },
+              { nome: 'chrome', label: 'Chrome', bg: '#4285F4', id: 'chrome' },
+              { nome: 'config', label: 'Config.', bg: '#607D8B', id: 'settings' },
+              { nome: 'fotos', label: 'Fotos', bg: '#FF7043', id: 'photos' },
+              { nome: 'busca', label: 'Google', bg: '#fff', corIcone: '#4285F4', id: 'google' },
+              { nome: 'musica', label: 'Música', bg: '#E91E63', id: 'music' },
+            ]}
+            appDestacado={passo === 1 ? 'lens' : null}
+            onAppClick={(id) => {
+              if (passo === 1 && id === 'lens') handleCliqueCerto(2, () => setLensAberto(true));
+            }}
+          />
         </div>
       )}
 

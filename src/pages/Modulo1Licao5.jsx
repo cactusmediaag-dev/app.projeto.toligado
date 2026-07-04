@@ -7,6 +7,8 @@ import SimuladorImersivo from "@/components/simulador/SimuladorImersivo";
 import ElementoClicavel from "@/components/simulador/ElementoClicavel";
 import ValidacaoQuiz from "@/components/simulador/ValidacaoQuiz";
 import { Sons, MoedasAnimadas, FeedbackAcerto, FeedbackErro } from "@/components/shared/GameFeedback";
+import AndroidHomeScreen from "@/components/simulador/AndroidHomeScreen";
+import { Image as ImageIcon, Share2, MessageCircle, Mail, Smartphone, Copy, Edit3, Trash2 } from 'lucide-react';
 
 export default function Modulo1Licao5() {
   const navigate = useNavigate();
@@ -93,52 +95,49 @@ export default function Modulo1Licao5() {
       onVoltar={() => navigate(createPageUrl("Modulos"))}
     >
       {!fotosAberto && (
-        <div className="w-full h-full bg-gradient-to-b from-blue-50 to-blue-100 p-6 pt-12">
-          <div className="grid grid-cols-4 gap-6 mt-8">
-            {passo === 1 && (
-              <ElementoClicavel
-                onClick={() => handleCliqueCerto(2, () => setFotosAberto(true))}
-                posicao="bottom"
-              >
-                <div className="flex flex-col items-center gap-2">
-                  <div className="w-14 h-14 bg-gradient-to-br from-yellow-400 via-red-400 to-pink-400 rounded-2xl flex items-center justify-center text-2xl shadow-md">
-                    📸
-                  </div>
-                  <span className="text-xs text-gray-600 font-semibold">Fotos</span>
-                </div>
-              </ElementoClicavel>
-            )}
-            {["G", "📷", "📱", "⚙️", "📧", "🎵", "📍"].map((emoji, i) => (
-              <div key={i} className="flex flex-col items-center gap-2">
-                <div className="w-14 h-14 bg-white rounded-2xl flex items-center justify-center text-2xl shadow-md">
-                  {emoji}
-                </div>
-              </div>
-            ))}
-          </div>
+        <div style={{ height: '100%', position: 'relative' }}>
+          <AndroidHomeScreen
+            appsCustom={[
+              { nome: 'camera', label: 'Câmera', bg: '#37474F', id: 'camera' },
+              { nome: 'mensagem', label: 'WhatsApp', bg: '#25D366', id: 'whatsapp' },
+              { nome: 'chrome', label: 'Chrome', bg: '#4285F4', id: 'chrome' },
+              { nome: 'config', label: 'Config.', bg: '#607D8B', id: 'settings' },
+              { nome: 'fotos', label: 'Fotos', bg: '#FF7043', id: 'photos' },
+              { nome: 'busca', label: 'Google', bg: '#fff', corIcone: '#4285F4', id: 'google' },
+              { nome: 'musica', label: 'Música', bg: '#E91E63', id: 'music' },
+              { nome: 'email', label: 'Email', bg: '#EA4335', id: 'email' },
+            ]}
+            appDestacado={passo === 1 ? 'photos' : null}
+            onAppClick={(id) => {
+              if (passo === 1 && id === 'photos') handleCliqueCerto(2, () => setFotosAberto(true));
+            }}
+          />
         </div>
       )}
 
       {fotosAberto && !fotoSelecionada && (
-        <div className="w-full h-full bg-white pt-12">
-          <div className="px-4 mb-4">
-            <h2 className="text-xl font-black text-gray-800">Fotos</h2>
-            <p className="text-sm text-gray-500 font-semibold">6 fotos</p>
+        <div style={{ height: '100%', background: '#fff', display: 'flex', flexDirection: 'column' }}>
+          <div style={{ padding: '16px', borderBottom: '1px solid #f0f0f0', display: 'flex', alignItems: 'center', gap: '12px', flexShrink: 0 }}>
+            <ImageIcon size={28} color="#FF7043" />
+            <div>
+              <h2 style={{ fontSize: '20px', fontWeight: '800', color: '#333', margin: 0 }}>Google Fotos</h2>
+              <p style={{ fontSize: '13px', color: '#999', margin: 0, fontWeight: '600' }}>6 fotos</p>
+            </div>
           </div>
-          <div className="px-4 grid grid-cols-3 gap-2">
+          <div style={{ flex: 1, overflowY: 'auto', padding: '8px', display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '8px' }}>
             {fotos.map((emoji, i) => (
               <div key={i}>
                 {passo === 2 ? (
                   <ElementoClicavel
                     onClick={() => handleCliqueCerto(3, () => setFotoSelecionada(emoji))}
-                    posicao={i < 3 ? "bottom" : "top"}
+                    mostrarSeta={false}
                   >
-                    <div className="aspect-square bg-gradient-to-br from-blue-100 to-purple-100 rounded-2xl flex items-center justify-center text-5xl cursor-pointer active:scale-95 transition-all shadow-md">
+                    <div style={{ width: '100%', aspectRatio: '1', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '40px', background: '#f5f5f5' }}>
                       {emoji}
                     </div>
                   </ElementoClicavel>
                 ) : (
-                  <div className="aspect-square bg-gradient-to-br from-blue-100 to-purple-100 rounded-2xl flex items-center justify-center text-5xl shadow-md">
+                  <div style={{ width: '100%', aspectRatio: '1', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '40px', background: '#f5f5f5' }}>
                     {emoji}
                   </div>
                 )}
@@ -168,19 +167,19 @@ export default function Modulo1Licao5() {
                 posicao="top"
               >
                 <div style={{ display:'flex', flexDirection:'column', alignItems:'center', gap:'4px', cursor:'pointer' }}>
-                  <div style={{ width:'48px', height:'48px', background:'rgba(255,255,255,0.2)', borderRadius:'50%', display:'flex', alignItems:'center', justifyContent:'center', fontSize:'22px' }}>📤</div>
+                  <div style={{ width:'48px', height:'48px', background:'rgba(255,255,255,0.2)', borderRadius:'50%', display:'flex', alignItems:'center', justifyContent:'center', }}><Share2 size={22} color="#fff" /></div>
                   <span style={{ color:'#fff', fontSize:'11px', fontWeight:'600' }}>Compartilhar</span>
                 </div>
               </ElementoClicavel>
             ) : (
               <div style={{ display:'flex', flexDirection:'column', alignItems:'center', gap:'4px' }}>
-                <div style={{ width:'48px', height:'48px', background:'rgba(255,255,255,0.2)', borderRadius:'50%', display:'flex', alignItems:'center', justifyContent:'center', fontSize:'22px' }}>📤</div>
+                <div style={{ width:'48px', height:'48px', background:'rgba(255,255,255,0.2)', borderRadius:'50%', display:'flex', alignItems:'center', justifyContent:'center', }}><Share2 size={22} color="#fff" /></div>
                 <span style={{ color:'#fff', fontSize:'11px', fontWeight:'600' }}>Compartilhar</span>
               </div>
             )}
-            {['✏️','🗑️'].map((emoji, i) => (
+            {[Edit3, Trash2].map((Ic, i) => (
               <div key={i} style={{ display:'flex', flexDirection:'column', alignItems:'center', gap:'4px' }}>
-                <div style={{ width:'48px', height:'48px', background:'rgba(255,255,255,0.2)', borderRadius:'50%', display:'flex', alignItems:'center', justifyContent:'center', fontSize:'22px' }}>{emoji}</div>
+                <div style={{ width:'48px', height:'48px', background:'rgba(255,255,255,0.2)', borderRadius:'50%', display:'flex', alignItems:'center', justifyContent:'center' }}><Ic size={22} color="#fff" /></div>
               </div>
             ))}
           </div>
@@ -197,18 +196,21 @@ export default function Modulo1Licao5() {
           <h3 className="text-xl font-bold text-gray-800 mb-4">Compartilhar via:</h3>
           <div className="grid grid-cols-4 gap-4 mb-6">
             {[
-              { emoji: "💬", nome: "WhatsApp" },
-              { emoji: "📧", nome: "Email" },
-              { emoji: "📱", nome: "SMS" },
-              { emoji: "📋", nome: "Copiar" },
-            ].map((app, i) => (
-              <div key={i} className="flex flex-col items-center gap-2">
-                <div className="w-14 h-14 bg-gray-100 rounded-2xl flex items-center justify-center text-2xl">
-                  {app.emoji}
+              { Icon: MessageCircle, nome: "WhatsApp", cor: "#25D366" },
+              { Icon: Mail, nome: "Email", cor: "#EA4335" },
+              { Icon: Smartphone, nome: "SMS", cor: "#4285F4" },
+              { Icon: Copy, nome: "Copiar", cor: "#607D8B" },
+            ].map((app, i) => {
+              const Ic = app.Icon;
+              return (
+                <div key={i} className="flex flex-col items-center gap-2">
+                  <div className="w-14 h-14 bg-gray-100 rounded-2xl flex items-center justify-center">
+                    <Ic size={24} color={app.cor} />
+                  </div>
+                  <span className="text-xs text-gray-600 font-semibold text-center">{app.nome}</span>
                 </div>
-                <span className="text-xs text-gray-600 font-semibold text-center">{app.nome}</span>
-              </div>
-            ))}
+              );
+            })}
           </div>
           {passo === 4 && (
             <ElementoClicavel

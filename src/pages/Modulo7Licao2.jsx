@@ -6,6 +6,19 @@ import SimuladorImersivo from "@/components/simulador/SimuladorImersivo";
 import ElementoClicavel from "@/components/simulador/ElementoClicavel";
 import ValidacaoQuiz from "@/components/simulador/ValidacaoQuiz";
 import { motion } from "framer-motion";
+import { QrCode, CheckCircle2, Zap, Camera } from 'lucide-react';
+
+const QR_PATTERN = [
+  1,1,1,0,1,0,1,1,1,
+  1,0,0,1,0,1,1,0,1,
+  1,0,1,0,1,0,0,0,1,
+  0,1,0,1,1,0,1,1,0,
+  1,0,1,0,0,1,0,0,1,
+  0,1,0,1,0,1,1,0,0,
+  1,0,1,0,1,0,0,1,1,
+  1,0,0,1,0,1,1,0,1,
+  1,1,1,0,1,0,1,1,1,
+];
 
 export default function Modulo7Licao2() {
   const navigate = useNavigate();
@@ -13,7 +26,7 @@ export default function Modulo7Licao2() {
   const [mostrarValidacao, setMostrarValidacao] = useState(false);
 
   const handleAvancar = (novoP) => {
-    const audio = new Audio('data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2/LDciUFLIHO8tiJNwgZaLvt559NEAxQp+PwtmMcBjiR1/LMeSwFJHfH8N2QQAoUXrTp66hVFApGn+DyvmwhBSuBzvLZiTYIGGi77eeeTRALUKjo77RgGgU7k9jxzHkrBSh+zPHajkILElyx6OyrWBUIRp/h8rBsGwU2idXx0n8qBSl5yO/bj0QKElqx5+iwWRQJP5jb8L90IAU2jdrzzoErByh1xe/akUALD1ap5earWRULRp7h8bJuHQU0hdLu0IEtBSh2yPDamT4JFlux6OanVxYLPJPY78p2KQUodMju2phACRZYr+XmqlgVCz2V2/DLdioFKHLG7tqZPwkWWLDn56lXFgk9ldrvy3cqBSl0yO/amkEJFVew5+aoVxYIPZXb78p3KgUqdsrw2plACBVWsOjnp1cWCT2V2+/KdioFKXbH79qZQAgVV7Dn56hYFQk9lNvvy3cqBSl2ye/amUAIFVew5+eoVxYJPJTa78t3KgUpdsjv2plACBVYsOjnqFgVCTyU2u/LdioFKXbJ79qZQQgVWLDo56hYFQk8lNrvy3cqBSl2yO/amUEIFVew6OeoWBUJPJPa78x4KgUpdsnu25lBCBVXsefnqFgVCTyU2u/MdyoFKXbI79uZQQgVWLHn56hYFQk8lNrvy3cqBSl2yO/bmUEIFVix5+eoWRUJPJPa78x3KgUpdsjv25lBCBVYsefnqFgVCTyT2u/MdyoFKXXI79uZQQgVWLHn56hZFQk8k9rvzHcqBSl1yO/bmUEIFVmx5+epWRUJO5Pa78x3KwUpdcjv25lBCBVYsejnqFgVCTuT2u/NdyoFKXXI79qZQQgVWLHn56hZFQk7k9rvzHcqBSl1yO/bmUEIFVmx6OeoWRUJO5Pa78x3KgUpdcjv25lBCBVZsejnqFkVCTuT2u/MdyoFKXXI79uZQQgVWbHo56hZFQk7k9rvzHcqBSl1yO/bmUEIFVmx6OeoWRUJO5Pa78x3KgUpdcjv25lBCBVZsejnqFkVCTuT2u/MdyoFKXXI79uZQQgVWbHo56hZFQk7k9rvzHcqBSl1yO/bmUEIFVmx6OeoWRUJO5Pa78x3KgUp');
+    const audio = new Audio('data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2/LDciUFLIHO8tiJNwgZaLvt559NEAxQp+PwtmMcBjiR1/LMeSwFJHfH8N2QQAoUXrTp66hVFApGn+DyvmwhBSuBzvLZiTYIGGi77eeeTRALUKjo77RgGgU7k9jxzHkrBSh+zPHajkILElyx6OyrWBUIRp/h8rBsGwU2idXx0n8qBSl5yO/bj0QKElqx5+iwWRQJP5jb8L90IAU2jdrzzoErByh1xe/akUALD1ap5earWRULRp7h8bJuHQU0hdLu0IEtBSh2yPDamT4JFlux6OanVxYLPJPY78p2KQUodMju2phACRZYr+XmqlgVCz2V2/DLdioFKHLG7tqZPwkWWLDn56lXFgk9ldrvy3cqBSl0yO/amkEJFVew5+aoVxYIPZXb78p3KgUqdsrw2plACBVWsOjnp1cWCT2V2+/KdioFKXbH79qZQAgVV7Dn56hYFQk9lNvvy3cqBSl2ye/amUAIFVew5+eoVxYJPJTa78t3KgUpdsjv2plACBVYsOjnqFgVCTyU2u/LdioFKXbJ79qZQQgVWLDo56hYFQk8lNrvy3cqBSl2yO/amUEIFVew6OeoWBUJPJPa78x4KgUpdsnu25lBCBVXsefnqFgVCTyU2u/MdyoFKXbI79uZQQgVWLHn56hYFQk8lNrvy3cqBSl2yO/bmUEIFVix5+eoWRUJPJPa78x3KgUpdsjv25lBCBVYsefnqFgVCTyT2u/MdyoFKXXI79uZQQgVWLHn56hZFQk8k9rvzHcqBSl1yO/bmUEIFVmx5+epWRUJO5Pa78x3KwUpdcjv25lBCBVYsejnqFgVCTuT2u/NdyoFKXXI79qZQQgVWLHn56hZFQk7k9rvzHcqBSl1yO/bmUEIFVmx6OeoWRUJO5Pa78x3KgUpdcjv25lBCBVZsejnqFkVCTuT2u/MdyoFKXXI79qZQQgVWbHo56hZFQk7k9rvzHcqBSl1yO/bmUEIFVmx6OeoWRUJO5Pa78x3KgUpdcjv25lBCBVZsejnqFkVCTuT2u/MdyoFKXXI79qZQQgVWbHo56hZFQk7k9rvzHcqBSl1yO/bmUEIFVmx6OeoWRUJO5Pa78x3KgUpdcjv25lBCBVZsejnqFkVCTuT2u/MdyoFKXXI79qZQQgVWbHo56hZFQk7k9rvzHcqBSl1yO/bmUEIFVmx6OeoWRUJO5Pa78x3KgUp');
     audio.volume = 0.3;
     audio.play().catch(() => {});
     setPasso(novoP);
@@ -67,6 +80,14 @@ export default function Modulo7Licao2() {
     }
   ];
 
+  const renderQR = (size = 144) => (
+    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(9, 1fr)', gap: '2px', width: `${size}px`, height: `${size}px` }}>
+      {QR_PATTERN.map((v, i) => (
+        <div key={i} style={{ background: v ? '#000' : '#fff' }} />
+      ))}
+    </div>
+  );
+
   return (
     <SimuladorImersivo
       instrucao={passos[passo - 1].instrucao}
@@ -77,29 +98,25 @@ export default function Modulo7Licao2() {
     >
       {/* Passo 1: Cena do mercadinho */}
       {passo === 1 && (
-        <div className="w-full h-full bg-gradient-to-b from-amber-50 to-orange-50 flex flex-col items-center justify-center p-6">
+        <div style={{ minHeight: '100%', background: '#FFF8E1', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '24px' }}>
           <motion.div
             initial={{ scale: 0.8, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
-            className="text-center"
+            style={{ textAlign: 'center' }}
           >
-            <div className="text-7xl mb-4">🏪</div>
-            <p className="font-black text-xl text-gray-800 mb-2">Mercadinho do Seu João</p>
-            <div className="bg-white p-6 rounded-3xl shadow-xl">
-              <div className="w-32 h-32 bg-black mx-auto mb-3 relative">
-                <div className="absolute inset-2 grid grid-cols-3 grid-rows-3 gap-1">
-                  {[...Array(9)].map((_, i) => (
-                    <div key={i} className={`${Math.random() > 0.5 ? 'bg-white' : 'bg-black'}`}></div>
-                  ))}
-                </div>
+            <QrCode size={40} color="#F57F17" style={{ margin: '0 auto 16px' }} />
+            <p style={{ fontWeight: '800', fontSize: '20px', color: '#1a1a1a', marginBottom: '16px', margin: '0 0 16px' }}>Mercadinho do Seu João</p>
+            <div style={{ background: '#fff', padding: '24px', borderRadius: '24px', boxShadow: '0 10px 40px rgba(0,0,0,0.15)' }}>
+              <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '12px' }}>
+                {renderQR(144)}
               </div>
-              <p className="text-sm font-bold text-gray-600">Escaneie para pagar</p>
+              <p style={{ fontSize: '14px', fontWeight: '700', color: '#666' }}>Escaneie para pagar</p>
             </div>
           </motion.div>
-          <div className="mt-6">
-            <ElementoClicavel onClick={() => handleAvancar(2)} posicao="bottom">
-              <button className="bg-gradient-to-r from-[#1E8449] to-[#58D68D] text-white px-8 py-4 rounded-2xl font-black text-lg shadow-lg">
-                Entendi! Vamos lá 👍
+          <div style={{ marginTop: '24px' }}>
+            <ElementoClicavel onClick={() => handleAvancar(2)} mostrarSeta={false}>
+              <button style={{ background: '#4A148C', color: '#fff', border: 'none', padding: '16px 32px', borderRadius: '16px', fontWeight: '800', fontSize: '17px', cursor: 'pointer', boxShadow: '0 6px 20px rgba(74,20,140,0.4)' }}>
+                Entendi! Vamos lá
               </button>
             </ElementoClicavel>
           </div>
@@ -108,34 +125,32 @@ export default function Modulo7Licao2() {
 
       {/* Passo 2: Câmera com QR Code */}
       {passo === 2 && (
-        <div className="w-full h-full bg-black flex flex-col items-center justify-center relative">
-          <div className="absolute top-8 left-0 right-0 text-center">
-            <p className="text-white font-bold text-sm">Aponte para o QR Code</p>
+        <div style={{ minHeight: '100%', background: '#111', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', position: 'relative' }}>
+          <div style={{ position: 'absolute', top: '32px', left: 0, right: 0, textAlign: 'center' }}>
+            <p style={{ color: '#fff', fontWeight: '700', fontSize: '14px' }}>Aponte para o QR Code</p>
           </div>
-          <div className="relative">
+          <div style={{ position: 'relative' }}>
             <motion.div
               animate={{ scale: [1, 1.05, 1] }}
               transition={{ duration: 1.5, repeat: Infinity }}
-              className="w-48 h-48 bg-white p-4 rounded-2xl"
+              style={{ background: '#fff', padding: '16px', borderRadius: '16px' }}
             >
-              <div className="w-full h-full bg-black relative">
-                <div className="absolute inset-3 grid grid-cols-5 grid-rows-5 gap-1">
-                  {[...Array(25)].map((_, i) => (
-                    <div key={i} className={`${Math.random() > 0.5 ? 'bg-white' : 'bg-black'}`}></div>
-                  ))}
-                </div>
-              </div>
+              {renderQR(176)}
             </motion.div>
-            <div className="absolute inset-0 border-4 border-green-400 rounded-2xl"></div>
-            <div className="absolute -top-2 -left-2 w-8 h-8 border-t-4 border-l-4 border-green-400"></div>
-            <div className="absolute -top-2 -right-2 w-8 h-8 border-t-4 border-r-4 border-green-400"></div>
-            <div className="absolute -bottom-2 -left-2 w-8 h-8 border-b-4 border-l-4 border-green-400"></div>
-            <div className="absolute -bottom-2 -right-2 w-8 h-8 border-b-4 border-r-4 border-green-400"></div>
+            <div style={{ position: 'absolute', top: '-4px', left: '-4px', width: '28px', height: '28px', borderTop: '4px solid #4A148C', borderLeft: '4px solid #4A148C' }} />
+            <div style={{ position: 'absolute', top: '-4px', right: '-4px', width: '28px', height: '28px', borderTop: '4px solid #4A148C', borderRight: '4px solid #4A148C' }} />
+            <div style={{ position: 'absolute', bottom: '-4px', left: '-4px', width: '28px', height: '28px', borderBottom: '4px solid #4A148C', borderLeft: '4px solid #4A148C' }} />
+            <div style={{ position: 'absolute', bottom: '-4px', right: '-4px', width: '28px', height: '28px', borderBottom: '4px solid #4A148C', borderRight: '4px solid #4A148C' }} />
+            <motion.div
+              animate={{ y: [-70, 70] }}
+              transition={{ duration: 2, repeat: Infinity, ease: 'linear' }}
+              style={{ position: 'absolute', left: '8px', right: '8px', top: '50%', height: '2px', background: '#EF4444' }}
+            />
           </div>
-          <div className="absolute bottom-12">
-            <ElementoClicavel onClick={() => handleAvancar(3)} posicao="bottom">
-              <button className="bg-gradient-to-r from-[#1E8449] to-[#58D68D] text-white px-8 py-4 rounded-full font-black text-lg shadow-lg">
-                🔍 Escanear QR Code
+          <div style={{ position: 'absolute', bottom: '32px' }}>
+            <ElementoClicavel onClick={() => handleAvancar(3)} mostrarSeta={false}>
+              <button style={{ background: '#4A148C', color: '#fff', border: 'none', padding: '16px 32px', borderRadius: '999px', fontWeight: '800', fontSize: '17px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <Camera size={22} color="#fff" /> Escanear QR Code
               </button>
             </ElementoClicavel>
           </div>
@@ -144,35 +159,35 @@ export default function Modulo7Licao2() {
 
       {/* Passo 3: Dados do QR Code */}
       {passo === 3 && (
-        <div className="w-full h-full bg-white flex flex-col items-center justify-center p-6">
+        <div style={{ minHeight: '100%', background: '#fff', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '24px' }}>
           <motion.div
             initial={{ scale: 0, rotate: -10 }}
             animate={{ scale: 1, rotate: 0 }}
-            className="bg-green-50 border-2 border-green-300 rounded-3xl p-6 w-full max-w-sm"
+            style={{ background: '#E8F5E9', border: '2px solid #66BB6A', borderRadius: '24px', padding: '24px', width: '100%', maxWidth: '320px' }}
           >
-            <div className="text-center mb-4">
-              <div className="text-5xl mb-2">✅</div>
-              <p className="font-black text-xl text-green-700">QR Code lido!</p>
+            <div style={{ textAlign: 'center', marginBottom: '16px' }}>
+              <CheckCircle2 size={40} color="#27AE60" style={{ margin: '0 auto 8px' }} />
+              <p style={{ fontWeight: '800', fontSize: '18px', color: '#1E8449', margin: 0 }}>QR Code lido!</p>
             </div>
-            <div className="bg-white rounded-2xl p-4 space-y-2">
+            <div style={{ background: '#fff', borderRadius: '16px', padding: '16px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
               <div>
-                <p className="text-xs text-gray-500">Estabelecimento</p>
-                <p className="font-bold text-gray-800">Mercadinho do Seu João</p>
+                <p style={{ fontSize: '12px', color: '#999', margin: 0 }}>Estabelecimento</p>
+                <p style={{ fontWeight: '700', color: '#1a1a1a', margin: 0 }}>Mercadinho do Seu João</p>
               </div>
               <div>
-                <p className="text-xs text-gray-500">Valor</p>
-                <p className="font-black text-2xl text-[#1E8449]">R$ 23,50</p>
+                <p style={{ fontSize: '12px', color: '#999', margin: 0 }}>Valor</p>
+                <p style={{ fontWeight: '900', fontSize: '28px', color: '#1E8449', margin: 0 }}>R$ 23,50</p>
               </div>
               <div>
-                <p className="text-xs text-gray-500">Chave PIX</p>
-                <p className="font-mono text-sm text-gray-700">mercadinho@email.com</p>
+                <p style={{ fontSize: '12px', color: '#999', margin: 0 }}>Chave PIX</p>
+                <p style={{ fontFamily: 'monospace', fontSize: '14px', color: '#444', margin: 0 }}>mercadinho@email.com</p>
               </div>
             </div>
           </motion.div>
-          <div className="mt-6">
-            <ElementoClicavel onClick={() => handleAvancar(4)} posicao="bottom">
-              <button className="bg-gradient-to-r from-[#1E8449] to-[#58D68D] text-white px-8 py-4 rounded-2xl font-black text-lg shadow-lg flex items-center gap-2">
-                💚 Pagar com PIX
+          <div style={{ marginTop: '24px' }}>
+            <ElementoClicavel onClick={() => handleAvancar(4)} mostrarSeta={false}>
+              <button style={{ background: '#27AE60', color: '#fff', border: 'none', padding: '16px 32px', borderRadius: '16px', fontWeight: '800', fontSize: '17px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px', minHeight: '56px' }}>
+                <Zap size={22} color="#fff" /> Pagar com PIX
               </button>
             </ElementoClicavel>
           </div>
@@ -181,30 +196,30 @@ export default function Modulo7Licao2() {
 
       {/* Passo 4: Confirmação */}
       {passo === 4 && (
-        <div className="w-full h-full bg-gradient-to-b from-gray-50 to-white flex flex-col items-center justify-center p-6">
-          <div className="bg-white rounded-3xl p-6 shadow-xl w-full max-w-sm border-2 border-gray-200">
-            <div className="text-center mb-4">
-              <div className="text-5xl mb-2">💰</div>
-              <p className="font-black text-lg text-gray-800">Confirmar Pagamento</p>
+        <div style={{ minHeight: '100%', background: '#fff', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '24px' }}>
+          <div style={{ background: '#fff', borderRadius: '24px', padding: '24px', boxShadow: '0 10px 40px rgba(0,0,0,0.12)', width: '100%', maxWidth: '320px', border: '2px solid #e0e0e0' }}>
+            <div style={{ textAlign: 'center', marginBottom: '16px' }}>
+              <Zap size={36} color="#27AE60" style={{ margin: '0 auto 8px' }} />
+              <p style={{ fontWeight: '800', fontSize: '18px', color: '#1a1a1a', margin: 0 }}>Confirmar Pagamento</p>
             </div>
-            <div className="space-y-3 mb-4">
-              <div className="bg-gray-50 p-3 rounded-xl">
-                <p className="text-xs text-gray-500">Você vai pagar</p>
-                <p className="font-black text-2xl text-[#1E8449]">R$ 23,50</p>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginBottom: '16px' }}>
+              <div style={{ background: '#f8f9fa', padding: '12px', borderRadius: '12px' }}>
+                <p style={{ fontSize: '12px', color: '#999', margin: 0 }}>Você vai pagar</p>
+                <p style={{ fontWeight: '900', fontSize: '30px', color: '#1E8449', margin: 0 }}>R$ 23,50</p>
               </div>
-              <div className="bg-gray-50 p-3 rounded-xl">
-                <p className="text-xs text-gray-500">Para</p>
-                <p className="font-bold text-gray-800">Mercadinho do Seu João</p>
+              <div style={{ background: '#f8f9fa', padding: '12px', borderRadius: '12px' }}>
+                <p style={{ fontSize: '12px', color: '#999', margin: 0 }}>Para</p>
+                <p style={{ fontWeight: '700', color: '#1a1a1a', margin: 0 }}>Mercadinho do Seu João</p>
               </div>
             </div>
-            <p className="text-center text-sm text-gray-600 mb-4">Confirma?</p>
-            <div className="flex gap-3">
-              <button className="flex-1 bg-gray-200 text-gray-700 py-3 rounded-xl font-bold">
+            <p style={{ textAlign: 'center', fontSize: '14px', color: '#666', marginBottom: '16px', margin: '0 0 16px' }}>Confirma?</p>
+            <div style={{ display: 'flex', gap: '12px' }}>
+              <button style={{ flex: 1, background: '#e0e0e0', color: '#666', border: 'none', padding: '14px', borderRadius: '12px', fontWeight: '700', cursor: 'default' }}>
                 Cancelar
               </button>
-              <ElementoClicavel onClick={() => setMostrarValidacao(true)} posicao="bottom">
-                <button className="flex-1 bg-gradient-to-r from-[#1E8449] to-[#58D68D] text-white py-3 rounded-xl font-black">
-                  ✅ Confirmar
+              <ElementoClicavel onClick={() => setMostrarValidacao(true)} mostrarSeta={false}>
+                <button style={{ flex: 1, background: '#27AE60', color: '#fff', border: 'none', padding: '14px', borderRadius: '12px', fontWeight: '800', cursor: 'pointer', minHeight: '48px' }}>
+                  Confirmar
                 </button>
               </ElementoClicavel>
             </div>

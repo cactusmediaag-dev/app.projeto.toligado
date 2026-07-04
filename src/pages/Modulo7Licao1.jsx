@@ -6,6 +6,7 @@ import SimuladorImersivo from "@/components/simulador/SimuladorImersivo";
 import ElementoClicavel from "@/components/simulador/ElementoClicavel";
 import ValidacaoQuiz from "@/components/simulador/ValidacaoQuiz";
 import { motion } from "framer-motion";
+import { Landmark, ScanBarcode, Zap, FileText, Receipt, Camera, CheckCircle2, Lock, ArrowLeft, FileCheck } from 'lucide-react';
 
 export default function Modulo7Licao1() {
   const navigate = useNavigate();
@@ -13,7 +14,7 @@ export default function Modulo7Licao1() {
   const [mostrarValidacao, setMostrarValidacao] = useState(false);
 
   const handleAvancar = (novoP) => {
-    const audio = new Audio('data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2/LDciUFLIHO8tiJNwgZaLvt559NEAxQp+PwtmMcBjiR1/LMeSwFJHfH8N2QQAoUXrTp66hVFApGn+DyvmwhBSuBzvLZiTYIGGi77eeeTRALUKjo77RgGgU7k9jxzHkrBSh+zPHajkILElyx6OyrWBUIRp/h8rBsGwU2idXx0n8qBSl5yO/bj0QKElqx5+iwWRQJP5jb8L90IAU2jdrzzoErByh1xe/akUALD1ap5earWRULRp7h8bJuHQU0hdLu0IEtBSh2yPDamT4JFlux6OanVxYLPJPY78p2KQUodMju2phACRZYr+XmqlgVCz2V2/DLdioFKHLG7tqZPwkWWLDn56lXFgk9ldrvy3cqBSl0yO/amkEJFVew5+aoVxYIPZXb78p3KgUqdsrw2plACBVWsOjnp1cWCT2V2+/KdioFKXbH79qZQAgVV7Dn56hYFQk9lNvvy3cqBSl2ye/amUAIFVew5+eoVxYJPJTa78t3KgUpdsjv2plACBVYsOjnqFgVCTyU2u/LdioFKXbJ79qZQQgVWLDo56hYFQk8lNrvy3cqBSl2yO/amUEIFVew6OeoWBUJPJPa78x4KgUpdsnu25lBCBVXsefnqFgVCTyU2u/MdyoFKXbI79uZQQgVWLHn56hYFQk8lNrvy3cqBSl2yO/bmUEIFVix5+eoWRUJPJPa78x3KgUpdsjv25lBCBVYsefnqFgVCTyT2u/MdyoFKXXI79uZQQgVWLHn56hZFQk8k9rvzHcqBSl1yO/bmUEIFVmx5+epWRUJO5Pa78x3KwUpdcjv25lBCBVYsejnqFgVCTuT2u/NdyoFKXXI79qZQQgVWLHn56hZFQk7k9rvzHcqBSl1yO/bmUEIFVmx6OeoWRUJO5Pa78x3KgUpdcjv25lBCBVZsejnqFkVCTuT2u/MdyoFKXXI79uZQQgVWbHo56hZFQk7k9rvzHcqBSl1yO/bmUEIFVmx6OeoWRUJO5Pa78x3KgUpdcjv25lBCBVZsejnqFkVCTuT2u/MdyoFKXXI79uZQQgVWbHo56hZFQk7k9rvzHcqBSl1yO/bmUEIFVmx6OeoWRUJO5Pa78x3KgUp');
+    const audio = new Audio('data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2/LDciUFLIHO8tiJNwgZaLvt559NEAxQp+PwtmMcBjiR1/LMeSwFJHfH8N2QQAoUXrTp66hVFApGn+DyvmwhBSuBzvLZiTYIGGi77eeeTRALUKjo77RgGgU7k9jxzHkrBSh+zPHajkILElyx6OyrWBUIRp/h8rBsGwU2idXx0n8qBSl5yO/bj0QKElqx5+iwWRQJP5jb8L90IAU2jdrzzoErByh1xe/akUALD1ap5earWRULRp7h8bJuHQU0hdLu0IEtBSh2yPDamT4JFlux6OanVxYLPJPY78p2KQUodMju2phACRZYr+XmqlgVCz2V2/DLdioFKHLG7tqZPwkWWLDn56lXFgk9ldrvy3cqBSl0yO/amkEJFVew5+aoVxYIPZXb78p3KgUqdsrw2plACBVWsOjnp1cWCT2V2+/KdioFKXbH79qZQAgVV7Dn56hYFQk9lNvvy3cqBSl2ye/amUAIFVew5+eoVxYJPJTa78t3KgUpdsjv2plACBVYsOjnqFgVCTyU2u/LdioFKXbJ79qZQQgVWLDo56hYFQk8lNrvy3cqBSl2yO/amUEIFVew6OeoWBUJPJPa78x4KgUpdsnu25lBCBVXsefnqFgVCTyU2u/MdyoFKXbI79uZQQgVWLHn56hYFQk8lNrvy3cqBSl2yO/bmUEIFVix5+eoWRUJPJPa78x3KgUpdsjv25lBCBVYsefnqFgVCTyT2u/MdyoFKXXI79uZQQgVWLHn56hZFQk8k9rvzHcqBSl1yO/bmUEIFVmx5+epWRUJO5Pa78x3KwUpdcjv25lBCBVYsejnqFgVCTuT2u/NdyoFKXXI79qZQQgVWLHn56hZFQk7k9rvzHcqBSl1yO/bmUEIFVmx6OeoWRUJO5Pa78x3KgUpdcjv25lBCBVZsejnqFkVCTuT2u/MdyoFKXXI79qZQQgVWbHo56hZFQk7k9rvzHcqBSl1yO/bmUEIFVmx6OeoWRUJO5Pa78x3KgUpdcjv25lBCBVZsejnqFkVCTuT2u/MdyoFKXXI79qZQQgVWbHo56hZFQk7k9rvzHcqBSl1yO/bmUEIFVmx6OeoWRUJO5Pa78x3KgUpdcjv25lBCBVZsejnqFkVCTuT2u/MdyoFKXXI79qZQQgVWbHo56hZFQk7k9rvzHcqBSl1yO/bmUEIFVmx6OeoWRUJO5Pa78x3KgUp');
     audio.volume = 0.3;
     audio.play().catch(() => {});
     setPasso(novoP);
@@ -79,6 +80,8 @@ export default function Modulo7Licao1() {
     }
   ];
 
+  const barras = [4,8,3,6,10,2,7,5,9,3,6,4,8,2,7,5,10,3,6,4,8,2,7,5,9,3,6,4,8,2];
+
   return (
     <SimuladorImersivo
       instrucao={passos[passo - 1].instrucao}
@@ -89,29 +92,28 @@ export default function Modulo7Licao1() {
     >
       {/* Passo 1: Conta na mesa */}
       {passo === 1 && (
-        <div className="w-full h-full bg-gradient-to-b from-gray-50 to-gray-100 flex flex-col items-center justify-center p-6">
+        <div style={{ minHeight: '100%', background: '#f5f0fa', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '24px' }}>
           <motion.div
             initial={{ scale: 0.8, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
-            className="bg-white rounded-3xl p-6 shadow-xl mb-6"
+            style={{ background: '#fff', borderRadius: '24px', padding: '24px', boxShadow: '0 10px 40px rgba(0,0,0,0.15)', marginBottom: '24px', width: '100%', maxWidth: '320px' }}
           >
-            <div className="text-6xl mb-4 text-center">💧</div>
-            <div className="bg-gray-100 p-4 rounded-xl mb-3">
-              <p className="text-sm font-bold text-gray-700 mb-2">CONTA DE ÁGUA</p>
-              <div className="bg-white p-2 rounded">
-                <div className="flex flex-col gap-1">
-                  <div className="h-1 bg-black w-full"></div>
-                  <div className="h-1 bg-black w-3/4"></div>
-                  <div className="h-1 bg-black w-full"></div>
+            <div style={{ background: '#f8f9fa', padding: '16px', borderRadius: '12px', marginBottom: '12px' }}>
+              <p style={{ fontSize: '14px', fontWeight: '700', color: '#666', marginBottom: '12px', margin: '0 0 12px' }}>CONTA DE ÁGUA</p>
+              <div style={{ background: '#fff', padding: '12px', borderRadius: '8px' }}>
+                <div style={{ display: 'flex', alignItems: 'flex-end', gap: '3px', height: '50px' }}>
+                  {barras.map((h,i) => (
+                    <div key={i} style={{ width: '3px', height: `${h*4}px`, background: '#000' }} />
+                  ))}
                 </div>
               </div>
-              <p className="text-xs text-gray-500 mt-2">Vencimento: 20/08/2025</p>
-              <p className="text-lg font-black text-[#1E8449] mt-1">R$ 45,80</p>
+              <p style={{ fontSize: '12px', color: '#999', marginTop: '8px', margin: '8px 0 0' }}>Vencimento: 20/08/2025</p>
+              <p style={{ fontSize: '22px', fontWeight: '900', color: '#1E8449', marginTop: '4px', margin: '4px 0 0' }}>R$ 45,80</p>
             </div>
           </motion.div>
-          <ElementoClicavel onClick={() => handleAvancar(2)} posicao="bottom">
-            <button className="bg-gradient-to-r from-[#1E8449] to-[#58D68D] text-white px-8 py-4 rounded-2xl font-black text-lg shadow-lg">
-              Vamos lá! 💪
+          <ElementoClicavel onClick={() => handleAvancar(2)} mostrarSeta={false}>
+            <button style={{ background: 'linear-gradient(135deg, #4A148C, #7B1FA2)', color: '#fff', border: 'none', padding: '16px 32px', borderRadius: '16px', fontWeight: '800', fontSize: '17px', cursor: 'pointer', boxShadow: '0 6px 20px rgba(74,20,140,0.4)' }}>
+              Vamos lá!
             </button>
           </ElementoClicavel>
         </div>
@@ -119,29 +121,32 @@ export default function Modulo7Licao1() {
 
       {/* Passo 2: Menu do banco */}
       {passo === 2 && (
-        <div className="w-full h-full bg-gradient-to-b from-[#1E8449] to-[#58D68D] flex flex-col pt-8">
-          <div className="text-center text-white mb-6">
-            <div className="text-4xl mb-2">🏦</div>
-            <p className="font-black text-xl">Meu Banco</p>
+        <div style={{ minHeight: '100%', display: 'flex', flexDirection: 'column', background: '#fff' }}>
+          <div style={{ background: '#4A148C', padding: '16px', display: 'flex', alignItems: 'center', gap: '12px', flexShrink: 0 }}>
+            <Landmark size={24} color="#fff" />
+            <div style={{ flex: 1 }}>
+              <p style={{ color: 'rgba(255,255,255,0.8)', fontSize: '14px', margin: 0 }}>Olá, Maria!</p>
+              <p style={{ fontSize: '24px', fontWeight: '900', color: '#fff', margin: 0 }}>R$ 850,00</p>
+            </div>
           </div>
-          <div className="flex-1 bg-white rounded-t-3xl p-6 space-y-3">
-            <ElementoClicavel onClick={() => handleAvancar(3)} posicao="bottom">
-              <div className="bg-gradient-to-r from-[#1E8449] to-[#58D68D] text-white p-5 rounded-2xl flex items-center gap-4 shadow-md cursor-pointer">
-                <span className="text-3xl">💳</span>
-                <span className="font-black text-lg">Pagar Conta</span>
+          <div style={{ padding: '16px', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
+            <ElementoClicavel onClick={() => handleAvancar(3)} mostrarSeta={false}>
+              <div style={{ background: '#F3E5F5', border: '2px solid #9C27B0', borderRadius: '16px', padding: '16px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px', cursor: 'pointer' }}>
+                <Receipt size={28} color="#4A148C" />
+                <p style={{ fontSize: '14px', fontWeight: '700', color: '#4A148C', margin: 0 }}>Pagar Conta</p>
               </div>
             </ElementoClicavel>
-            <div className="bg-gray-100 p-5 rounded-2xl flex items-center gap-4 opacity-50">
-              <span className="text-3xl">📲</span>
-              <span className="font-bold text-gray-600">PIX</span>
+            <div style={{ background: '#f8f9fa', borderRadius: '16px', padding: '16px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px', opacity: 0.5 }}>
+              <Zap size={28} color="#999" />
+              <p style={{ fontSize: '14px', fontWeight: '700', color: '#999', margin: 0 }}>PIX</p>
             </div>
-            <div className="bg-gray-100 p-5 rounded-2xl flex items-center gap-4 opacity-50">
-              <span className="text-3xl">💸</span>
-              <span className="font-bold text-gray-600">Transferir</span>
+            <div style={{ background: '#f8f9fa', borderRadius: '16px', padding: '16px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px', opacity: 0.5 }}>
+              <ScanBarcode size={28} color="#999" />
+              <p style={{ fontSize: '14px', fontWeight: '700', color: '#999', margin: 0 }}>Boleto</p>
             </div>
-            <div className="bg-gray-100 p-5 rounded-2xl flex items-center gap-4 opacity-50">
-              <span className="text-3xl">📊</span>
-              <span className="font-bold text-gray-600">Extrato</span>
+            <div style={{ background: '#f8f9fa', borderRadius: '16px', padding: '16px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px', opacity: 0.5 }}>
+              <FileText size={28} color="#999" />
+              <p style={{ fontSize: '14px', fontWeight: '700', color: '#999', margin: 0 }}>Extrato</p>
             </div>
           </div>
         </div>
@@ -149,26 +154,28 @@ export default function Modulo7Licao1() {
 
       {/* Passo 3: Opções de leitura */}
       {passo === 3 && (
-        <div className="w-full h-full bg-white flex flex-col pt-8">
-          <div className="text-center mb-6">
-            <div className="text-4xl mb-2">💳</div>
-            <p className="font-black text-xl text-[#1E8449]">Pagar Conta</p>
+        <div style={{ minHeight: '100%', display: 'flex', flexDirection: 'column', background: '#fff' }}>
+          <div style={{ background: '#4A148C', padding: '14px 16px', display: 'flex', alignItems: 'center', gap: '12px', flexShrink: 0 }}>
+            <button onClick={() => setPasso(2)} style={{ background: 'none', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', padding: 0 }}>
+              <ArrowLeft size={22} color="#fff" />
+            </button>
+            <p style={{ fontSize: '18px', fontWeight: '700', color: '#fff', margin: 0 }}>Pagar Conta</p>
           </div>
-          <div className="flex-1 px-6 space-y-4">
-            <ElementoClicavel onClick={() => handleAvancar(4)} posicao="bottom">
-              <div className="bg-gradient-to-r from-[#1E8449] to-[#58D68D] text-white p-6 rounded-2xl flex items-center gap-4 shadow-lg cursor-pointer">
-                <span className="text-4xl">📷</span>
+          <div style={{ flex: 1, padding: '16px', display: 'flex', flexDirection: 'column', gap: '12px' }}>
+            <ElementoClicavel onClick={() => handleAvancar(4)} mostrarSeta={false}>
+              <div style={{ background: '#F3E5F5', border: '2px solid #9C27B0', borderRadius: '16px', padding: '20px', display: 'flex', alignItems: 'center', gap: '16px', cursor: 'pointer' }}>
+                <Camera size={32} color="#4A148C" />
                 <div>
-                  <p className="font-black text-lg">Ler Código de Barras</p>
-                  <p className="text-sm opacity-90">Use a câmera</p>
+                  <p style={{ fontWeight: '700', color: '#1a1a1a', fontSize: '17px', margin: 0 }}>Ler Código de Barras</p>
+                  <p style={{ fontSize: '14px', color: '#666', margin: 0 }}>Use a câmera</p>
                 </div>
               </div>
             </ElementoClicavel>
-            <div className="bg-gray-100 p-6 rounded-2xl flex items-center gap-4 opacity-50">
-              <span className="text-4xl">⌨️</span>
+            <div style={{ background: '#f8f9fa', borderRadius: '16px', padding: '20px', display: 'flex', alignItems: 'center', gap: '16px', opacity: 0.5 }}>
+              <ScanBarcode size={32} color="#999" />
               <div>
-                <p className="font-bold text-gray-600">Digitar Código</p>
-                <p className="text-sm text-gray-500">Digite manualmente</p>
+                <p style={{ fontWeight: '700', color: '#666', fontSize: '17px', margin: 0 }}>Digitar Código</p>
+                <p style={{ fontSize: '14px', color: '#999', margin: 0 }}>Digite manualmente</p>
               </div>
             </div>
           </div>
@@ -177,29 +184,37 @@ export default function Modulo7Licao1() {
 
       {/* Passo 4: Câmera com código de barras */}
       {passo === 4 && (
-        <div className="w-full h-full bg-black flex flex-col items-center justify-center relative">
-          <div className="absolute top-8 left-0 right-0 text-center">
-            <p className="text-white font-bold text-sm">Enquadre o código de barras</p>
+        <div style={{ minHeight: '100%', background: '#111', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', position: 'relative' }}>
+          <div style={{ position: 'absolute', top: '32px', left: 0, right: 0, textAlign: 'center' }}>
+            <p style={{ color: '#fff', fontWeight: '700', fontSize: '14px' }}>Enquadre o código de barras</p>
           </div>
-          <div className="relative">
+          <div style={{ position: 'relative' }}>
             <motion.div
               animate={{ scaleX: [1, 1.05, 1] }}
               transition={{ duration: 2, repeat: Infinity }}
-              className="bg-white p-6 rounded-2xl"
+              style={{ background: '#fff', padding: '24px', borderRadius: '16px' }}
             >
-              <div className="flex flex-col gap-1">
-                <div className="h-2 bg-black w-48"></div>
-                <div className="h-2 bg-black w-32"></div>
-                <div className="h-2 bg-black w-48"></div>
-                <div className="h-2 bg-black w-40"></div>
+              <div style={{ display: 'flex', alignItems: 'flex-end', gap: '3px', height: '80px' }}>
+                {barras.map((h,i) => (
+                  <div key={i} style={{ width: '4px', height: `${h*6}px`, background: '#000' }} />
+                ))}
               </div>
             </motion.div>
-            <div className="absolute inset-0 border-4 border-red-500 rounded-2xl"></div>
+            <div style={{ position: 'absolute', inset: 0, border: '3px solid #fff', borderRadius: '16px' }} />
+            <div style={{ position: 'absolute', top: '-4px', left: '-4px', width: '24px', height: '24px', borderTop: '4px solid #4A148C', borderLeft: '4px solid #4A148C' }} />
+            <div style={{ position: 'absolute', top: '-4px', right: '-4px', width: '24px', height: '24px', borderTop: '4px solid #4A148C', borderRight: '4px solid #4A148C' }} />
+            <div style={{ position: 'absolute', bottom: '-4px', left: '-4px', width: '24px', height: '24px', borderBottom: '4px solid #4A148C', borderLeft: '4px solid #4A148C' }} />
+            <div style={{ position: 'absolute', bottom: '-4px', right: '-4px', width: '24px', height: '24px', borderBottom: '4px solid #4A148C', borderRight: '4px solid #4A148C' }} />
+            <motion.div
+              animate={{ y: [-30, 30] }}
+              transition={{ duration: 2, repeat: Infinity, ease: 'linear' }}
+              style={{ position: 'absolute', left: '8px', right: '8px', top: '50%', height: '2px', background: '#EF4444' }}
+            />
           </div>
-          <div className="absolute bottom-12">
-            <ElementoClicavel onClick={() => handleAvancar(5)} posicao="bottom">
-              <button className="bg-gradient-to-r from-[#1E8449] to-[#58D68D] text-white px-8 py-4 rounded-full font-black text-lg shadow-lg">
-                🔍 Escanear
+          <div style={{ position: 'absolute', bottom: '32px' }}>
+            <ElementoClicavel onClick={() => handleAvancar(5)} mostrarSeta={false}>
+              <button style={{ background: '#4A148C', color: '#fff', border: 'none', padding: '16px 32px', borderRadius: '999px', fontWeight: '800', fontSize: '17px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <Camera size={22} color="#fff" /> Escanear
               </button>
             </ElementoClicavel>
           </div>
@@ -208,35 +223,35 @@ export default function Modulo7Licao1() {
 
       {/* Passo 5: Dados lidos */}
       {passo === 5 && (
-        <div className="w-full h-full bg-white flex flex-col items-center justify-center p-6">
+        <div style={{ minHeight: '100%', background: '#fff', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '24px' }}>
           <motion.div
             initial={{ scale: 0, rotate: -10 }}
             animate={{ scale: 1, rotate: 0 }}
-            className="bg-green-50 border-2 border-green-300 rounded-3xl p-6 w-full max-w-sm"
+            style={{ background: '#E8F5E9', border: '2px solid #66BB6A', borderRadius: '24px', padding: '24px', width: '100%', maxWidth: '320px' }}
           >
-            <div className="text-center mb-4">
-              <div className="text-5xl mb-2">✅</div>
-              <p className="font-black text-xl text-green-700">Código lido com sucesso!</p>
+            <div style={{ textAlign: 'center', marginBottom: '16px' }}>
+              <CheckCircle2 size={40} color="#27AE60" style={{ margin: '0 auto 8px' }} />
+              <p style={{ fontWeight: '800', fontSize: '18px', color: '#1E8449', margin: 0 }}>Código lido com sucesso!</p>
             </div>
-            <div className="bg-white rounded-2xl p-4 space-y-2">
+            <div style={{ background: '#fff', borderRadius: '16px', padding: '16px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
               <div>
-                <p className="text-xs text-gray-500">Empresa</p>
-                <p className="font-bold text-gray-800">SANEMAT — Água e Esgoto</p>
+                <p style={{ fontSize: '12px', color: '#999', margin: 0 }}>Empresa</p>
+                <p style={{ fontWeight: '700', color: '#1a1a1a', margin: 0 }}>SANEMAT — Água e Esgoto</p>
               </div>
               <div>
-                <p className="text-xs text-gray-500">Valor</p>
-                <p className="font-black text-2xl text-[#1E8449]">R$ 45,80</p>
+                <p style={{ fontSize: '12px', color: '#999', margin: 0 }}>Valor</p>
+                <p style={{ fontWeight: '900', fontSize: '28px', color: '#1E8449', margin: 0 }}>R$ 45,80</p>
               </div>
               <div>
-                <p className="text-xs text-gray-500">Vencimento</p>
-                <p className="font-bold text-gray-800">20/08/2025</p>
+                <p style={{ fontSize: '12px', color: '#999', margin: 0 }}>Vencimento</p>
+                <p style={{ fontWeight: '700', color: '#1a1a1a', margin: 0 }}>20/08/2025</p>
               </div>
             </div>
           </motion.div>
-          <div className="mt-6">
-            <ElementoClicavel onClick={() => handleAvancar(6)} posicao="bottom">
-              <button className="bg-gradient-to-r from-[#1E8449] to-[#58D68D] text-white px-8 py-4 rounded-2xl font-black text-lg shadow-lg">
-                ✅ Confirmar Pagamento
+          <div style={{ marginTop: '24px' }}>
+            <ElementoClicavel onClick={() => handleAvancar(6)} mostrarSeta={false}>
+              <button style={{ background: '#27AE60', color: '#fff', border: 'none', padding: '18px 32px', borderRadius: '16px', fontWeight: '800', fontSize: '18px', cursor: 'pointer', minHeight: '56px' }}>
+                Confirmar Pagamento
               </button>
             </ElementoClicavel>
           </div>
@@ -245,19 +260,19 @@ export default function Modulo7Licao1() {
 
       {/* Passo 6: Senha */}
       {passo === 6 && (
-        <div className="w-full h-full bg-gradient-to-b from-gray-50 to-white flex flex-col items-center justify-center p-6">
-          <div className="text-center mb-6">
-            <div className="text-5xl mb-3">🔐</div>
-            <p className="font-black text-xl text-gray-800">Digite sua senha</p>
-            <p className="text-sm text-gray-500 mt-1">Para confirmar o pagamento</p>
+        <div style={{ minHeight: '100%', background: '#fff', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '24px' }}>
+          <div style={{ textAlign: 'center', marginBottom: '24px' }}>
+            <Lock size={48} color="#4A148C" style={{ margin: '0 auto 16px' }} />
+            <p style={{ fontWeight: '800', fontSize: '20px', color: '#1a1a1a', margin: 0 }}>Digite sua senha</p>
+            <p style={{ fontSize: '14px', color: '#999', marginTop: '4px', margin: '4px 0 0' }}>Para confirmar o pagamento</p>
           </div>
-          <div className="flex gap-3 mb-8">
+          <div style={{ display: 'flex', gap: '12px', marginBottom: '32px' }}>
             {[1, 2, 3, 4, 5, 6].map((i) => (
-              <div key={i} className="w-4 h-4 bg-[#1E8449] rounded-full"></div>
+              <div key={i} style={{ width: '16px', height: '16px', background: '#4A148C', borderRadius: '50%' }} />
             ))}
           </div>
-          <ElementoClicavel onClick={() => handleAvancar(7)} posicao="bottom">
-            <button className="bg-gradient-to-r from-[#1E8449] to-[#58D68D] text-white px-10 py-4 rounded-2xl font-black text-lg shadow-lg">
+          <ElementoClicavel onClick={() => handleAvancar(7)} mostrarSeta={false}>
+            <button style={{ background: '#4A148C', color: '#fff', border: 'none', padding: '16px 48px', borderRadius: '16px', fontWeight: '800', fontSize: '18px', cursor: 'pointer' }}>
               OK
             </button>
           </ElementoClicavel>
@@ -266,34 +281,33 @@ export default function Modulo7Licao1() {
 
       {/* Passo 7: Sucesso */}
       {passo === 7 && (
-        <div className="w-full h-full bg-gradient-to-b from-green-50 to-white flex flex-col items-center justify-center p-6">
+        <div style={{ minHeight: '100%', background: '#fff', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '24px' }}>
           <motion.div
             initial={{ scale: 0 }}
             animate={{ scale: [0, 1.2, 1] }}
             transition={{ duration: 0.6 }}
-            className="text-7xl mb-4"
           >
-            🎉
+            <CheckCircle2 size={64} color="#27AE60" style={{ margin: '0 auto 16px' }} />
           </motion.div>
-          <p className="font-black text-2xl text-[#1E8449] mb-2">Pagamento realizado!</p>
-          <div className="bg-white rounded-2xl p-5 shadow-lg mb-6 w-full max-w-sm">
-            <div className="space-y-2">
-              <div className="flex justify-between">
-                <span className="text-gray-600">Valor</span>
-                <span className="font-black text-[#1E8449]">R$ 45,80</span>
+          <p style={{ fontWeight: '900', fontSize: '22px', color: '#27AE60', marginBottom: '16px', margin: '0 0 16px' }}>Pagamento realizado!</p>
+          <div style={{ background: '#f8f9fa', borderRadius: '16px', padding: '20px', boxShadow: '0 4px 16px rgba(0,0,0,0.08)', marginBottom: '24px', width: '100%', maxWidth: '320px' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                <span style={{ color: '#666' }}>Valor</span>
+                <span style={{ fontWeight: '900', color: '#1E8449' }}>R$ 45,80</span>
               </div>
-              <div className="flex justify-between">
-                <span className="text-gray-600">Data</span>
-                <span className="font-bold">Hoje</span>
+              <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                <span style={{ color: '#666' }}>Data</span>
+                <span style={{ fontWeight: '700' }}>Hoje</span>
               </div>
-              <div className="text-center text-xs text-gray-500 mt-3">
-                ✅ Comprovante disponível
+              <div style={{ textAlign: 'center', fontSize: '12px', color: '#999', marginTop: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '4px' }}>
+                <FileCheck size={14} color="#27AE60" /> Comprovante disponível
               </div>
             </div>
           </div>
-          <ElementoClicavel onClick={() => setMostrarValidacao(true)} posicao="bottom">
-            <button className="bg-gradient-to-r from-[#1E8449] to-[#58D68D] text-white px-8 py-4 rounded-2xl font-black shadow-lg">
-              🧾 Ver Comprovante
+          <ElementoClicavel onClick={() => setMostrarValidacao(true)} mostrarSeta={false}>
+            <button style={{ background: '#4A148C', color: '#fff', border: 'none', padding: '16px 32px', borderRadius: '16px', fontWeight: '800', fontSize: '17px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <FileText size={20} color="#fff" /> Ver Comprovante
             </button>
           </ElementoClicavel>
         </div>

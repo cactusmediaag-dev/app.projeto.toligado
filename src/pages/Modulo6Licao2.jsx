@@ -5,7 +5,9 @@ import { createPageUrl } from "@/utils";
 import { base44 } from "@/api/base44Client";
 import SimuladorImersivo from "@/components/simulador/SimuladorImersivo";
 import ElementoClicavel from "@/components/simulador/ElementoClicavel";
+import AndroidHomeScreen from "@/components/simulador/AndroidHomeScreen";
 import ValidacaoQuiz from "@/components/simulador/ValidacaoQuiz";
+import { ArrowLeft, Landmark, Home, Receipt, FileText, ScanBarcode, Zap, Droplet, Smartphone, Camera, CheckCircle2, Lock } from 'lucide-react';
 
 export default function Modulo6Licao2() {
   const navigate = useNavigate();
@@ -78,153 +80,158 @@ export default function Modulo6Licao2() {
       onVoltar={() => navigate(createPageUrl("Modulos"))}
     >
       {!bancoAberto && (
-        <div className="w-full h-full bg-gradient-to-b from-green-50 to-green-100 p-6 pt-12">
-          <div className="grid grid-cols-4 gap-6 mt-8">
-            {passo === 1 && (
-              <ElementoClicavel onClick={() => handleCliqueCerto(2, () => setBancoAberto(true))} posicao="bottom">
-                <div className="flex flex-col items-center gap-2">
-                  <div className="w-14 h-14 bg-orange-500 rounded-2xl flex items-center justify-center text-2xl shadow-md">
-                    🏦
-                  </div>
-                  <p className="text-xs text-gray-600 font-semibold text-center">Banco Fácil</p>
-                </div>
-              </ElementoClicavel>
-            )}
-            {["💬", "📧", "🎵", "📷", "📱", "📍", "⚙️"].map((emoji, i) => (
-              <div key={i} className="flex flex-col items-center gap-2">
-                <div className="w-14 h-14 bg-white rounded-2xl flex items-center justify-center text-2xl shadow-md">{emoji}</div>
-              </div>
-            ))}
-          </div>
+        <div style={{ height: '100%', position: 'relative' }}>
+          <AndroidHomeScreen
+            appsCustom={[
+              { nome: 'banco', label: 'Meu Banco', bg: '#4A148C', id: 'banco' },
+              { nome: 'mensagem', label: 'WhatsApp', bg: '#25D366', id: 'whatsapp' },
+              { nome: 'email', label: 'Email', bg: '#EA4335', id: 'email' },
+              { nome: 'camera', label: 'Câmera', bg: '#37474F', id: 'camera' },
+              { nome: 'chrome', label: 'Chrome', bg: '#4285F4', id: 'chrome' },
+              { nome: 'musica', label: 'Música', bg: '#E91E63', id: 'music' },
+              { nome: 'config', label: 'Config.', bg: '#607D8B', id: 'settings' },
+              { nome: 'fotos', label: 'Fotos', bg: '#FF7043', id: 'photos' },
+            ]}
+            appDestacado={passo === 1 ? 'banco' : null}
+            onAppClick={(id) => { if (passo === 1 && id === 'banco') handleCliqueCerto(2, () => setBancoAberto(true)); }}
+          />
         </div>
       )}
 
       {bancoAberto && !telaPagamento && !opcoesPagamento && (
-        <div className="w-full h-full bg-white pt-12 flex flex-col">
-          <div className="bg-orange-500 px-4 py-4">
-            <p className="text-white/80 text-sm mb-1">Olá, Maria!</p>
-            <p className="text-3xl font-black text-white">R$ 850,00</p>
-            <p className="text-white/80 text-sm">Saldo disponível</p>
-          </div>
-
-          <div className="flex-1 p-4">
-            <div className="bg-gray-50 rounded-2xl p-4 mb-4">
-              <p className="text-sm text-gray-600 mb-2">Últimas transações</p>
-              <div className="space-y-2">
-                <div className="flex items-center justify-between">
-                  <p className="text-gray-700 font-semibold">Mercado Central</p>
-                  <p className="text-red-600 font-bold">-R$ 45,00</p>
-                </div>
-                <div className="flex items-center justify-between">
-                  <p className="text-gray-700 font-semibold">Farmácia Saúde</p>
-                  <p className="text-red-600 font-bold">-R$ 28,50</p>
-                </div>
-              </div>
+        <div style={{ minHeight: '100%', display: 'flex', flexDirection: 'column', background: '#fff' }}>
+          <div style={{ background: '#4A148C', padding: '16px', display: 'flex', alignItems: 'center', gap: '12px', flexShrink: 0 }}>
+            <Landmark size={24} color="#fff" />
+            <div style={{ flex: 1 }}>
+              <p style={{ color: 'rgba(255,255,255,0.8)', fontSize: '14px', margin: 0 }}>Olá, Maria!</p>
+              <p style={{ fontSize: '28px', fontWeight: '900', color: '#fff', margin: 0 }}>R$ 850,00</p>
             </div>
           </div>
 
-          <div className="border-t p-4 flex items-center justify-around">
-            <button className="flex flex-col items-center gap-1">
-              <div className="text-2xl">🏠</div>
-              <p className="text-xs text-gray-500">Início</p>
-            </button>
+          <div style={{ padding: '16px', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', flexShrink: 0 }}>
             {passo === 2 && (
-              <ElementoClicavel onClick={() => handleCliqueCerto(3, () => { setTelaPagamento(true); setOpcoesPagamento(true); })} posicao="top">
-                <button className="flex flex-col items-center gap-1">
-                  <div className="text-2xl">💸</div>
-                  <p className="text-xs font-bold text-orange-600">Pagar</p>
-                </button>
+              <ElementoClicavel onClick={() => handleCliqueCerto(3, () => { setTelaPagamento(true); setOpcoesPagamento(true); })} mostrarSeta={false}>
+                <div style={{ background: '#F3E5F5', border: '2px solid #9C27B0', borderRadius: '16px', padding: '16px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px', cursor: 'pointer' }}>
+                  <Receipt size={28} color="#4A148C" />
+                  <p style={{ fontSize: '14px', fontWeight: '700', color: '#4A148C', margin: 0 }}>Pagar</p>
+                </div>
               </ElementoClicavel>
             )}
             {passo !== 2 && (
-              <button className="flex flex-col items-center gap-1">
-                <div className="text-2xl">💸</div>
-                <p className="text-xs text-gray-500">Pagar</p>
-              </button>
+              <div style={{ background: '#f8f9fa', borderRadius: '16px', padding: '16px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px' }}>
+                <Receipt size={28} color="#999" />
+                <p style={{ fontSize: '14px', fontWeight: '700', color: '#999', margin: 0 }}>Pagar</p>
+              </div>
             )}
-            <button className="flex flex-col items-center gap-1">
-              <div className="text-2xl">📊</div>
-              <p className="text-xs text-gray-500">Extrato</p>
-            </button>
-            <button className="flex flex-col items-center gap-1">
-              <div className="text-2xl">👤</div>
-              <p className="text-xs text-gray-500">Perfil</p>
-            </button>
+            <div style={{ background: '#f8f9fa', borderRadius: '16px', padding: '16px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px' }}>
+              <Zap size={28} color="#999" />
+              <p style={{ fontSize: '14px', fontWeight: '700', color: '#999', margin: 0 }}>PIX</p>
+            </div>
+            <div style={{ background: '#f8f9fa', borderRadius: '16px', padding: '16px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px' }}>
+              <ScanBarcode size={28} color="#999" />
+              <p style={{ fontSize: '14px', fontWeight: '700', color: '#999', margin: 0 }}>Boleto</p>
+            </div>
+            <div style={{ background: '#f8f9fa', borderRadius: '16px', padding: '16px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px' }}>
+              <FileText size={28} color="#999" />
+              <p style={{ fontSize: '14px', fontWeight: '700', color: '#999', margin: 0 }}>Extrato</p>
+            </div>
+          </div>
+
+          <div style={{ flex: 1, padding: '16px' }}>
+            <div style={{ background: '#f8f9fa', borderRadius: '16px', padding: '16px' }}>
+              <p style={{ fontSize: '14px', color: '#666', marginBottom: '12px', margin: '0 0 12px' }}>Últimas transações</p>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                  <p style={{ color: '#444', fontWeight: '600', margin: 0 }}>Mercado Central</p>
+                  <p style={{ color: '#E74C3C', fontWeight: '700', margin: 0 }}>-R$ 45,00</p>
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                  <p style={{ color: '#444', fontWeight: '600', margin: 0 }}>Farmácia Saúde</p>
+                  <p style={{ color: '#E74C3C', fontWeight: '700', margin: 0 }}>-R$ 28,50</p>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       )}
 
       {opcoesPagamento && !cameraAberta && !codigoLido && (
-        <div className="w-full h-full bg-white pt-12">
-          <div className="px-4 py-3 border-b flex items-center gap-3">
-            <button onClick={() => setOpcoesPagamento(false)} className="text-xl">←</button>
-            <h2 className="text-xl font-bold text-gray-800">Pagamentos</h2>
+        <div style={{ minHeight: '100%', display: 'flex', flexDirection: 'column', background: '#fff' }}>
+          <div style={{ background: '#4A148C', padding: '14px 16px', display: 'flex', alignItems: 'center', gap: '12px', flexShrink: 0 }}>
+            <button onClick={() => setOpcoesPagamento(false)} style={{ background: 'none', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', padding: 0 }}>
+              <ArrowLeft size={22} color="#fff" />
+            </button>
+            <h2 style={{ fontSize: '18px', fontWeight: '700', color: '#fff', margin: 0 }}>Pagamentos</h2>
           </div>
 
-          <div className="p-4 space-y-3">
-            <div className="p-4 bg-gray-50 rounded-2xl flex items-center gap-3">
-              <span className="text-3xl">📄</span>
-              <span className="text-lg font-bold text-gray-700">Boleto / Código de Barras</span>
+          <div style={{ padding: '16px', display: 'flex', flexDirection: 'column', gap: '12px', flex: 1 }}>
+            <div style={{ padding: '16px', background: '#f8f9fa', borderRadius: '16px', display: 'flex', alignItems: 'center', gap: '14px' }}>
+              <ScanBarcode size={28} color="#666" />
+              <span style={{ fontSize: '16px', fontWeight: '700', color: '#444' }}>Boleto / Código de Barras</span>
             </div>
             {passo === 3 && (
-              <ElementoClicavel onClick={() => handleCliqueCerto(4, () => setCameraAberta(true))} posicao="right">
-                <div className="p-4 bg-yellow-50 border-2 border-yellow-400 rounded-2xl flex items-center gap-3 cursor-pointer">
-                  <span className="text-3xl">⚡</span>
-                  <span className="text-lg font-bold text-gray-700">Conta de Luz</span>
+              <ElementoClicavel onClick={() => handleCliqueCerto(4, () => setCameraAberta(true))} mostrarSeta={false}>
+                <div style={{ padding: '16px', background: '#FFF8E1', border: '2px solid #F9A825', borderRadius: '16px', display: 'flex', alignItems: 'center', gap: '14px', cursor: 'pointer' }}>
+                  <Zap size={28} color="#F9A825" />
+                  <span style={{ fontSize: '16px', fontWeight: '700', color: '#444' }}>Conta de Luz</span>
                 </div>
               </ElementoClicavel>
             )}
-            <div className="p-4 bg-gray-50 rounded-2xl flex items-center gap-3">
-              <span className="text-3xl">💧</span>
-              <span className="text-lg font-bold text-gray-700">Conta de Água</span>
+            <div style={{ padding: '16px', background: '#f8f9fa', borderRadius: '16px', display: 'flex', alignItems: 'center', gap: '14px' }}>
+              <Droplet size={28} color="#666" />
+              <span style={{ fontSize: '16px', fontWeight: '700', color: '#444' }}>Conta de Água</span>
             </div>
-            <div className="p-4 bg-gray-50 rounded-2xl flex items-center gap-3">
-              <span className="text-3xl">📱</span>
-              <span className="text-lg font-bold text-gray-700">Recarga de Celular</span>
+            <div style={{ padding: '16px', background: '#f8f9fa', borderRadius: '16px', display: 'flex', alignItems: 'center', gap: '14px' }}>
+              <Smartphone size={28} color="#666" />
+              <span style={{ fontSize: '16px', fontWeight: '700', color: '#444' }}>Recarga de Celular</span>
             </div>
           </div>
         </div>
       )}
 
       {cameraAberta && passo === 4 && !codigoLido && (
-        <div className="w-full h-full bg-white pt-12">
-          <div className="px-4 py-3 border-b flex items-center gap-3">
-            <button onClick={() => setCameraAberta(false)} className="text-xl">←</button>
-            <h2 className="text-xl font-bold text-gray-800">Conta de Luz</h2>
+        <div style={{ minHeight: '100%', display: 'flex', flexDirection: 'column', background: '#fff' }}>
+          <div style={{ background: '#4A148C', padding: '14px 16px', display: 'flex', alignItems: 'center', gap: '12px', flexShrink: 0 }}>
+            <button onClick={() => setCameraAberta(false)} style={{ background: 'none', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', padding: 0 }}>
+              <ArrowLeft size={22} color="#fff" />
+            </button>
+            <h2 style={{ fontSize: '18px', fontWeight: '700', color: '#fff', margin: 0 }}>Conta de Luz</h2>
           </div>
 
-          <div className="p-4 space-y-3">
+          <div style={{ padding: '16px', display: 'flex', flexDirection: 'column', gap: '12px', flex: 1 }}>
             {passo === 4 && (
-              <ElementoClicavel onClick={() => handleCliqueCerto(5, () => {})} posicao="right">
-                <button className="w-full p-5 bg-blue-500 text-white rounded-2xl font-bold text-lg flex items-center justify-center gap-3">
-                  <span className="text-3xl">📷</span>
+              <ElementoClicavel onClick={() => handleCliqueCerto(5, () => {})} mostrarSeta={false}>
+                <button style={{ width: '100%', padding: '20px', background: '#4A148C', color: '#fff', border: 'none', borderRadius: '16px', fontWeight: '700', fontSize: '17px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '12px', cursor: 'pointer' }}>
+                  <Camera size={28} color="#fff" />
                   Escanear código de barras
                 </button>
               </ElementoClicavel>
             )}
-            <button className="w-full p-5 bg-gray-100 text-gray-700 rounded-2xl font-bold text-lg">
-              ⌨️ Digitar o código manualmente
+            <button style={{ width: '100%', padding: '20px', background: '#f1f3f4', color: '#666', border: 'none', borderRadius: '16px', fontWeight: '700', fontSize: '17px' }}>
+              Digitar o código manualmente
             </button>
           </div>
         </div>
       )}
 
       {passo === 5 && cameraAberta && !codigoLido && (
-        <div className="w-full h-full bg-black pt-12 flex items-center justify-center relative">
-          <div className="text-center">
-            <div className="bg-white rounded-2xl p-8 mb-4">
-              <div className="h-2 bg-black mb-1" />
-              <div className="h-2 bg-black mb-1" />
-              <div className="h-2 bg-black mb-1" />
-              <p className="text-xs text-gray-500 mt-2">34191.79001 01043.510047 91020.150008 1 99990000008750</p>
+        <div style={{ minHeight: '100%', background: '#111', display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative' }}>
+          <div style={{ textAlign: 'center' }}>
+            <div style={{ background: '#fff', borderRadius: '16px', padding: '32px', marginBottom: '16px' }}>
+              <div style={{ display: 'flex', alignItems: 'flex-end', gap: '3px', height: '60px', justifyContent: 'center' }}>
+                {[4,8,3,6,10,2,7,5,9,3,6,4,8,2,7,5,10,3,6,4,8,2,7,5,9,3,6,4,8,2].map((h,i) => (
+                  <div key={i} style={{ width: '3px', height: `${h*5}px`, background: '#000' }} />
+                ))}
+              </div>
+              <p style={{ fontSize: '11px', color: '#999', marginTop: '12px', letterSpacing: '1px' }}>34191.79001 01043.510047 91020.150008 1 99990000008750</p>
             </div>
-            <motion.div animate={{ y: [0, 100] }} transition={{ duration: 2, repeat: Infinity, ease: "linear" }} className="h-1 bg-red-500 w-64 mx-auto" />
+            <motion.div animate={{ y: [-40, 40] }} transition={{ duration: 2, repeat: Infinity, ease: "linear" }} style={{ height: '2px', background: '#EF4444', width: '240px', margin: '0 auto' }} />
           </div>
 
-          <div className="absolute bottom-8 left-0 right-0 px-4">
+          <div style={{ position: 'absolute', bottom: '32px', left: 0, right: 0, padding: '0 16px' }}>
             {passo === 5 && (
-              <ElementoClicavel onClick={() => { setCodigoLido(true); setResumo(true); setCameraAberta(false); handleCliqueCerto(6, null); }} posicao="top">
-                <button className="w-full bg-orange-500 text-white py-4 rounded-2xl font-bold text-lg">
+              <ElementoClicavel onClick={() => { setCodigoLido(true); setResumo(true); setCameraAberta(false); handleCliqueCerto(6, null); }} mostrarSeta={false}>
+                <button style={{ width: '100%', background: '#4A148C', color: '#fff', border: 'none', padding: '16px', borderRadius: '16px', fontWeight: '700', fontSize: '17px', cursor: 'pointer' }}>
                   Escanear Agora
                 </button>
               </ElementoClicavel>
@@ -234,37 +241,39 @@ export default function Modulo6Licao2() {
       )}
 
       {resumo && !confirmacaoSenha && !sucesso && (
-        <div className="w-full h-full bg-white pt-12">
-          <div className="px-4 py-3 border-b flex items-center gap-3">
-            <button onClick={() => setResumo(false)} className="text-xl">←</button>
-            <h2 className="text-xl font-bold text-gray-800">Confirmar Pagamento</h2>
+        <div style={{ minHeight: '100%', display: 'flex', flexDirection: 'column', background: '#fff' }}>
+          <div style={{ background: '#4A148C', padding: '14px 16px', display: 'flex', alignItems: 'center', gap: '12px', flexShrink: 0 }}>
+            <button onClick={() => setResumo(false)} style={{ background: 'none', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', padding: 0 }}>
+              <ArrowLeft size={22} color="#fff" />
+            </button>
+            <h2 style={{ fontSize: '18px', fontWeight: '700', color: '#fff', margin: 0 }}>Confirmar Pagamento</h2>
           </div>
 
-          <div className="p-4">
-            <div className="bg-yellow-50 border-2 border-yellow-400 rounded-2xl p-5 mb-4">
-              <div className="flex items-center justify-between mb-3">
-                <span className="text-3xl">⚡</span>
-                <p className="text-2xl font-black text-gray-800">R$ 87,50</p>
+          <div style={{ padding: '16px', flex: 1 }}>
+            <div style={{ background: '#FFF8E1', border: '2px solid #F9A825', borderRadius: '16px', padding: '20px', marginBottom: '16px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px' }}>
+                <Zap size={28} color="#F9A825" />
+                <p style={{ fontSize: '30px', fontWeight: '900', color: '#1a1a1a', margin: 0 }}>R$ 87,50</p>
               </div>
-              <div className="space-y-2 text-sm">
-                <div className="flex justify-between">
-                  <p className="text-gray-600">Empresa:</p>
-                  <p className="font-bold text-gray-800">Energisa MT</p>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', fontSize: '14px' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                  <p style={{ color: '#666', margin: 0 }}>Empresa:</p>
+                  <p style={{ fontWeight: '700', color: '#1a1a1a', margin: 0 }}>Energisa MT</p>
                 </div>
-                <div className="flex justify-between">
-                  <p className="text-gray-600">Vencimento:</p>
-                  <p className="font-bold text-gray-800">15/08/2026</p>
+                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                  <p style={{ color: '#666', margin: 0 }}>Vencimento:</p>
+                  <p style={{ fontWeight: '700', color: '#1a1a1a', margin: 0 }}>15/08/2026</p>
                 </div>
-                <div className="flex justify-between">
-                  <p className="text-gray-600">Código:</p>
-                  <p className="font-bold text-gray-800 text-xs">34191.79001 01043...</p>
+                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                  <p style={{ color: '#666', margin: 0 }}>Código:</p>
+                  <p style={{ fontWeight: '700', color: '#1a1a1a', fontSize: '12px', margin: 0 }}>34191.79001 01043...</p>
                 </div>
               </div>
             </div>
 
             {passo === 6 && (
-              <ElementoClicavel onClick={() => handleCliqueCerto(7, () => { setResumo(false); setConfirmacaoSenha(true); })} posicao="top">
-                <button className="w-full bg-green-500 text-white py-4 rounded-2xl font-bold text-lg">
+              <ElementoClicavel onClick={() => handleCliqueCerto(7, () => { setResumo(false); setConfirmacaoSenha(true); })} mostrarSeta={false}>
+                <button style={{ width: '100%', background: '#27AE60', color: '#fff', border: 'none', padding: '18px', borderRadius: '16px', fontWeight: '800', fontSize: '18px', cursor: 'pointer', minHeight: '56px' }}>
                   Confirmar Pagamento
                 </button>
               </ElementoClicavel>
@@ -274,20 +283,20 @@ export default function Modulo6Licao2() {
       )}
 
       {confirmacaoSenha && !sucesso && (
-        <div className="w-full h-full bg-white pt-12 flex flex-col items-center justify-center p-6">
-          <div className="text-6xl mb-6">🔐</div>
-          <h3 className="text-2xl font-bold text-gray-800 mb-2">Digite sua senha</h3>
-          <p className="text-gray-500 mb-8">Para confirmar o pagamento</p>
+        <div style={{ minHeight: '100%', background: '#fff', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '24px' }}>
+          <Lock size={48} color="#4A148C" style={{ marginBottom: '24px' }} />
+          <h3 style={{ fontSize: '20px', fontWeight: '700', color: '#1a1a1a', marginBottom: '8px', margin: '0 0 8px' }}>Digite sua senha</h3>
+          <p style={{ color: '#999', marginBottom: '32px', margin: '0 0 32px' }}>Para confirmar o pagamento</p>
 
-          <div className="flex gap-3 mb-8">
+          <div style={{ display: 'flex', gap: '12px', marginBottom: '32px' }}>
             {[1, 2, 3, 4, 5, 6].map((i) => (
-              <div key={i} className="w-12 h-12 bg-orange-500 rounded-xl" />
+              <div key={i} style={{ width: '44px', height: '44px', background: '#4A148C', borderRadius: '12px' }} />
             ))}
           </div>
 
           {passo === 7 && (
-            <ElementoClicavel onClick={() => { setConfirmacaoSenha(false); setSucesso(true); handleCliqueCerto(8, null); }} posicao="top">
-              <button className="w-full max-w-sm bg-orange-500 text-white py-4 rounded-2xl font-bold text-lg">
+            <ElementoClicavel onClick={() => { setConfirmacaoSenha(false); setSucesso(true); handleCliqueCerto(8, null); }} mostrarSeta={false}>
+              <button style={{ width: '100%', maxWidth: '320px', background: '#4A148C', color: '#fff', border: 'none', padding: '16px', borderRadius: '16px', fontWeight: '700', fontSize: '17px', cursor: 'pointer' }}>
                 Confirmar
               </button>
             </ElementoClicavel>
@@ -296,17 +305,17 @@ export default function Modulo6Licao2() {
       )}
 
       {sucesso && !comprovante && (
-        <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} className="w-full h-full bg-white pt-12 flex flex-col items-center justify-center p-6">
+        <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} style={{ minHeight: '100%', background: '#fff', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '24px' }}>
           <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ type: "spring" }}>
-            <div className="text-8xl mb-6">✅</div>
-            <h3 className="text-2xl font-bold text-gray-800 mb-2 text-center">Pagamento realizado!</h3>
-            <p className="text-gray-600 text-center mb-6">Conta de Luz — R$ 87,50</p>
+            <CheckCircle2 size={72} color="#27AE60" style={{ margin: '0 auto 24px' }} />
+            <h3 style={{ fontSize: '22px', fontWeight: '700', color: '#1a1a1a', marginBottom: '8px', textAlign: 'center', margin: '0 0 8px' }}>Pagamento realizado!</h3>
+            <p style={{ color: '#666', textAlign: 'center', marginBottom: '24px', margin: '0 0 24px' }}>Conta de Luz — R$ 87,50</p>
           </motion.div>
 
           {passo === 8 && (
-            <ElementoClicavel onClick={() => { setComprovante(true); setTimeout(() => setMostrarValidacao(true), 1500); }} posicao="top">
-              <button className="w-full max-w-sm bg-blue-500 text-white py-4 rounded-2xl font-bold text-lg flex items-center justify-center gap-2">
-                <span className="text-2xl">📄</span>
+            <ElementoClicavel onClick={() => { setComprovante(true); setTimeout(() => setMostrarValidacao(true), 1500); }} mostrarSeta={false}>
+              <button style={{ width: '100%', maxWidth: '320px', background: '#4A148C', color: '#fff', border: 'none', padding: '16px', borderRadius: '16px', fontWeight: '700', fontSize: '17px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', cursor: 'pointer' }}>
+                <FileText size={22} color="#fff" />
                 Ver Comprovante
               </button>
             </ElementoClicavel>
@@ -315,35 +324,37 @@ export default function Modulo6Licao2() {
       )}
 
       {comprovante && (
-        <motion.div initial={{ y: "100%" }} animate={{ y: 0 }} className="w-full h-full bg-white pt-12">
-          <div className="px-4 py-3 border-b flex items-center gap-3">
-            <button onClick={() => setComprovante(false)} className="text-xl">←</button>
-            <h2 className="text-xl font-bold text-gray-800">Comprovante</h2>
+        <motion.div initial={{ y: "100%" }} animate={{ y: 0 }} style={{ minHeight: '100%', display: 'flex', flexDirection: 'column', background: '#fff' }}>
+          <div style={{ background: '#4A148C', padding: '14px 16px', display: 'flex', alignItems: 'center', gap: '12px', flexShrink: 0 }}>
+            <button onClick={() => setComprovante(false)} style={{ background: 'none', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', padding: 0 }}>
+              <ArrowLeft size={22} color="#fff" />
+            </button>
+            <h2 style={{ fontSize: '18px', fontWeight: '700', color: '#fff', margin: 0 }}>Comprovante</h2>
           </div>
 
-          <div className="p-4">
-            <div className="bg-gray-50 border-2 border-gray-200 rounded-2xl p-6">
-              <div className="text-center mb-6">
-                <div className="text-6xl mb-3">✅</div>
-                <p className="text-sm text-gray-500">PAGAMENTO APROVADO</p>
+          <div style={{ padding: '16px', flex: 1 }}>
+            <div style={{ background: '#f8f9fa', border: '2px solid #e0e0e0', borderRadius: '16px', padding: '24px' }}>
+              <div style={{ textAlign: 'center', marginBottom: '24px' }}>
+                <CheckCircle2 size={48} color="#27AE60" style={{ margin: '0 auto 12px' }} />
+                <p style={{ fontSize: '14px', color: '#999' }}>PAGAMENTO APROVADO</p>
               </div>
 
-              <div className="space-y-3 text-sm border-t pt-4">
-                <div className="flex justify-between">
-                  <p className="text-gray-600">Valor:</p>
-                  <p className="font-bold text-gray-800">R$ 87,50</p>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', fontSize: '14px', borderTop: '1px solid #e0e0e0', paddingTop: '16px' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                  <p style={{ color: '#666', margin: 0 }}>Valor:</p>
+                  <p style={{ fontWeight: '700', color: '#1a1a1a', margin: 0 }}>R$ 87,50</p>
                 </div>
-                <div className="flex justify-between">
-                  <p className="text-gray-600">Empresa:</p>
-                  <p className="font-bold text-gray-800">Energisa MT</p>
+                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                  <p style={{ color: '#666', margin: 0 }}>Empresa:</p>
+                  <p style={{ fontWeight: '700', color: '#1a1a1a', margin: 0 }}>Energisa MT</p>
                 </div>
-                <div className="flex justify-between">
-                  <p className="text-gray-600">Data:</p>
-                  <p className="font-bold text-gray-800">11/03/2026</p>
+                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                  <p style={{ color: '#666', margin: 0 }}>Data:</p>
+                  <p style={{ fontWeight: '700', color: '#1a1a1a', margin: 0 }}>11/03/2026</p>
                 </div>
-                <div className="flex justify-between">
-                  <p className="text-gray-600">Protocolo:</p>
-                  <p className="font-bold text-gray-800">2026031187451</p>
+                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                  <p style={{ color: '#666', margin: 0 }}>Protocolo:</p>
+                  <p style={{ fontWeight: '700', color: '#1a1a1a', margin: 0 }}>2026031187451</p>
                 </div>
               </div>
             </div>

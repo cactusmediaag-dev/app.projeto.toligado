@@ -5,7 +5,8 @@ import {
   Mic, Home, Aperture, Clock, Video, Calculator,
   Bluetooth, Lock, Shield, Bell, RefreshCw, KeyRound, Wifi, Cloud,
   Fingerprint, ScanFace, Eye, AlertTriangle, Landmark,
-  Facebook, Instagram, Heart, ThumbsUp, Send, Plus
+  Facebook, Instagram, Heart, ThumbsUp, Send, Plus,
+  Zap, ScanBarcode, Receipt, FileText, QrCode, HeartHandshake
 } from 'lucide-react';
 
 const ICONES = {
@@ -47,6 +48,13 @@ const ICONES = {
   curtir: ThumbsUp,
   enviar: Send,
   mais: Plus,
+  pix: Zap,
+  boleto: ScanBarcode,
+  recibo: Receipt,
+  extrato: FileText,
+  qrcode: QrCode,
+  inss: HeartHandshake,
+  govbr: Landmark,
 };
 
 export default function AppIcon({

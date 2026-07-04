@@ -5,7 +5,9 @@ import { createPageUrl } from "@/utils";
 import { base44 } from "@/api/base44Client";
 import SimuladorImersivo from "@/components/simulador/SimuladorImersivo";
 import ElementoClicavel from "@/components/simulador/ElementoClicavel";
+import AndroidHomeScreen from "@/components/simulador/AndroidHomeScreen";
 import ValidacaoQuiz from "@/components/simulador/ValidacaoQuiz";
+import { ArrowLeft, Search, HeartHandshake, FileText, Calendar, FileCheck, Landmark } from 'lucide-react';
 
 export default function Modulo6Licao1() {
   const navigate = useNavigate();
@@ -80,55 +82,56 @@ export default function Modulo6Licao1() {
       onVoltar={() => navigate(createPageUrl("Modulos"))}
     >
       {!playStoreAberta && (
-        <div className="w-full h-full bg-gradient-to-b from-blue-50 to-blue-100 p-6 pt-12">
-          <div className="grid grid-cols-4 gap-6 mt-8">
-            {passo === 1 && (
-              <ElementoClicavel onClick={() => handleCliqueCerto(2, () => setPlayStoreAberta(true))} posicao="bottom">
-                <div className="flex flex-col items-center gap-2">
-                  <div className="w-14 h-14 bg-white rounded-2xl flex items-center justify-center shadow-md">
-                    <div className="text-3xl">▶️</div>
-                  </div>
-                  <p className="text-xs text-gray-600 font-semibold">Play Store</p>
-                </div>
-              </ElementoClicavel>
-            )}
-            {["📱", "💬", "📧", "🎵", "📷", "📍", "⚙️"].map((emoji, i) => (
-              <div key={i} className="flex flex-col items-center gap-2">
-                <div className="w-14 h-14 bg-white rounded-2xl flex items-center justify-center text-2xl shadow-md">{emoji}</div>
-              </div>
-            ))}
-          </div>
+        <div style={{ height: '100%', position: 'relative' }}>
+          <AndroidHomeScreen
+            appsCustom={[
+              { nome: 'camera', label: 'Câmera', bg: '#37474F', id: 'camera' },
+              { nome: 'playstore', label: 'Play Store', bg: '#fff', corIcone: '#34A853', id: 'playstore' },
+              { nome: 'mensagem', label: 'WhatsApp', bg: '#25D366', id: 'whatsapp' },
+              { nome: 'chrome', label: 'Chrome', bg: '#4285F4', id: 'chrome' },
+              { nome: 'config', label: 'Config.', bg: '#607D8B', id: 'settings' },
+              { nome: 'fotos', label: 'Fotos', bg: '#FF7043', id: 'photos' },
+              { nome: 'busca', label: 'Google', bg: '#fff', corIcone: '#4285F4', id: 'google' },
+              { nome: 'musica', label: 'Música', bg: '#E91E63', id: 'music' },
+            ]}
+            appDestacado={passo === 1 ? 'playstore' : null}
+            onAppClick={(id) => { if (passo === 1 && id === 'playstore') handleCliqueCerto(2, () => setPlayStoreAberta(true)); }}
+          />
         </div>
       )}
 
       {playStoreAberta && !buscando && !resultadoBusca && (
-        <div className="w-full h-full bg-white pt-12">
-          <div className="px-4 py-3 border-b">
-            <div className="flex items-center gap-3">
-              <button onClick={() => setPlayStoreAberta(false)} className="text-xl">←</button>
+        <div style={{ minHeight: '100%', display: 'flex', flexDirection: 'column', background: '#fff' }}>
+          <div style={{ padding: '12px 16px', borderBottom: '1px solid #eee', flexShrink: 0 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+              <button onClick={() => setPlayStoreAberta(false)} style={{ background: 'none', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', padding: 0 }}>
+                <ArrowLeft size={22} color="#1a1a1a" />
+              </button>
               {passo === 2 && (
-                <ElementoClicavel onClick={() => { setBuscando(true); setTimeout(() => { setBuscando(false); setResultadoBusca(true); setPasso(3); }, 1500); }} posicao="right">
-                  <div className="flex-1 bg-gray-100 rounded-full px-4 py-2 cursor-pointer">
-                    <p className="text-gray-400">Pesquisar apps...</p>
+                <ElementoClicavel onClick={() => { setBuscando(true); setTimeout(() => { setBuscando(false); setResultadoBusca(true); setPasso(3); }, 1500); }} mostrarSeta={false}>
+                  <div style={{ flex: 1, background: '#f1f3f4', borderRadius: '999px', padding: '8px 16px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <Search size={18} color="#999" />
+                    <p style={{ color: '#999', margin: 0 }}>Pesquisar apps...</p>
                   </div>
                 </ElementoClicavel>
               )}
               {passo !== 2 && (
-                <div className="flex-1 bg-gray-100 rounded-full px-4 py-2">
-                  <p className="text-gray-400">Pesquisar apps...</p>
+                <div style={{ flex: 1, background: '#f1f3f4', borderRadius: '999px', padding: '8px 16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <Search size={18} color="#999" />
+                  <p style={{ color: '#999', margin: 0 }}>Pesquisar apps...</p>
                 </div>
               )}
             </div>
           </div>
-          <div className="p-4">
-            <p className="text-lg font-bold text-gray-800 mb-4">Apps populares</p>
-            <div className="space-y-3">
+          <div style={{ padding: '16px', flex: 1 }}>
+            <p style={{ fontSize: '16px', fontWeight: '700', color: '#1a1a1a', marginBottom: '16px', margin: '0 0 16px' }}>Apps populares</p>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
               {["WhatsApp", "Instagram", "TikTok"].map((app, i) => (
-                <div key={i} className="flex items-center gap-3 p-3 bg-gray-50 rounded-xl">
-                  <div className="w-12 h-12 bg-gray-200 rounded-xl" />
-                  <div className="flex-1">
-                    <p className="font-bold text-gray-700">{app}</p>
-                    <p className="text-xs text-gray-400">★★★★☆ 4.5</p>
+                <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '12px', background: '#f8f9fa', borderRadius: '12px' }}>
+                  <div style={{ width: '48px', height: '48px', background: '#e0e0e0', borderRadius: '12px' }} />
+                  <div style={{ flex: 1 }}>
+                    <p style={{ fontWeight: '700', color: '#444', margin: 0 }}>{app}</p>
+                    <p style={{ fontSize: '12px', color: '#bbb', margin: 0 }}>★★★★☆ 4.5</p>
                   </div>
                 </div>
               ))}
@@ -138,32 +141,34 @@ export default function Modulo6Licao1() {
       )}
 
       {buscando && (
-        <div className="w-full h-full bg-white pt-12">
-          <div className="px-4 py-3 border-b">
-            <div className="flex items-center gap-3">
-              <button className="text-xl">←</button>
-              <div className="flex-1 bg-blue-100 rounded-full px-4 py-2">
-                <p className="text-gray-800 font-semibold">Meu INSS</p>
+        <div style={{ minHeight: '100%', display: 'flex', flexDirection: 'column', background: '#fff' }}>
+          <div style={{ padding: '12px 16px', borderBottom: '1px solid #eee', flexShrink: 0 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+              <button style={{ background: 'none', border: 'none' }}><ArrowLeft size={22} color="#1a1a1a" /></button>
+              <div style={{ flex: 1, background: '#E3F2FD', borderRadius: '999px', padding: '8px 16px' }}>
+                <p style={{ color: '#1a1a1a', fontWeight: '600', margin: 0 }}>Meu INSS</p>
               </div>
             </div>
           </div>
-          <div className="flex items-center justify-center h-64">
-            <motion.div animate={{ rotate: 360 }} transition={{ duration: 1, repeat: Infinity, ease: "linear" }} className="w-12 h-12 border-4 border-blue-500 border-t-transparent rounded-full" />
+          <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <motion.div animate={{ rotate: 360 }} transition={{ duration: 1, repeat: Infinity, ease: "linear" }} style={{ width: '48px', height: '48px', border: '4px solid #1351B4', borderTopColor: 'transparent', borderRadius: '50%' }} />
           </div>
         </div>
       )}
 
       {resultadoBusca && !instalando && !instalado && (
-        <div className="w-full h-full bg-white pt-12">
-          <div className="px-4 py-3 border-b">
-            <div className="flex items-center gap-3">
-              <button onClick={() => setResultadoBusca(false)} className="text-xl">←</button>
-              <div className="flex-1 bg-blue-100 rounded-full px-4 py-2">
-                <p className="text-gray-800 font-semibold">Meu INSS</p>
+        <div style={{ minHeight: '100%', display: 'flex', flexDirection: 'column', background: '#fff' }}>
+          <div style={{ padding: '12px 16px', borderBottom: '1px solid #eee', flexShrink: 0 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+              <button onClick={() => setResultadoBusca(false)} style={{ background: 'none', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', padding: 0 }}>
+                <ArrowLeft size={22} color="#1a1a1a" />
+              </button>
+              <div style={{ flex: 1, background: '#E3F2FD', borderRadius: '999px', padding: '8px 16px' }}>
+                <p style={{ color: '#1a1a1a', fontWeight: '600', margin: 0 }}>Meu INSS</p>
               </div>
             </div>
           </div>
-          <div className="p-4">
+          <div style={{ padding: '16px', flex: 1 }}>
             {passo === 3 && (
               <ElementoClicavel onClick={() => {
                 setInstalando(true);
@@ -178,17 +183,17 @@ export default function Modulo6Licao1() {
                     setPasso(4);
                   }
                 }, 400);
-              }} posicao="right">
-                <div className="flex items-start gap-4 p-4 bg-blue-50 border-2 border-blue-300 rounded-2xl cursor-pointer">
-                  <div className="w-16 h-16 bg-blue-600 rounded-2xl flex items-center justify-center text-3xl">
-                    🏛️
+              }} mostrarSeta={false}>
+                <div style={{ display: 'flex', alignItems: 'flex-start', gap: '16px', padding: '16px', background: '#E3F2FD', border: '2px solid #90CAF9', borderRadius: '16px', cursor: 'pointer' }}>
+                  <div style={{ width: '64px', height: '64px', background: '#1351B4', borderRadius: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                    <HeartHandshake size={32} color="#fff" />
                   </div>
-                  <div className="flex-1">
-                    <p className="font-bold text-gray-800 text-lg">Meu INSS</p>
-                    <p className="text-sm text-gray-500 mb-2">Governo Federal</p>
-                    <p className="text-xs text-gray-400">★★★★☆ 4.3 • 10M+ downloads</p>
+                  <div style={{ flex: 1 }}>
+                    <p style={{ fontWeight: '700', color: '#1a1a1a', fontSize: '18px', margin: 0 }}>Meu INSS</p>
+                    <p style={{ fontSize: '14px', color: '#666', marginBottom: '8px', margin: '0 0 8px' }}>Governo Federal</p>
+                    <p style={{ fontSize: '12px', color: '#bbb' }}>★★★★☆ 4.3 • 10M+ downloads</p>
                   </div>
-                  <button className="bg-blue-600 text-white px-6 py-2 rounded-full font-bold">
+                  <button style={{ background: '#1351B4', color: '#fff', border: 'none', padding: '8px 24px', borderRadius: '999px', fontWeight: '700', cursor: 'pointer' }}>
                     Instalar
                   </button>
                 </div>
@@ -199,21 +204,21 @@ export default function Modulo6Licao1() {
       )}
 
       {instalando && (
-        <div className="w-full h-full bg-white pt-12">
-          <div className="px-4 py-3 border-b">
-            <p className="font-bold text-gray-800">Instalando...</p>
+        <div style={{ minHeight: '100%', display: 'flex', flexDirection: 'column', background: '#fff' }}>
+          <div style={{ padding: '12px 16px', borderBottom: '1px solid #eee', flexShrink: 0 }}>
+            <p style={{ fontWeight: '700', color: '#1a1a1a', margin: 0 }}>Instalando...</p>
           </div>
-          <div className="p-4">
-            <div className="flex items-start gap-4 p-4 bg-gray-50 rounded-2xl">
-              <div className="w-16 h-16 bg-blue-600 rounded-2xl flex items-center justify-center text-3xl">
-                🏛️
+          <div style={{ padding: '16px', flex: 1 }}>
+            <div style={{ display: 'flex', alignItems: 'flex-start', gap: '16px', padding: '16px', background: '#f8f9fa', borderRadius: '16px' }}>
+              <div style={{ width: '64px', height: '64px', background: '#1351B4', borderRadius: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                <HeartHandshake size={32} color="#fff" />
               </div>
-              <div className="flex-1">
-                <p className="font-bold text-gray-800 text-lg mb-3">Meu INSS</p>
-                <div className="bg-gray-200 rounded-full h-2 overflow-hidden">
-                  <motion.div className="h-full bg-blue-600" style={{ width: `${progresso}%` }} />
+              <div style={{ flex: 1 }}>
+                <p style={{ fontWeight: '700', color: '#1a1a1a', fontSize: '18px', marginBottom: '12px', margin: '0 0 12px' }}>Meu INSS</p>
+                <div style={{ background: '#e0e0e0', borderRadius: '999px', height: '8px', overflow: 'hidden' }}>
+                  <motion.div style={{ height: '100%', background: '#1351B4', width: `${progresso}%` }} />
                 </div>
-                <p className="text-sm text-gray-500 mt-2">{progresso}%</p>
+                <p style={{ fontSize: '14px', color: '#666', marginTop: '8px' }}>{progresso}%</p>
               </div>
             </div>
           </div>
@@ -221,22 +226,22 @@ export default function Modulo6Licao1() {
       )}
 
       {instalado && !appAberto && (
-        <div className="w-full h-full bg-white pt-12">
-          <div className="px-4 py-3 border-b">
-            <p className="font-bold text-gray-800">Meu INSS</p>
+        <div style={{ minHeight: '100%', display: 'flex', flexDirection: 'column', background: '#fff' }}>
+          <div style={{ padding: '12px 16px', borderBottom: '1px solid #eee', flexShrink: 0 }}>
+            <p style={{ fontWeight: '700', color: '#1a1a1a', margin: 0 }}>Meu INSS</p>
           </div>
-          <div className="p-4">
+          <div style={{ padding: '16px', flex: 1 }}>
             {passo === 4 && (
-              <ElementoClicavel onClick={() => handleCliqueCerto(5, () => setAppAberto(true))} posicao="right">
-                <div className="flex items-start gap-4 p-4 bg-green-50 border-2 border-green-400 rounded-2xl cursor-pointer">
-                  <div className="w-16 h-16 bg-blue-600 rounded-2xl flex items-center justify-center text-3xl">
-                    🏛️
+              <ElementoClicavel onClick={() => handleCliqueCerto(5, () => setAppAberto(true))} mostrarSeta={false}>
+                <div style={{ display: 'flex', alignItems: 'flex-start', gap: '16px', padding: '16px', background: '#E8F5E9', border: '2px solid #66BB6A', borderRadius: '16px', cursor: 'pointer' }}>
+                  <div style={{ width: '64px', height: '64px', background: '#1351B4', borderRadius: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                    <HeartHandshake size={32} color="#fff" />
                   </div>
-                  <div className="flex-1">
-                    <p className="font-bold text-gray-800 text-lg">Meu INSS</p>
-                    <p className="text-sm text-green-600 font-semibold mb-2">✅ Instalado</p>
+                  <div style={{ flex: 1 }}>
+                    <p style={{ fontWeight: '700', color: '#1a1a1a', fontSize: '18px', margin: 0 }}>Meu INSS</p>
+                    <p style={{ fontSize: '14px', color: '#2E7D32', fontWeight: '600', marginBottom: '8px', margin: '0 0 8px' }}>Instalado</p>
                   </div>
-                  <button className="bg-green-600 text-white px-6 py-2 rounded-full font-bold">
+                  <button style={{ background: '#2E7D32', color: '#fff', border: 'none', padding: '8px 24px', borderRadius: '999px', fontWeight: '700', cursor: 'pointer' }}>
                     Abrir
                   </button>
                 </div>
@@ -247,51 +252,53 @@ export default function Modulo6Licao1() {
       )}
 
       {appAberto && !logado && (
-        <div className="w-full h-full bg-gradient-to-b from-blue-600 to-blue-800 pt-12 flex flex-col">
-          <div className="text-center py-8">
-            <div className="text-7xl mb-4">🏛️</div>
-            <h2 className="text-2xl font-black text-white mb-2">Meu INSS</h2>
-            <p className="text-white/80">Governo Federal</p>
+        <div style={{ minHeight: '100%', display: 'flex', flexDirection: 'column', background: 'linear-gradient(180deg, #1351B4, #0D3B8C)' }}>
+          <div style={{ textAlign: 'center', padding: '32px 0' }}>
+            <div style={{ width: '72px', height: '72px', background: '#fff', borderRadius: '20px', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px' }}>
+              <HeartHandshake size={40} color="#1351B4" />
+            </div>
+            <h2 style={{ fontSize: '24px', fontWeight: '900', color: '#fff', marginBottom: '8px', margin: '0 0 8px' }}>Meu INSS</h2>
+            <p style={{ color: 'rgba(255,255,255,0.8)' }}>Governo Federal</p>
           </div>
 
-          <div className="flex-1 bg-white rounded-t-3xl p-6">
-            <h3 className="text-xl font-bold text-gray-800 mb-6">Entre com seus dados</h3>
+          <div style={{ flex: 1, background: '#fff', borderRadius: '24px 24px 0 0', padding: '24px' }}>
+            <h3 style={{ fontSize: '18px', fontWeight: '700', color: '#1a1a1a', marginBottom: '24px', margin: '0 0 24px' }}>Entre com seus dados</h3>
             
             {passo === 5 && !cpfPreenchido && (
-              <ElementoClicavel onClick={() => { setCpfPreenchido(true); handleCliqueCerto(6, null); }} posicao="top">
-                <div className="mb-4">
-                  <label className="text-sm font-semibold text-gray-600 mb-2 block">CPF</label>
-                  <input type="text" placeholder="000.000.000-00" className="w-full px-4 py-3 rounded-xl border-2 border-gray-200 cursor-pointer" readOnly />
+              <ElementoClicavel onClick={() => { setCpfPreenchido(true); handleCliqueCerto(6, null); }} mostrarSeta={false}>
+                <div style={{ marginBottom: '16px' }}>
+                  <label style={{ fontSize: '14px', fontWeight: '600', color: '#666', display: 'block', marginBottom: '8px' }}>CPF</label>
+                  <input type="text" placeholder="000.000.000-00" style={{ width: '100%', padding: '14px 16px', borderRadius: '12px', border: '2px solid #e0e0e0', cursor: 'pointer', fontSize: '16px', boxSizing: 'border-box' }} readOnly />
                 </div>
               </ElementoClicavel>
             )}
 
             {cpfPreenchido && (
-              <div className="mb-4">
-                <label className="text-sm font-semibold text-gray-600 mb-2 block">CPF</label>
-                <input type="text" value="123.456.789-00" className="w-full px-4 py-3 rounded-xl border-2 border-blue-300 bg-blue-50" readOnly />
+              <div style={{ marginBottom: '16px' }}>
+                <label style={{ fontSize: '14px', fontWeight: '600', color: '#666', display: 'block', marginBottom: '8px' }}>CPF</label>
+                <input type="text" value="123.456.789-00" style={{ width: '100%', padding: '14px 16px', borderRadius: '12px', border: '2px solid #90CAF9', background: '#E3F2FD', fontSize: '16px', boxSizing: 'border-box' }} readOnly />
               </div>
             )}
 
             {passo >= 6 && cpfPreenchido && !senhaPreenchida && (
-              <ElementoClicavel onClick={() => { setSenhaPreenchida(true); handleCliqueCerto(7, null); }} posicao="top">
-                <div className="mb-4">
-                  <label className="text-sm font-semibold text-gray-600 mb-2 block">Senha</label>
-                  <input type="password" placeholder="••••••" className="w-full px-4 py-3 rounded-xl border-2 border-gray-200 cursor-pointer" readOnly />
+              <ElementoClicavel onClick={() => { setSenhaPreenchida(true); handleCliqueCerto(7, null); }} mostrarSeta={false}>
+                <div style={{ marginBottom: '16px' }}>
+                  <label style={{ fontSize: '14px', fontWeight: '600', color: '#666', display: 'block', marginBottom: '8px' }}>Senha</label>
+                  <input type="password" placeholder="••••••" style={{ width: '100%', padding: '14px 16px', borderRadius: '12px', border: '2px solid #e0e0e0', cursor: 'pointer', fontSize: '16px', boxSizing: 'border-box' }} readOnly />
                 </div>
               </ElementoClicavel>
             )}
 
             {senhaPreenchida && (
-              <div className="mb-4">
-                <label className="text-sm font-semibold text-gray-600 mb-2 block">Senha</label>
-                <input type="password" value="••••••" className="w-full px-4 py-3 rounded-xl border-2 border-blue-300 bg-blue-50" readOnly />
+              <div style={{ marginBottom: '16px' }}>
+                <label style={{ fontSize: '14px', fontWeight: '600', color: '#666', display: 'block', marginBottom: '8px' }}>Senha</label>
+                <input type="password" value="••••••" style={{ width: '100%', padding: '14px 16px', borderRadius: '12px', border: '2px solid #90CAF9', background: '#E3F2FD', fontSize: '16px', boxSizing: 'border-box' }} readOnly />
               </div>
             )}
 
             {passo === 7 && cpfPreenchido && senhaPreenchida && (
-              <ElementoClicavel onClick={() => handleCliqueCerto(8, () => setLogado(true))} posicao="top">
-                <button className="w-full bg-blue-600 text-white py-4 rounded-xl font-bold text-lg">
+              <ElementoClicavel onClick={() => handleCliqueCerto(8, () => setLogado(true))} mostrarSeta={false}>
+                <button style={{ width: '100%', background: '#1351B4', color: '#fff', border: 'none', padding: '16px', borderRadius: '12px', fontWeight: '700', fontSize: '17px', cursor: 'pointer' }}>
                   Entrar
                 </button>
               </ElementoClicavel>
@@ -301,52 +308,54 @@ export default function Modulo6Licao1() {
       )}
 
       {logado && !extratoAberto && (
-        <div className="w-full h-full bg-white pt-12">
-          <div className="bg-blue-600 px-4 py-4">
-            <h2 className="text-xl font-bold text-white">Meu INSS</h2>
-            <p className="text-white/80 text-sm">Olá, Maria!</p>
+        <div style={{ minHeight: '100%', display: 'flex', flexDirection: 'column', background: '#fff' }}>
+          <div style={{ background: '#1351B4', padding: '16px', flexShrink: 0 }}>
+            <h2 style={{ fontSize: '20px', fontWeight: '700', color: '#fff', margin: 0 }}>Meu INSS</h2>
+            <p style={{ color: 'rgba(255,255,255,0.8)', fontSize: '14px' }}>Olá, Maria!</p>
           </div>
 
-          <div className="p-4 grid grid-cols-2 gap-3">
+          <div style={{ padding: '16px', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', flex: 1 }}>
             {passo === 8 && (
-              <ElementoClicavel onClick={() => { setExtratoAberto(true); setTimeout(() => setMostrarValidacao(true), 2000); }} posicao="bottom">
-                <div className="bg-blue-50 border-2 border-blue-300 rounded-2xl p-4 text-center cursor-pointer">
-                  <div className="text-4xl mb-2">📋</div>
-                  <p className="font-bold text-gray-800 text-sm">Extrato de Pagamento</p>
+              <ElementoClicavel onClick={() => { setExtratoAberto(true); setTimeout(() => setMostrarValidacao(true), 2000); }} mostrarSeta={false}>
+                <div style={{ background: '#E3F2FD', border: '2px solid #90CAF9', borderRadius: '16px', padding: '16px', textAlign: 'center', cursor: 'pointer' }}>
+                  <FileText size={32} color="#1351B4" style={{ margin: '0 auto 8px' }} />
+                  <p style={{ fontWeight: '700', color: '#1a1a1a', fontSize: '14px', margin: 0 }}>Extrato de Pagamento</p>
                 </div>
               </ElementoClicavel>
             )}
-            <div className="bg-gray-50 rounded-2xl p-4 text-center">
-              <div className="text-4xl mb-2">📅</div>
-              <p className="font-bold text-gray-800 text-sm">Agendamentos</p>
+            <div style={{ background: '#f8f9fa', borderRadius: '16px', padding: '16px', textAlign: 'center' }}>
+              <Calendar size={32} color="#666" style={{ margin: '0 auto 8px' }} />
+              <p style={{ fontWeight: '700', color: '#1a1a1a', fontSize: '14px', margin: 0 }}>Agendamentos</p>
             </div>
-            <div className="bg-gray-50 rounded-2xl p-4 text-center">
-              <div className="text-4xl mb-2">📄</div>
-              <p className="font-bold text-gray-800 text-sm">Certidões</p>
+            <div style={{ background: '#f8f9fa', borderRadius: '16px', padding: '16px', textAlign: 'center' }}>
+              <FileCheck size={32} color="#666" style={{ margin: '0 auto 8px' }} />
+              <p style={{ fontWeight: '700', color: '#1a1a1a', fontSize: '14px', margin: 0 }}>Certidões</p>
             </div>
-            <div className="bg-gray-50 rounded-2xl p-4 text-center">
-              <div className="text-4xl mb-2">💰</div>
-              <p className="font-bold text-gray-800 text-sm">Empréstimo</p>
+            <div style={{ background: '#f8f9fa', borderRadius: '16px', padding: '16px', textAlign: 'center' }}>
+              <Landmark size={32} color="#666" style={{ margin: '0 auto 8px' }} />
+              <p style={{ fontWeight: '700', color: '#1a1a1a', fontSize: '14px', margin: 0 }}>Empréstimo</p>
             </div>
           </div>
         </div>
       )}
 
       {extratoAberto && (
-        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="w-full h-full bg-white pt-12">
-          <div className="bg-blue-600 px-4 py-4 flex items-center gap-3">
-            <button onClick={() => setExtratoAberto(false)} className="text-white text-xl">←</button>
-            <h2 className="text-xl font-bold text-white">Extrato de Pagamento</h2>
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} style={{ minHeight: '100%', display: 'flex', flexDirection: 'column', background: '#fff' }}>
+          <div style={{ background: '#1351B4', padding: '16px', display: 'flex', alignItems: 'center', gap: '12px', flexShrink: 0 }}>
+            <button onClick={() => setExtratoAberto(false)} style={{ background: 'none', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', padding: 0 }}>
+              <ArrowLeft size={24} color="#fff" />
+            </button>
+            <h2 style={{ fontSize: '20px', fontWeight: '700', color: '#fff', margin: 0 }}>Extrato de Pagamento</h2>
           </div>
 
-          <div className="p-4">
-            <motion.div initial={{ y: 20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} className="bg-gradient-to-r from-blue-600 to-blue-800 rounded-2xl p-6 text-white">
-              <p className="text-sm mb-2 opacity-90">Benefício</p>
-              <p className="text-2xl font-black mb-4">Aposentadoria</p>
-              <div className="bg-white/20 rounded-xl p-4">
-                <p className="text-sm mb-1">Valor do benefício:</p>
-                <p className="text-4xl font-black">R$ 1.412,00</p>
-                <p className="text-sm mt-3 opacity-90">Próximo pagamento: 25/08/2026</p>
+          <div style={{ padding: '16px', flex: 1 }}>
+            <motion.div initial={{ y: 20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} style={{ background: 'linear-gradient(135deg, #1351B4, #0D3B8C)', borderRadius: '16px', padding: '24px', color: '#fff' }}>
+              <p style={{ fontSize: '14px', marginBottom: '8px', opacity: 0.9, margin: '0 0 8px' }}>Benefício</p>
+              <p style={{ fontSize: '22px', fontWeight: '900', marginBottom: '16px', margin: '0 0 16px' }}>Aposentadoria</p>
+              <div style={{ background: 'rgba(255,255,255,0.2)', borderRadius: '12px', padding: '16px' }}>
+                <p style={{ fontSize: '14px', marginBottom: '4px', margin: '0 0 4px' }}>Valor do benefício:</p>
+                <p style={{ fontSize: '32px', fontWeight: '900' }}>R$ 1.412,00</p>
+                <p style={{ fontSize: '14px', marginTop: '12px', opacity: 0.9 }}>Próximo pagamento: 25/08/2026</p>
               </div>
             </motion.div>
           </div>

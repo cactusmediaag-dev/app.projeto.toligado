@@ -5,7 +5,9 @@ import { createPageUrl } from "@/utils";
 import { base44 } from "@/api/base44Client";
 import SimuladorImersivo from "@/components/simulador/SimuladorImersivo";
 import ElementoClicavel from "@/components/simulador/ElementoClicavel";
+import AndroidHomeScreen from "@/components/simulador/AndroidHomeScreen";
 import ValidacaoQuiz from "@/components/simulador/ValidacaoQuiz";
+import { CheckCircle2, Landmark } from 'lucide-react';
 
 export default function Modulo6Licao3() {
   const navigate = useNavigate();
@@ -78,89 +80,89 @@ export default function Modulo6Licao3() {
       onVoltar={() => navigate(createPageUrl("Modulos"))}
     >
       {!appAberto && (
-        <div className="w-full h-full bg-gradient-to-b from-blue-50 to-purple-50 p-6 pt-12">
-          <div className="grid grid-cols-4 gap-6 mt-8">
-            {passo === 1 && (
-              <ElementoClicavel onClick={() => handleCliqueCerto(2, () => setAppAberto(true))} posicao="bottom">
-                <div className="flex flex-col items-center gap-2">
-                  <div className="w-14 h-14 bg-blue-600 rounded-2xl flex items-center justify-center text-2xl shadow-md">
-                    🏛️
-                  </div>
-                  <p className="text-xs text-gray-600 font-semibold text-center">CadÚnico</p>
-                </div>
-              </ElementoClicavel>
-            )}
-            {["💬", "📧", "🎵", "📷", "📱", "📍", "⚙️"].map((emoji, i) => (
-              <div key={i} className="flex flex-col items-center gap-2">
-                <div className="w-14 h-14 bg-white rounded-2xl flex items-center justify-center text-2xl shadow-md">{emoji}</div>
-              </div>
-            ))}
-          </div>
+        <div style={{ height: '100%', position: 'relative' }}>
+          <AndroidHomeScreen
+            appsCustom={[
+              { nome: 'govbr', label: 'CadÚnico', bg: '#1351B4', id: 'cadunico' },
+              { nome: 'mensagem', label: 'WhatsApp', bg: '#25D366', id: 'whatsapp' },
+              { nome: 'email', label: 'Email', bg: '#EA4335', id: 'email' },
+              { nome: 'camera', label: 'Câmera', bg: '#37474F', id: 'camera' },
+              { nome: 'chrome', label: 'Chrome', bg: '#4285F4', id: 'chrome' },
+              { nome: 'musica', label: 'Música', bg: '#E91E63', id: 'music' },
+              { nome: 'config', label: 'Config.', bg: '#607D8B', id: 'settings' },
+              { nome: 'fotos', label: 'Fotos', bg: '#FF7043', id: 'photos' },
+            ]}
+            appDestacado={passo === 1 ? 'cadunico' : null}
+            onAppClick={(id) => { if (passo === 1 && id === 'cadunico') handleCliqueCerto(2, () => setAppAberto(true)); }}
+          />
         </div>
       )}
 
       {appAberto && !cadastroEnviado && (
-        <div className="w-full h-full bg-gradient-to-b from-blue-600 to-blue-800 pt-12 flex flex-col">
-          <div className="text-center py-6">
-            <div className="text-6xl mb-3">🏛️</div>
-            <h2 className="text-2xl font-black text-white mb-1">CadÚnico Digital</h2>
-            <p className="text-white/80 text-sm">Governo Federal</p>
+        <div style={{ minHeight: '100%', display: 'flex', flexDirection: 'column', background: '#fff' }}>
+          <div style={{ background: '#1351B4', padding: '16px 20px', display: 'flex', alignItems: 'center', gap: '12px', flexShrink: 0 }}>
+            <Landmark size={28} color="#fff" />
+            <div>
+              <h2 style={{ color: '#fff', margin: 0, fontWeight: '800', fontSize: '20px' }}>CadÚnico Digital</h2>
+              <p style={{ color: 'rgba(255,255,255,0.8)', margin: 0, fontSize: '13px' }}>Governo Federal</p>
+            </div>
           </div>
 
-          <div className="flex-1 bg-white rounded-t-3xl p-6">
-            <h3 className="text-xl font-bold text-gray-800 mb-6">Cadastro de Usuário</h3>
+          <div style={{ flex: 1, background: '#fff', padding: '24px', overflowY: 'auto' }}>
+            <h3 style={{ fontSize: '20px', fontWeight: '700', color: '#1a1a1a', marginBottom: '8px', margin: '0 0 8px' }}>Cadastro de Usuário</h3>
+            <p style={{ color: '#999', marginBottom: '24px', fontSize: '15px', margin: '0 0 24px' }}>Preencha seus dados para criar sua conta</p>
 
             {passo === 2 && !nomePreenchido && (
-              <ElementoClicavel onClick={() => { setNomePreenchido("Maria Silva"); handleCliqueCerto(3, null); }} posicao="top">
-                <div className="mb-4">
-                  <label className="text-sm font-semibold text-gray-600 mb-2 block">Nome completo</label>
-                  <input type="text" placeholder="Digite seu nome completo" className="w-full px-4 py-3 rounded-xl border-2 border-gray-200 cursor-pointer" readOnly />
+              <ElementoClicavel onClick={() => { setNomePreenchido("Maria Silva"); handleCliqueCerto(3, null); }} mostrarSeta={false}>
+                <div style={{ marginBottom: '16px' }}>
+                  <label style={{ fontSize: '15px', fontWeight: '600', color: '#555', display: 'block', marginBottom: '8px' }}>Nome completo</label>
+                  <input type="text" placeholder="Digite seu nome completo" style={{ width: '100%', padding: '14px 16px', borderRadius: '12px', border: '2px solid #e0e0e0', cursor: 'pointer', minHeight: '48px', fontSize: '18px', boxSizing: 'border-box' }} readOnly />
                 </div>
               </ElementoClicavel>
             )}
 
             {nomePreenchido && (
-              <div className="mb-4">
-                <label className="text-sm font-semibold text-gray-600 mb-2 block">Nome completo</label>
-                <input type="text" value={nomePreenchido} className="w-full px-4 py-3 rounded-xl border-2 border-blue-300 bg-blue-50" readOnly />
+              <div style={{ marginBottom: '16px' }}>
+                <label style={{ fontSize: '15px', fontWeight: '600', color: '#555', display: 'block', marginBottom: '8px' }}>Nome completo</label>
+                <input type="text" value={nomePreenchido} style={{ width: '100%', padding: '14px 16px', borderRadius: '12px', border: '2px solid #90CAF9', background: '#E3F2FD', minHeight: '48px', fontSize: '18px', boxSizing: 'border-box' }} readOnly />
               </div>
             )}
 
             {passo >= 3 && nomePreenchido && !cpfPreenchido && (
-              <ElementoClicavel onClick={() => { setCpfPreenchido(true); handleCliqueCerto(4, null); }} posicao="top">
-                <div className="mb-4">
-                  <label className="text-sm font-semibold text-gray-600 mb-2 block">CPF</label>
-                  <input type="text" placeholder="000.000.000-00" className="w-full px-4 py-3 rounded-xl border-2 border-gray-200 cursor-pointer" readOnly />
+              <ElementoClicavel onClick={() => { setCpfPreenchido(true); handleCliqueCerto(4, null); }} mostrarSeta={false}>
+                <div style={{ marginBottom: '16px' }}>
+                  <label style={{ fontSize: '15px', fontWeight: '600', color: '#555', display: 'block', marginBottom: '8px' }}>CPF</label>
+                  <input type="text" placeholder="000.000.000-00" style={{ width: '100%', padding: '14px 16px', borderRadius: '12px', border: '2px solid #e0e0e0', cursor: 'pointer', minHeight: '48px', fontSize: '18px', boxSizing: 'border-box' }} readOnly />
                 </div>
               </ElementoClicavel>
             )}
 
             {cpfPreenchido && (
-              <div className="mb-4">
-                <label className="text-sm font-semibold text-gray-600 mb-2 block">CPF</label>
-                <input type="text" value="123.456.789-00" className="w-full px-4 py-3 rounded-xl border-2 border-blue-300 bg-blue-50" readOnly />
+              <div style={{ marginBottom: '16px' }}>
+                <label style={{ fontSize: '15px', fontWeight: '600', color: '#555', display: 'block', marginBottom: '8px' }}>CPF</label>
+                <input type="text" value="123.456.789-00" style={{ width: '100%', padding: '14px 16px', borderRadius: '12px', border: '2px solid #90CAF9', background: '#E3F2FD', minHeight: '48px', fontSize: '18px', boxSizing: 'border-box' }} readOnly />
               </div>
             )}
 
             {passo >= 4 && cpfPreenchido && !seletorData && !dataPreenchida && (
-              <ElementoClicavel onClick={() => handleCliqueCerto(5, () => setSeletorData(true))} posicao="top">
-                <div className="mb-4">
-                  <label className="text-sm font-semibold text-gray-600 mb-2 block">Data de nascimento</label>
-                  <input type="text" placeholder="DD/MM/AAAA" className="w-full px-4 py-3 rounded-xl border-2 border-gray-200 cursor-pointer" readOnly />
+              <ElementoClicavel onClick={() => handleCliqueCerto(5, () => setSeletorData(true))} mostrarSeta={false}>
+                <div style={{ marginBottom: '16px' }}>
+                  <label style={{ fontSize: '15px', fontWeight: '600', color: '#555', display: 'block', marginBottom: '8px' }}>Data de nascimento</label>
+                  <input type="text" placeholder="DD/MM/AAAA" style={{ width: '100%', padding: '14px 16px', borderRadius: '12px', border: '2px solid #e0e0e0', cursor: 'pointer', minHeight: '48px', fontSize: '18px', boxSizing: 'border-box' }} readOnly />
                 </div>
               </ElementoClicavel>
             )}
 
             {dataPreenchida && (
-              <div className="mb-4">
-                <label className="text-sm font-semibold text-gray-600 mb-2 block">Data de nascimento</label>
-                <input type="text" value="15/03/1960" className="w-full px-4 py-3 rounded-xl border-2 border-blue-300 bg-blue-50" readOnly />
+              <div style={{ marginBottom: '16px' }}>
+                <label style={{ fontSize: '15px', fontWeight: '600', color: '#555', display: 'block', marginBottom: '8px' }}>Data de nascimento</label>
+                <input type="text" value="15/03/1960" style={{ width: '100%', padding: '14px 16px', borderRadius: '12px', border: '2px solid #90CAF9', background: '#E3F2FD', minHeight: '48px', fontSize: '18px', boxSizing: 'border-box' }} readOnly />
               </div>
             )}
 
             {passo === 6 && dataPreenchida && (
-              <ElementoClicavel onClick={() => { setCadastroEnviado(true); setTimeout(() => setMostrarValidacao(true), 2000); }} posicao="top">
-                <button className="w-full bg-blue-600 text-white py-4 rounded-xl font-bold text-lg">
+              <ElementoClicavel onClick={() => { setCadastroEnviado(true); setTimeout(() => setMostrarValidacao(true), 2000); }} mostrarSeta={false}>
+                <button style={{ width: '100%', background: '#1351B4', color: '#fff', border: 'none', padding: '16px', borderRadius: '12px', fontWeight: '700', fontSize: '18px', cursor: 'pointer', minHeight: '48px' }}>
                   Enviar Cadastro
                 </button>
               </ElementoClicavel>
@@ -170,46 +172,47 @@ export default function Modulo6Licao3() {
       )}
 
       {seletorData && !dataPreenchida && (
-        <motion.div initial={{ y: "100%" }} animate={{ y: 0 }} className="absolute inset-0 bg-white pt-12 z-50 flex flex-col">
-          <div className="px-4 py-3 border-b flex items-center justify-between">
-            <button onClick={() => setSeletorData(false)} className="text-gray-600">Cancelar</button>
-            <p className="font-bold text-gray-800">Selecione a data</p>
+        <motion.div initial={{ y: "100%" }} animate={{ y: 0 }} style={{ position: 'absolute', inset: 0, background: '#fff', zIndex: 50, display: 'flex', flexDirection: 'column' }}>
+          <div style={{ padding: '14px 16px', borderBottom: '1px solid #eee', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexShrink: 0 }}>
+            <button onClick={() => setSeletorData(false)} style={{ background: 'none', border: 'none', color: '#999', fontWeight: '600', fontSize: '15px', cursor: 'pointer' }}>Cancelar</button>
+            <p style={{ fontWeight: '700', color: '#1a1a1a' }}>Selecione a data</p>
             {passo === 5 && (
-              <ElementoClicavel onClick={() => { setSeletorData(false); setDataPreenchida(true); handleCliqueCerto(6, null); }} posicao="left">
-                <button className="text-blue-600 font-bold">OK</button>
+              <ElementoClicavel onClick={() => { setSeletorData(false); setDataPreenchida(true); handleCliqueCerto(6, null); }} mostrarSeta={false}>
+                <button style={{ background: 'none', border: 'none', color: '#1351B4', fontWeight: '700', fontSize: '15px', cursor: 'pointer' }}>OK</button>
               </ElementoClicavel>
             )}
+            {passo !== 5 && <span style={{ color: '#ccc', fontWeight: '700', fontSize: '15px' }}>OK</span>}
           </div>
 
-          <div className="flex-1 flex items-center justify-center">
-            <div className="flex gap-4">
-              <div className="text-center">
-                <p className="text-sm text-gray-500 mb-2">Dia</p>
-                <div className="h-32 overflow-hidden">
-                  <motion.div animate={{ y: [-20, 0] }} transition={{ duration: 2, repeat: Infinity }} className="space-y-2">
-                    <p className="text-2xl text-gray-400">14</p>
-                    <p className="text-4xl font-bold text-gray-800">15</p>
-                    <p className="text-2xl text-gray-400">16</p>
+          <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <div style={{ display: 'flex', gap: '16px' }}>
+              <div style={{ textAlign: 'center' }}>
+                <p style={{ fontSize: '14px', color: '#999', marginBottom: '8px', margin: '0 0 8px' }}>Dia</p>
+                <div style={{ height: '128px', overflow: 'hidden' }}>
+                  <motion.div animate={{ y: [-20, 0] }} transition={{ duration: 2, repeat: Infinity }} style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                    <p style={{ fontSize: '22px', color: '#ccc', margin: 0 }}>14</p>
+                    <p style={{ fontSize: '36px', fontWeight: '700', color: '#1a1a1a', margin: 0 }}>15</p>
+                    <p style={{ fontSize: '22px', color: '#ccc', margin: 0 }}>16</p>
                   </motion.div>
                 </div>
               </div>
-              <div className="text-center">
-                <p className="text-sm text-gray-500 mb-2">Mês</p>
-                <div className="h-32 overflow-hidden">
-                  <motion.div animate={{ y: [-20, 0] }} transition={{ duration: 2, repeat: Infinity, delay: 0.2 }} className="space-y-2">
-                    <p className="text-2xl text-gray-400">02</p>
-                    <p className="text-4xl font-bold text-gray-800">03</p>
-                    <p className="text-2xl text-gray-400">04</p>
+              <div style={{ textAlign: 'center' }}>
+                <p style={{ fontSize: '14px', color: '#999', marginBottom: '8px', margin: '0 0 8px' }}>Mês</p>
+                <div style={{ height: '128px', overflow: 'hidden' }}>
+                  <motion.div animate={{ y: [-20, 0] }} transition={{ duration: 2, repeat: Infinity, delay: 0.2 }} style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                    <p style={{ fontSize: '22px', color: '#ccc', margin: 0 }}>02</p>
+                    <p style={{ fontSize: '36px', fontWeight: '700', color: '#1a1a1a', margin: 0 }}>03</p>
+                    <p style={{ fontSize: '22px', color: '#ccc', margin: 0 }}>04</p>
                   </motion.div>
                 </div>
               </div>
-              <div className="text-center">
-                <p className="text-sm text-gray-500 mb-2">Ano</p>
-                <div className="h-32 overflow-hidden">
-                  <motion.div animate={{ y: [-20, 0] }} transition={{ duration: 2, repeat: Infinity, delay: 0.4 }} className="space-y-2">
-                    <p className="text-2xl text-gray-400">1959</p>
-                    <p className="text-4xl font-bold text-gray-800">1960</p>
-                    <p className="text-2xl text-gray-400">1961</p>
+              <div style={{ textAlign: 'center' }}>
+                <p style={{ fontSize: '14px', color: '#999', marginBottom: '8px', margin: '0 0 8px' }}>Ano</p>
+                <div style={{ height: '128px', overflow: 'hidden' }}>
+                  <motion.div animate={{ y: [-20, 0] }} transition={{ duration: 2, repeat: Infinity, delay: 0.4 }} style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                    <p style={{ fontSize: '22px', color: '#ccc', margin: 0 }}>1959</p>
+                    <p style={{ fontSize: '36px', fontWeight: '700', color: '#1a1a1a', margin: 0 }}>1960</p>
+                    <p style={{ fontSize: '22px', color: '#ccc', margin: 0 }}>1961</p>
                   </motion.div>
                 </div>
               </div>
@@ -219,13 +222,13 @@ export default function Modulo6Licao3() {
       )}
 
       {cadastroEnviado && (
-        <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} className="w-full h-full bg-gradient-to-b from-green-50 to-white pt-12 flex flex-col items-center justify-center p-6">
+        <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} style={{ minHeight: '100%', background: '#fff', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '24px' }}>
           <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ type: "spring" }}>
-            <div className="text-8xl mb-6">✅</div>
-            <h3 className="text-2xl font-bold text-gray-800 mb-3 text-center">Cadastro realizado!</h3>
-            <div className="bg-blue-50 border-2 border-blue-300 rounded-2xl p-6 max-w-sm">
-              <p className="text-center text-gray-700 mb-2">Número de protocolo:</p>
-              <p className="text-center text-3xl font-black text-blue-600">2025-08741</p>
+            <CheckCircle2 size={64} color="#27AE60" style={{ margin: '0 auto 24px' }} />
+            <h3 style={{ fontSize: '22px', fontWeight: '700', color: '#1a1a1a', marginBottom: '16px', textAlign: 'center', margin: '0 0 16px' }}>Cadastro realizado!</h3>
+            <div style={{ background: '#E3F2FD', border: '2px solid #90CAF9', borderRadius: '16px', padding: '24px', maxWidth: '320px' }}>
+              <p style={{ textAlign: 'center', color: '#666', marginBottom: '8px', margin: '0 0 8px' }}>Número de protocolo:</p>
+              <p style={{ textAlign: 'center', fontSize: '30px', fontWeight: '900', color: '#1351B4', margin: 0 }}>2025-08741</p>
             </div>
           </motion.div>
         </motion.div>

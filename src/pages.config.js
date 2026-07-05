@@ -107,6 +107,7 @@ import Modulo9Licao5 from './pages/Modulo9Licao5';
 import Modulos from './pages/Modulos';
 import Perfil from './pages/Perfil';
 import Ranking from './pages/Ranking';
+import Biblioteca from './pages/Biblioteca';
 import Splash from './pages/Splash';
 import Turma from './pages/Turma';
 
@@ -172,6 +173,7 @@ export const PAGES = {
     "Modulos": Modulos,
     "Perfil": Perfil,
     "Ranking": Ranking,
+    "Biblioteca": Biblioteca,
     "Splash": Splash,
     "Turma": Turma,
 }

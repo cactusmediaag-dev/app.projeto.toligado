@@ -121,6 +121,18 @@ export default function Home() {
           </div>
         </div>
 
+        {/* BIBLIOTECA */}
+        <div onClick={() => navigate(createPageUrl('Biblioteca'))} style={{ background: 'linear-gradient(135deg, #5C2E7F, #7B3FA0)', borderRadius: '24px', padding: '18px 20px', cursor: 'pointer', boxShadow: '0 6px 20px rgba(92,46,127,0.3)', display: 'flex', alignItems: 'center', gap: '14px', border: '1px solid rgba(255,255,255,0.2)' }}>
+          <div style={{ width: '52px', height: '52px', background: 'rgba(255,255,255,0.2)', borderRadius: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '28px', flexShrink: 0 }}>
+            📚
+          </div>
+          <div style={{ flex: 1 }}>
+            <p style={{ color: '#fff', fontSize: '16px', fontWeight: '800', margin: '0 0 2px' }}>Biblioteca</p>
+            <p style={{ color: 'rgba(255,255,255,0.8)', fontSize: '13px', margin: 0, fontWeight: '600' }}>Leia, ouça e ganhe moedas</p>
+          </div>
+          <span style={{ color: '#FFD700', fontSize: '20px', fontWeight: '900' }}>→</span>
+        </div>
+
         {/* CONTINUAR APRENDENDO */}
         {moduloAtivo ? (
           <div onClick={() => navigate(createPageUrl(moduloAtivo.rota))} style={{ background: 'linear-gradient(135deg, #F3984B, #e67e22)', borderRadius: '24px', padding: '20px', cursor: 'pointer', boxShadow: '0 8px 24px rgba(243,152,75,0.4)', display: 'flex', alignItems: 'center', gap: '16px', border: '1px solid rgba(255,255,255,0.2)' }}>

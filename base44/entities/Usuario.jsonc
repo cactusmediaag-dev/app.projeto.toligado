@@ -56,6 +56,14 @@
     "avatar": {
       "type": "string",
       "description": "ID do avatar pr\u00e9-definido escolhido pelo usu\u00e1rio (ex: avatar_3). Opcional."
+    },
+    "cartilhas_completas": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": [],
+      "description": "Lista de IDs de cartilhas conclu\u00eddas"
     }
   },
   "required": [

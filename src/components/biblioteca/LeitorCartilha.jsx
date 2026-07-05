@@ -4,6 +4,7 @@ import { ArrowLeft, Volume2 } from 'lucide-react';
 import VozSistema from '@/components/shared/AudioSystem';
 import ValidacaoQuiz from '@/components/simulador/ValidacaoQuiz';
 import Confetti from '@/components/shared/Confetti';
+import CenaIlustrada from '@/components/biblioteca/CenaIlustrada';
 import { base44 } from '@/api/base44Client';
 
 const reducedMotion = typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -394,12 +395,14 @@ export default function LeitorCartilha({ cartilha, usuario, onConcluir, onVoltar
                 animate={reducedMotion ? {} : { scale: 1, y: [0, -6, 0] }}
                 transition={{ scale: { type: 'spring', stiffness: 200, damping: 15 }, y: { duration: 3, repeat: Infinity, ease: 'easeInOut' } }}
                 style={{
-                  width: '120px', height: '120px', borderRadius: '50%',
+                  width: '180px', height: '180px', borderRadius: '50%',
                   background: pagina.corFundo, display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  fontSize: '64px', flexShrink: 0,
+                  flexShrink: 0,
                 }}
               >
-                {pagina.ilustracao}
+                {pagina.cena
+                  ? <CenaIlustrada cena={pagina.cena} cor={cartilha.cor} tamanho={180} fallbackEmoji={pagina.ilustracao} />
+                  : <span style={{ fontSize: '64px' }}>{pagina.ilustracao}</span>}
               </motion.div>
               {!reducedMotion && [
                 { top: '10%', left: '-10%', delay: 0 },

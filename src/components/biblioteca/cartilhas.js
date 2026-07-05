@@ -8,6 +8,7 @@ export const CARTILHAS = [
     paginas: [
       {
         ilustracao: '🕵️',
+        cena: 'mensagem_suspeita',
         corFundo: '#FADBD8',
         titulo: 'O que é um golpe?',
         texto: 'Golpistas mandam mensagens fingindo ser bancos, lojas ou até parentes. Eles querem seu dinheiro ou seus dados.',
@@ -15,6 +16,7 @@ export const CARTILHAS = [
       },
       {
         ilustracao: '⏰',
+        cena: 'relogio_pressa',
         corFundo: '#FDEBD0',
         titulo: 'Desconfie da pressa',
         texto: 'Golpe quase sempre tem pressa: é só hoje, é urgente! Quem apressa você quer que você não pense.',
@@ -22,6 +24,7 @@ export const CARTILHAS = [
       },
       {
         ilustracao: '🎁',
+        cena: 'premio_falso',
         corFundo: '#D5F5E3',
         titulo: 'Prêmio que você não pediu',
         texto: 'Você ganhou um prêmio! Se você não participou de nada, não ganhou nada. Pode apagar.',
@@ -29,6 +32,7 @@ export const CARTILHAS = [
       },
       {
         ilustracao: '👨‍👩‍👧',
+        cena: 'golpe_parente',
         corFundo: '#D6EAF8',
         titulo: 'O golpe do parente',
         texto: 'Mãe, troquei de número, me faz um PIX? Ligue para o número antigo do seu filho antes de qualquer coisa.',
@@ -36,6 +40,7 @@ export const CARTILHAS = [
       },
       {
         ilustracao: '🏦',
+        cena: 'banco_escudo',
         corFundo: '#D4EFDF',
         titulo: 'Banco não pede senha',
         texto: 'Nenhum banco liga ou manda mensagem pedindo senha ou código. Quem pede é golpista.',
@@ -43,6 +48,7 @@ export const CARTILHAS = [
       },
       {
         ilustracao: '🔗',
+        cena: 'link_perigoso',
         corFundo: '#EBDEF0',
         titulo: 'Cuidado com links',
         texto: 'Link estranho por mensagem pode roubar seus dados. Na dúvida, não toque.',
@@ -50,6 +56,7 @@ export const CARTILHAS = [
       },
       {
         ilustracao: '🛡️',
+        cena: 'bloquear_golpista',
         corFundo: '#D5DBDB',
         titulo: 'O que fazer?',
         texto: 'Não responda, não clique. Apague e bloqueie o número. Conte para alguém de confiança.',
@@ -57,6 +64,7 @@ export const CARTILHAS = [
       },
       {
         ilustracao: '💪',
+        cena: 'voce_esperto',
         corFundo: '#FDEDEC',
         titulo: 'Você é mais esperto',
         texto: 'Golpista tem pressa, você tem calma. Desconfiar não é falta de educação: é proteção.',

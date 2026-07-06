@@ -91,6 +91,7 @@ export default function Perfil() {
   const sair = () => {
     localStorage.removeItem('toligado_user_id');
     localStorage.removeItem('toligado_user_nome');
+    localStorage.removeItem('toligado_demo');
     navigate(createPageUrl('Entrar'));
   };
 
@@ -100,6 +101,7 @@ export default function Perfil() {
       await base44.entities.Usuario.delete(usuario.id);
       localStorage.removeItem('toligado_user_id');
       localStorage.removeItem('toligado_user_nome');
+      localStorage.removeItem('toligado_demo');
       navigate(createPageUrl('Entrar'));
     } catch (e) {
       console.error('Erro ao excluir conta:', e);

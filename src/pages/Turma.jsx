@@ -45,6 +45,7 @@ export default function Turma() {
 
   // Paginação
   const [limite, setLimite] = useState(30);
+  const isDemo = localStorage.getItem('toligado_demo') === '1';
 
   useEffect(() => { carregarTudo(); }, []);
 
@@ -171,6 +172,7 @@ export default function Turma() {
   };
 
   const handleReagir = async (alvo, tipo) => {
+    if (isDemo) return;
     const chave = `${alvo}:${tipo}`;
     if (minhasReacoes[chave]) return; // já reagiu
 
@@ -216,7 +218,7 @@ export default function Turma() {
             <button
               key={b.tipo}
               onClick={() => handleReagir(alvo, b.tipo)}
-              disabled={ativo}
+              disabled={ativo || isDemo}
               style={{
                 display: 'flex', alignItems: 'center', gap: '4px',
                 padding: '8px 14px', borderRadius: '20px',
@@ -224,7 +226,7 @@ export default function Turma() {
                 background: ativo ? b.bgTint : temCount ? b.bgTint : 'transparent',
                 color: (ativo || temCount) ? b.cor : '#777',
                 fontSize: '14px', fontWeight: '700',
-                cursor: ativo ? 'default' : 'pointer',
+                cursor: (ativo || isDemo) ? 'default' : 'pointer',
                 minHeight: '40px',
                 touchAction: 'manipulation',
               }}
@@ -276,6 +278,12 @@ export default function Turma() {
           <div style={{ padding: '0 16px', paddingBottom: 'calc(env(safe-area-inset-bottom, 20px) + 100px)', display: 'flex', flexDirection: 'column', gap: '12px' }}>
 
             {/* COMPOSER */}
+            {isDemo ? (
+              <div style={{ background: '#F0F0F0', borderRadius: '18px', padding: '16px', border: '1px solid #E0E0E0', display: 'flex', alignItems: 'center', gap: '12px' }}>
+                <AvatarUsuario usuario={usuario} tamanho={40} style={{ flexShrink: 0 }} />
+                <p style={{ fontSize: '14px', color: '#999', fontWeight: '600', margin: 0 }}>🔒 Modo demonstração — publicação desativada</p>
+              </div>
+            ) : (
             <div style={{ background: '#fff', borderRadius: '18px', padding: '16px', border: '1px solid #EFE9F5', boxShadow: '0 1px 4px rgba(92,46,127,0.06)' }}>
               <div style={{ display: 'flex', gap: '12px', alignItems: 'flex-start' }}>
                 <AvatarUsuario usuario={usuario} tamanho={40} style={{ flexShrink: 0 }} />
@@ -353,6 +361,7 @@ export default function Turma() {
                 </div>
               </div>
             </div>
+            )}
 
             {/* FEED VAZIO */}
             {feed.length === 0 && (
@@ -424,10 +433,10 @@ export default function Turma() {
                     {!isConquista && (
                       <button
                         onClick={() => { if (confirm('Deseja denunciar este post?')) handleReagir(item.alvo_reacao, 'denuncia'); }}
-                        disabled={minhasReacoes[`${item.alvo_reacao}:denuncia`]}
+                        disabled={isDemo || minhasReacoes[`${item.alvo_reacao}:denuncia`]}
                         style={{
                           background: 'none', border: 'none', color: '#CCC',
-                          cursor: 'pointer',
+                          cursor: isDemo ? 'default' : 'pointer',
                           display: 'flex', alignItems: 'center', justifyContent: 'center',
                           minHeight: '36px', width: '36px', padding: '4px',
                         }}

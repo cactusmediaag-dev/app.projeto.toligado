@@ -65,7 +65,12 @@ export default function Home() {
       <div style={{ padding: 'calc(env(safe-area-inset-top, 44px) + 12px) 20px 20px', flexShrink: 0 }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <div style={{ flex: 1 }}>
-            <p style={{ color: 'rgba(255,255,255,0.8)', fontSize: '14px', margin: '0 0 2px', fontWeight: '600' }}>{saudacao}! ☀️</p>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+              <p style={{ color: 'rgba(255,255,255,0.8)', fontSize: '14px', margin: '0 0 2px', fontWeight: '600' }}>{saudacao}! ☀️</p>
+              {localStorage.getItem('toligado_demo') === '1' && (
+                <span style={{ background: '#FFD700', color: '#5C2E7F', fontSize: '12px', fontWeight: '800', padding: '2px 8px', borderRadius: '8px' }}>DEMO</span>
+              )}
+            </div>
             <h1 style={{ color: '#fff', fontSize: '22px', fontWeight: '800', margin: 0, letterSpacing: '-0.3px' }}>
               {primeiroNome(usuario.nome)} {avatar}
             </h1>

@@ -110,6 +110,7 @@ import Ranking from './pages/Ranking';
 import Biblioteca from './pages/Biblioteca';
 import Splash from './pages/Splash';
 import Turma from './pages/Turma';
+import DemoAcesso from './pages/DemoAcesso';
 
 
 export const PAGES = {
@@ -176,6 +177,7 @@ export const PAGES = {
     "Biblioteca": Biblioteca,
     "Splash": Splash,
     "Turma": Turma,
+    "demo/projeto/livre": DemoAcesso,
 }
 
 export const pagesConfig = {

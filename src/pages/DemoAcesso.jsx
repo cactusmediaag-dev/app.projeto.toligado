@@ -8,20 +8,24 @@ export default function DemoAcesso() {
   const [erro, setErro] = useState(false);
 
   useEffect(() => {
+    const timeoutId = setTimeout(() => setErro(true), 10000);
     const iniciarDemo = async () => {
       try {
         const usuarios = await base44.entities.Usuario.list();
         const demo = usuarios.find(u => u.nome === 'Dona Tereza')
           || usuarios.find(u => u.senha_hash === 'demo');
 
-        if (!demo) { setErro(true); return; }
+        if (!demo) { clearTimeout(timeoutId); setErro(true); return; }
 
         localStorage.setItem('toligado_user_id', demo.id);
         localStorage.setItem('toligado_user_nome', demo.nome);
         localStorage.setItem('toligado_demo', '1');
 
+        clearTimeout(timeoutId);
         setTimeout(() => navigate(createPageUrl('Home'), { replace: true }), 800);
       } catch (e) {
+        console.error('[DEMO]', e);
+        clearTimeout(timeoutId);
         setErro(true);
       }
     };

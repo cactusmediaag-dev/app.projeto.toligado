@@ -38,9 +38,11 @@ export default function Modulos() {
   ];
 
   const getStatus = (modulo, index) => {
+    const isDemo = localStorage.getItem('toligado_demo') === '1';
     if (modulosCompletos.includes(modulo.id)) return 'completo';
     if (index === 0) return 'disponivel';
     if (modulosCompletos.includes(modulos[index - 1].id)) return 'disponivel';
+    if (isDemo) return 'disponivel';
     return 'bloqueado';
   };
 
